@@ -13,7 +13,7 @@ export default function LayoutWrapper({
         
 
 
-        <div className="min-h-screen max-w-[1500px] w-full mx-auto flex flex-col bg-green-400">
+        <div className="min-h-screen max-w-[1500px] w-full mx-auto flex flex-col">
             <Header/>
             <main >
                 {children}

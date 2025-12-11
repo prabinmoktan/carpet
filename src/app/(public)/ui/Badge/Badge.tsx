@@ -2,22 +2,23 @@ import React from 'react'
 import { clsx } from 'clsx';
 
 interface Badge{
-    title: number;
-    variant: 'primary' | 'secondary' | 'default';
+    title: number | string;
+    variant: 'primary' | 'secondary' | 'default' | 'cart';
     className?: string;
 }
 
 
 const badgeVariants = {
-    primary: 'bg-blue-500 text-white border border-blue-600',
-    secondary: 'bg-gray-100 text-gray-800 border border-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700',
-    default: 'bg-neutral-100 text-neutral-800 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700'
+    cart: 'rounded-full px-1 border text-sm',
+    primary: 'bg-blue-500 text-white border border-blue-600 rounded-sm px-3 py-1',
+    secondary: 'bg-gray-300 text-gray-800 border border-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 rounded-sm px-3 py-1',
+    default: 'bg-neutral-100 text-neutral-800 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700 rounded-sm px-3 py-1'
   }
 const Badge: React.FC<Badge> = ({title, variant= 'default', className }) => {
   return (
     <>
     <div className={clsx(
-      'inline-block px-3 py-1 text-xs font-medium rounded-full',
+      'inline-block   font-medium ',
       badgeVariants[variant],
       className
     )}>
