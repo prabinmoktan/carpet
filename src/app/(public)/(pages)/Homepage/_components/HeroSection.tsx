@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 
 import { ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
-import heroImage from "../../../../../public/herosection.png";
-import Button from "../../ui/Button/Button";
+import heroImage from "../../../../../../public/herosection.png";
+import Button from "../../../ui/Button/Button";
 import Image from "next/image";
 
 export default function Hero() {

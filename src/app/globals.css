@@ -12,14 +12,18 @@
   }
 }
 :root {
-  --bg-color: #ffffff;
+  --bg-color: ##F2F0EF;
   --text-color: #111111;
 }
 
 /* Dark mode enabled when you add .dark class to html or body */
 .dark {
-  --bg-color: #0f0f0f;
+  --bg-color: #0B0B10;
   --text-color: #f5f5f5;
+}
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 .dark {
   --button-outline: rgba(255,255,255, .10);

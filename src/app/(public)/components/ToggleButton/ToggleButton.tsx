@@ -62,16 +62,16 @@ const ToggleButton = () => {
   <Sun className={`z-10 cursor-pointer transition-all ${!isDark ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`} 
        onClick={() => setIsDark(false)  } />
   
-  <div className="relative mx-3 w-9 h-5 bg-neutral-quaternary rounded-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft">
+  <div className="relative mx-3 w-9 h-5 bg-neutral-quaternary rounded-full peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-brand-soft border-2 dark:peer-focus:ring-brand-soft">
     <input type="checkbox" 
            className="sr-only peer" 
            checked={isDark}
            onChange={() => setIsDark(!isDark)} />
-    <div className={`absolute top-[2px] start-[2px] bg-white rounded-full h-4 w-4 transition-all duration-300 ${isDark ? 'translate-x-full' : 'translate-x-0'}`} />
+    <div className={`absolute   bg-white rounded-full h-4 w-4 transition-all duration-300 ${isDark ? 'translate-x-full' : 'translate-x-0'}`} />
   </div>
   
   <SunDim className={`z-10 cursor-pointer transition-all ${!isDark ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`} 
-          color="white" 
+          color="gray" 
           onClick={() => setIsDark(true)} />
 </div>
 

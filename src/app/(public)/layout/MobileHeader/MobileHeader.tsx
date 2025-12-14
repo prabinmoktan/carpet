@@ -34,6 +34,9 @@ const MobileHeader = () => {
                 </button>
               </div>
             </div>
+            <div className="px-6 space-y-5 mt-4">
+
+          
             {navItems?.map((item, index) => (
               <motion.div
                 key={index}
@@ -49,6 +52,7 @@ const MobileHeader = () => {
                 </Link>
               </motion.div>
             ))}
+              </div>
           </div>
         )}
 

@@ -10,7 +10,7 @@ interface Badge{
 
 const badgeVariants = {
     cart: 'rounded-full px-1 border text-sm',
-    primary: 'bg-blue-500 text-white border border-blue-600 rounded-sm px-3 py-1',
+    primary: 'bg-amber-500 text-white  rounded-2xl  text-xs px-3 py-1',
     secondary: 'bg-gray-300 text-gray-800 border border-gray-200 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 rounded-sm px-3 py-1',
     default: 'bg-neutral-100 text-neutral-800 border border-neutral-200 dark:bg-neutral-800 dark:text-neutral-200 dark:border-neutral-700 rounded-sm px-3 py-1'
   }

@@ -19,12 +19,12 @@ const ProductCard: React.FC<ProductCardTypes> = ({
   category,
   price,
   image,
-  isNew,
+  isNew=false,
 }) => {
     const [isHover, setIsHover] = useState(false);
   return (
     <>
-      <div className=" relative h-full  rounded-xl overflow-hidden bg-gray-100 w-full dark:bg-zinc-800 border-gray-100 border "
+      <div className=" relative h-full  rounded-xl overflow-hidden bg-gray-100 w-full  border-gray-100 border "
       onMouseEnter={()=> setIsHover(true)}
       onMouseLeave={()=>setIsHover(false)}
       onClick={()=>console.log('object')}>
@@ -37,12 +37,14 @@ const ProductCard: React.FC<ProductCardTypes> = ({
           alt={name}
           className={`object-cover duration-500 transition-transform ${isHover ? 'scale-125' : 'scale-100'}`}
         />
-        {isNew && 
-        <Badge title={"NEW"} variant={"primary"} className="absolute top-2 right-0 z-50"/>}
+        {
+        isNew && 
+        <Badge title="NEW" variant={"primary"} className="absolute top-2 left-2"/>
+    }
         </div>
         <motion.div 
         initial={{opacity: 0}}
-        animate={{opacity: isHover ? 1 : 0}} className={`absolute inset-0 bg-black/20 `}>
+        animate={{opacity: isHover ? 1 : 0}} className={`absolute inset-0 bg-black/20 cursor-pointer`}>
 
         </motion.div>
         <div className="p-6 space-y-2">

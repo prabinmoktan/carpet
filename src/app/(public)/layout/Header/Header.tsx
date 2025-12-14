@@ -5,6 +5,7 @@ import { navItems } from "@/app/constant";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import MobileHeader from "../MobileHeader/MobileHeader";
+import ToggleButton from "../../components/ToggleButton/ToggleButton";
 
 const Header = () => {
   const [scroll, setScroll] = useState(false);
@@ -51,7 +52,8 @@ const Header = () => {
               </motion.div>
             ))}
           </nav>
-          <div>
+          <div className="flex gap-10">
+            {/* <ToggleButton/> */}
             <ShoppingBag size={"1.2rem"} fontWeight={'light'}/>
           </div>
         </div>

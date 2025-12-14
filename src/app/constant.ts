@@ -4,6 +4,10 @@ import persianImage from '../../public/persianImage.png'
 import scandinavianImage from '../../public/scandinavianImage.png'
 import emeraldImage from '../../public/emeraldImage.png'
 import runnerImage from '../../public/runnerImage.png'
+import burgundyPrayer from '../../public/burgundyPrayer.png'
+import emeraldPrayer from '../../public/emeraldPrayer.png'
+import creamPrayer from '../../public/creamPrayer.png'
+import pm4 from '../../public/pm4.png'
 
 
 export const navItems = [
@@ -24,5 +28,35 @@ export const navItems = [
     { id: '6', name: 'Tribal Runner', category: 'Vintage', price: 1650, image: runnerImage },
     // { id: '7', name: 'Persian Heritage', category: 'Oriental', price: 2850, image: navyImage },
     // { id: '8', name: 'Abstract Dream', category: 'Contemporary', price: 1950, image: abstractImage },
+  ];
+
+  export const prayerMats = [
+    {
+      id: 'pm-1',
+      name: 'Emerald Blessings',
+      price: 180,
+      image: emeraldPrayer,
+      isNew: true,
+    },
+    {
+      id: 'pm-2',
+      name: 'Burgundy Heritage',
+      price: 165,
+      image: burgundyPrayer,
+    },
+    {
+      id: 'pm-3',
+      name: 'Cream Serenity',
+      price: 175,
+      image: creamPrayer,
+      isNew: true,
+    },
+    {
+      id: 'pm-4',
+      name: ' Serenity',
+      price: 175,
+      image: pm4,
+      isNew: true,
+    },
   ];
   
