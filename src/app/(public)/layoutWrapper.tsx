@@ -9,14 +9,14 @@ export default function LayoutWrapper({
     children: React.ReactNode
 }){
     return(
-        <div className="flex justify-center p">
+        <div className="flex justify-center ">
 
         
 
 
-        <div className="min-h-screen max-w-[1500px] w-full mx-auto flex flex-col  ">
+        <div className="min-h-screen max-w-[1500px]  mx-auto flex flex-col  ">
             <Header/>
-            <main >
+            <main className="overflow-x-hidden md:mb-10 mb-6 min-h-screen py-10 mt-10 ">
                 {children}
             </main>
             <Footer/>

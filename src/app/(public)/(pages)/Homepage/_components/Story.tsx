@@ -24,14 +24,14 @@ const Story = () => {
         transition={{duration: 0.4, delay: 0.2}}
         
         className="flex flex-col gap-5">
-          <h1 className="tracking-wide text-amber-700 uppercase">our story</h1>
+          <h1 className=" text-sm md:text-md text-amber-700 uppercase">our story</h1>
           <TitleHeader title={"Where Tradition Meets Innovation"} />
-          <p className="text-lg text-muted-foreground font-light leading-relaxed indent-10">
+          <p className="text-lg text-muted-foreground font-light leading-relaxed ">
             For over three decades, we&apos;ve been curating the finest handcrafted
             carpets and rugs from master artisans around the world. Each piece
             tells a story of heritage, skill, and timeless beauty.
           </p>
-          <p className="text-lg text-muted-foreground font-light leading-relaxed indent-10">
+          <p className="text-lg text-muted-foreground font-light leading-relaxed text-justify">
             Our commitment to authenticity means working directly with weavers
             who have perfected their craft over generations, ensuring every
             thread reflects centuries of tradition.

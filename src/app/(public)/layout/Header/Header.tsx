@@ -25,9 +25,10 @@ const Header = () => {
   return (
     <>
       <header
-        className={`  fixed top-0 z-50 left-0 right-0 transition-all duration-300 ${
+        className={`   w-full max-w-[1500px] fixed top-0 z-50 left-0 mx-auto right-0 transition-all duration-300 ${
           scroll ? "bg-white/95 backdrop-blur-md " : "bg-transparent"
         }`}
+        
       >
         <div className="hidden md:flex justify-between items-center px-8 py-4">
           <div>

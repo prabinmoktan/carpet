@@ -4,9 +4,10 @@ import { motion } from "framer-motion";
 
 interface animateParaTypes {
   paragraph: string;
+  className?: string;
 }
 
-const AnimateParagraph: React.FC<animateParaTypes> = ({ paragraph }) => {
+const AnimateParagraph: React.FC<animateParaTypes> = ({ paragraph,className }) => {
   return (
     <>
       <motion.p
@@ -15,7 +16,7 @@ const AnimateParagraph: React.FC<animateParaTypes> = ({ paragraph }) => {
       
         transition={{ duration: 0.6, delay: 0.2 }}
         viewport={{ once: false, margin: "-100px" }}
-        className="tracking-wider font-light text-center"
+        className={`${className} tracking-wider font-light text-center `}
       >
         {paragraph}
       </motion.p>

@@ -6,11 +6,14 @@ import ProductCard from "../../../components/ProductCard/ProductCard";
 import { motion } from "framer-motion";
 import TitleHeader from "../../../ui/TitleHeader/TitleHeader";
 import AnimatePara from "../../../ui/AnimateParagraph/AnimateParagraph";
+import { useRouter } from "next/navigation";
 
 const Collection = () => {
+  const route = useRouter();
+  
   return (
     <>
-      <section className="flex flex-col space-y-5 justify-center px-3 md:px-10">
+      <section className="flex flex-col space-y-5 justify-center px-3 md:px-10 ">
         <TitleHeader title="Our Collection" />
 
         <AnimatePara
@@ -42,6 +45,7 @@ const Collection = () => {
                     name={product.name}
                     category={product.category}
                     isNew={!!product.isNew}
+                    onClick={()=>route.push(`/shop/${product.id}`)}
                   />
                 </div>
               );

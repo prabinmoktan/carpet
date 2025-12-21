@@ -1,4 +1,6 @@
+'use client'
 import clsx from "clsx";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface ButtonTypes {
@@ -18,17 +20,20 @@ const buttonVariant = {
     "bg-black/5 backdrop-blur-xs rounded-xl shadow-md border border-white/10 text-white px-10 py-2 cursor-pointer",
 };
 
-const Button: React.FC<ButtonTypes> = ({
+const ClientButton: React.FC<ButtonTypes> = ({
   title,
   variant = "default",
   firstIcon,
   secondIcon,
-  onClick,
+  
+
   className,
+
 }) => {
+    const route = useRouter();
   return (
     <>
-      <button className={clsx(buttonVariant[variant], className)} onClick={onClick}>
+      <button className={clsx(buttonVariant[variant], className)} onClick={()=>route.push(`/inspiration`)}>
         {firstIcon && firstIcon}
         <p className="capitalize">{title}</p>
         {secondIcon && secondIcon}
@@ -37,4 +42,4 @@ const Button: React.FC<ButtonTypes> = ({
   );
 };
 
-export default Button;
+export default ClientButton;

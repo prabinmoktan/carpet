@@ -5,19 +5,19 @@ import Collection from "./_components/Collection";
 import PrayerMat from "./_components/PrayerMat";
 import Story from "./_components/Story";
 import Craftmanship from "./_components/Craftmanship";
-import ContactForm from "./_components/ContactForm";
+import Contact from "./_components/Contact";
 
 const Homepage = () => {
   return (
     <>
-      <section className="space-y-20">
+      <section className=" flex flex-col gap-y-16 max-w-full w-full ">
 
-      <HeroSection />
+       <HeroSection />
       <Collection/>
       <PrayerMat/>
       <Story/>
       <Craftmanship/>
-      <ContactForm/>
+      <Contact/>
       </section>
     </>
   );

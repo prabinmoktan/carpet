@@ -11,6 +11,7 @@ interface ProductCardTypes {
   price: number;
   image: string | StaticImageData;
   isNew: boolean;
+  onClick?: React.MouseEventHandler;
 }
 
 const ProductCard: React.FC<ProductCardTypes> = ({
@@ -19,6 +20,7 @@ const ProductCard: React.FC<ProductCardTypes> = ({
   category,
   price,
   image,
+  onClick,
   isNew=false,
 }) => {
     const [isHover, setIsHover] = useState(false);
@@ -27,7 +29,7 @@ const ProductCard: React.FC<ProductCardTypes> = ({
       <div className=" relative h-full  rounded-xl overflow-hidden bg-gray-100 w-full  border-gray-100 border "
       onMouseEnter={()=> setIsHover(true)}
       onMouseLeave={()=>setIsHover(false)}
-      onClick={()=>console.log('object')}>
+      onClick={onClick}>
        
         <div className={`overflow-hidden aspect-square `}>
 
