@@ -1,11 +1,10 @@
-/* eslint-disable @next/next/no-img-element */
-import Image, { StaticImageData } from "next/image";
+
+import { StaticImageData } from "next/image";
 import React from "react";
 import Badge from "../../ui/Badge/Badge";
 import TitleHeader from "../../ui/TitleHeader/TitleHeader";
 import AnimateParagraph from "../../ui/AnimateParagraph/AnimateParagraph";
 import { MoveRight } from "lucide-react";
-import { StaticImport } from "next/dist/shared/lib/get-img-props";
 
 export interface InspirationPostTypes {
   id?: number;
@@ -23,24 +22,22 @@ export interface InspirationPostTypes {
 }
 
 const ArticleCard: React.FC<InspirationPostTypes> = ({
-  id,
+  
   title,
   excerpt,
-  content,
   category,
   date,
-  image,
-  author,
+  
   gradient,
-  readTime,
+  
   className,
   onClick
 }) => {
   return (
     <>
-      <article className={`${className}  w-full bg-zinc-200 rounded-lg`}>
+      <article className={`${className}  w-full bg-zinc-200 rounded-lg p-4`}>
         <div
-          className="w-1/2  rounded-lg"
+          className="w-1/2  rounded-lg "
           style={{ backgroundImage: gradient }}
         ></div>
         <div className="space-y-10 py-5">

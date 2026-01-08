@@ -10,21 +10,19 @@ import React from 'react'
 
 const InspirationSlug = async({params}: {params: Promise<{slug: string}>}) => {
     const {slug} = await params;
-    console.log(slug)
     
    
     const post = inspirationPosts?.find((p)=> p.id === Number(slug)) ;
-   console.log(post)
   return (
    <>
-   <article className='mx-auto  w-2/3 space-y-10'>
+   <article className='mx-auto  w-2/3 space-y-10 pt-10 mt-10'>
    <ClientButton firstIcon={<MoveLeft />} title='Back to inspirations' variant={'primary'} />
    <div className='w-full h-[40vh] rounded-lg' style={{ 
       backgroundImage: post?.image 
     }}>
    </div>
    <div className='space-y-4'>
-    <div className='flex gap-5'>
+    <div className='flex gap-5 items-center'>
 
     <Badge title={post?.category} variant={'primary'}/>
     <p className='text-sm text-gray-600'>{post?.readTime}</p>
@@ -39,7 +37,7 @@ const InspirationSlug = async({params}: {params: Promise<{slug: string}>}) => {
     {post?.content?.split('\n').map((paragraph, index) => (
       <AnimateParagraph key={index} paragraph={paragraph} className='text-justify'/>
     ))}
-        {/* <AnimateParagraph paragraph={post?.content as string} /> */}
+        
      
     </div>
     <div>

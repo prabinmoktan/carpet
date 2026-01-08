@@ -35,7 +35,7 @@ const ClientButton: React.FC<ButtonTypes> = ({
     <>
       <button className={clsx(buttonVariant[variant], className)} onClick={()=>route.push(`/inspiration`)}>
         {firstIcon && firstIcon}
-        <p className="capitalize">{title}</p>
+        <p className="capitalize text-md font-light">{title}</p>
         {secondIcon && secondIcon}
       </button>
     </>

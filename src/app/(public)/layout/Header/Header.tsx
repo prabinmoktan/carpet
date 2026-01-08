@@ -5,19 +5,16 @@ import { navItems } from "@/app/constant";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import MobileHeader from "../MobileHeader/MobileHeader";
-import ToggleButton from "../../components/ToggleButton/ToggleButton";
 
 const Header = () => {
   const [scroll, setScroll] = useState(false);
-  const [mobileView, setMobileView] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScroll(window.scrollY > 50);
-     
+      const shouldScroll = window.scrollY > 50;
+      setScroll((prev) => (prev !== shouldScroll ? shouldScroll : prev));
     };
 
-   
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -25,10 +22,9 @@ const Header = () => {
   return (
     <>
       <header
-        className={`   w-full max-w-[1500px] fixed top-0 z-50 left-0 mx-auto right-0 transition-all duration-300 ${
-          scroll ? "bg-white/95 backdrop-blur-md " : "bg-transparent"
-        }`}
-        
+        className={`w-full max-w-[1500px] fixed  top-0 z-50 left-0 mx-auto right-0 transition-all duration-300 
+          
+          ${scroll ? "bg-white/95 backdrop-blur-md " : "bg-transparent"}`}
       >
         <div className="hidden md:flex justify-between items-center px-8 py-4">
           <div>
@@ -55,12 +51,14 @@ const Header = () => {
           </nav>
           <div className="flex gap-10">
             {/* <ToggleButton/> */}
-            <ShoppingBag size={"1.2rem"} fontWeight={'light'}/>
+            <ShoppingBag size={"1.2rem"} fontWeight={"light"} />
           </div>
         </div>
-      <MobileHeader/>
-      </header>
 
+        <div className="md:hidden">
+          <MobileHeader />
+        </div>
+      </header>
     </>
   );
 };

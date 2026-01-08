@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <>
       <footer className="w-screen max-w-[1500px] text-gray-500 font-light capitalize px-10 md:py-12 py-6 bg-zinc-100">
-        <footer className="grid md:grid-cols-3 grid-cols-2 border-b py-10">
+        <footer className="grid md:grid-cols-3 grid-cols-2 border-b gap-10 py-10">
         <div className="flex flex-col gap-3 justify-center">
           <h1 className="text-4xl uppercase">Company Name</h1>
           <p className=" tracking-wide text-sm">
@@ -38,7 +38,7 @@ const Footer = () => {
         </div>
         </footer>
        
-        <div className="flex justify-between items-center h-10">
+        <div className="flex justify-between items-center gap-10 h-10">
           <p className="text-sm">
           © 2024 Luxe Rugs. All rights reserved.
           </p>

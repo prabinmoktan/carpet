@@ -5,7 +5,7 @@ import { products } from "@/app/constant";
 import ProductCard from "../../../components/ProductCard/ProductCard";
 import { motion } from "framer-motion";
 import TitleHeader from "../../../ui/TitleHeader/TitleHeader";
-import AnimatePara from "../../../ui/AnimateParagraph/AnimateParagraph";
+import AnimateParagraph from "../../../ui/AnimateParagraph/AnimateParagraph";
 import { useRouter } from "next/navigation";
 
 const Collection = () => {
@@ -16,7 +16,7 @@ const Collection = () => {
       <section className="flex flex-col space-y-5 justify-center px-3 md:px-10 ">
         <TitleHeader title="Our Collection" />
 
-        <AnimatePara
+        <AnimateParagraph
           paragraph="Each piece in our collection is carefully selected for its exceptional quality and timeless beauty"
         />
 

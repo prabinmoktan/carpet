@@ -14,9 +14,8 @@ const Page = () => {
         <div className="">
           <TitleHeader title="Islamic Prayer Mats & Carpets" />
           <AnimateParagraph
-            paragraph={
-              "Premium prayer mats and carpets crafted with reverence and traditional Islamic design principles"
-            }
+            paragraph="Premium prayer mats and carpets crafted with reverence and traditional Islamic design principles"
+            
           />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 sm:grid-cols-3 gap-4 px-3 md:px-10">

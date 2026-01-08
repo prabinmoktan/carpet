@@ -20,8 +20,7 @@ const PrayerMat = () => {
 
         <TitleHeader title="Islamic  Prayer Mats"  />
         <AnimateParagraph
-          paragraph=" Premium prayer mats crafted with reverence and traditional Islamic
-               design, perfect for your spiritual practice"
+          paragraph=" Premium prayer mats crafted with reverence and traditional Islamic design, perfect for your spiritual practice"
         />
         </div>
         
