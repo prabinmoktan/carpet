@@ -1,6 +1,10 @@
 import { model, models, Schema } from "mongoose";
 import { ISale, SaleSchema } from "./sale.model";
 
+import { HydratedDocument } from "mongoose";
+
+export type CarpetDocument = HydratedDocument<ICarpet>;
+
 export interface ICarpet {
   title: string;
   category: string;
@@ -12,10 +16,11 @@ export interface ICarpet {
   features?: string[];
   specs?: Record<string, string>;
   slug: string;
-  stock: string;
+  stock: number;
   sale?: ISale;
-  // discount?: number;
   createdAt?: Date;
+  updatedAt?: Date;
+ 
 }
 
 const ProductSchema = new Schema<ICarpet>(
@@ -58,7 +63,7 @@ const ProductSchema = new Schema<ICarpet>(
     },
 
     stock: {
-      type: String,
+      type: Number,
       min: 0,
       required: true,
     },
@@ -73,50 +78,36 @@ const ProductSchema = new Schema<ICarpet>(
   }
 );
 
-ProductSchema.virtual("isNew").get(function () {
-  // console.log(this.createdAt as Date)
-  // const NEW_DAYS = 15;
-  // // if (!this.createdAt) return console.log(this.createdAt, 'error here'); // just in case
-  // const now = Date.now();
-  // console.log('now==>', now)
-  // const createdTime = this.createdAt instanceof Date ? this.createdAt.getTime() : new Date(this.createdAt).getTime();
-  // console.log('createdTime==>', createdTime)
-  // console.log( (now - createdTime) <= NEW_DAYS * 24 * 60 * 60 * 1000);
-  // return (now - createdTime) <= NEW_DAYS * 24 * 60 * 60 * 1000;
+ProductSchema.virtual("isNew").get(function (this) {
+ 
   const NEW_DAYS = 15;
 
-  // ✅ Multiple fallbacks
-  let createdTime: number;
-  if (this._id) {
-    createdTime = this._id.getTimestamp().getTime();
-    console.log("createdTime", createdTime);
-  } else if (this.createdAt) {
-    createdTime = new Date(this.createdAt).getTime();
-    console.log("createdTime==>", createdTime);
-  } else {
-    return false; // Default safe value
-  }
+  
 
-  return Date.now() - createdTime <= NEW_DAYS * 24 * 60 * 60 * 1000;
+  if (!this.createdAt) return false;
+
+  const diff =
+    Date.now() - this.createdAt.getTime();
+
+  return diff <= NEW_DAYS * 24 * 60 * 60 * 1000;
 });
 
 ProductSchema.virtual("onSale").get(function () {
   if (!this.sale) return false;
   const now = Date.now();
-  console.log("startsAt==>", now >= this.sale.startsAt.getTime());
-  console.log("endsAt===>", now <= this.sale.endsAt.getTime());
+
   return (
-    this.sale.isActive &&
+    this.sale.percentage > 0 &&
     now >= this.sale.startsAt.getTime() &&
     now <= this.sale.endsAt.getTime()
   );
 });
 
 ProductSchema.virtual("finalPrice").get(function () {
-  if (
-    !this.sale?.isActive ||
-    !this.sale?.startsAt.getTime() ||
-    !this.sale?.endsAt.getTime()
+  if (!this.sale
+    // !this.sale?.isActive ||
+    // !this.sale?.startsAt.getTime() ||
+    // !this.sale?.endsAt.getTime()
   ) {
     return this.price;
   }

@@ -8,6 +8,7 @@ interface ButtonTypes {
   firstIcon?: React.ReactNode;
   secondIcon?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  type?: "submit"
 }
 
 const buttonVariant = {
@@ -24,11 +25,13 @@ const Button: React.FC<ButtonTypes> = ({
   firstIcon,
   secondIcon,
   onClick,
+  type= "submit",
   className,
+  
 }) => {
   return (
     <>
-      <button className={clsx(buttonVariant[variant], className)} onClick={onClick}>
+      <button className={clsx(buttonVariant[variant], className)} onClick={onClick} type={type}>
         {firstIcon && firstIcon}
         <p className="capitalize">{title}</p>
         {secondIcon && secondIcon}

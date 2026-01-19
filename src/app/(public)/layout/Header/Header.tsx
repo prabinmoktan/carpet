@@ -5,6 +5,7 @@ import { navItems } from "@/app/constant";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import MobileHeader from "../MobileHeader/MobileHeader";
+import CompanyLogo from "../../ui/CompanyLogo/CompanyLogo";
 
 const Header = () => {
   const [scroll, setScroll] = useState(false);
@@ -26,12 +27,10 @@ const Header = () => {
           
           ${scroll ? "bg-white/95 backdrop-blur-md " : "bg-transparent"}`}
       >
-        <div className="hidden md:flex justify-between items-center px-8 py-4">
-          <div>
-            <Link href="/" className="text-5xl font-light">
-              LOGO
-            </Link>
-          </div>
+        <div className="hidden md:flex justify-between items-center px-8 py-2">
+          <Link href={"/"}>
+            <CompanyLogo />
+          </Link>
           <nav className="md:flex items-center gap-10 text-gray-600">
             {navItems?.map((item, index) => (
               <motion.div

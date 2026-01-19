@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant, Cormorant_Garamond, Playfair_Display_SC } from "next/font/google";
 import "./globals.css";
+// import ProviderWrapper from "./provider";
 
 export const cormorantGaramond = Cormorant_Garamond({
   subsets: ['latin'],
@@ -24,7 +25,7 @@ export const playfairDisplaySC = Playfair_Display_SC({
 });
 
 export const metadata: Metadata = {
-  title: "Company name",
+  title: "Sadaa Wadawiya",
   description: "Company Slogan  ",
 };
 
@@ -38,7 +39,10 @@ export default function RootLayout({
       <body
         className={`${cormorantGaramond.variable} ${cormorant.variable} ${playfairDisplaySC.variable} antialiased`}
       >
+        {/* <ProviderWrapper > */}
+
         {children}
+        {/* </ProviderWrapper> */}
       </body>
     </html>
   );

@@ -9,6 +9,13 @@ import emeraldPrayer from "../../public/emeraldPrayer.png";
 import creamPrayer from "../../public/creamPrayer.png";
 import pm4 from "../../public/pm4.png";
 
+import { LayoutDashboard } from "lucide-react";
+import { Settings } from "lucide-react";
+import { Boxes } from "lucide-react";
+import { Mail } from "lucide-react";
+import { ChartColumnDecreasing } from "lucide-react";
+
+
 export const navItems = [
   { label: "Shop", href: "/shop" },
   { label: "Prayer Mats", href: "/prayerMats" },
@@ -363,3 +370,11 @@ export const inspirationPosts = [
 // export function getInspirationById(id: number): InspirationPost | undefined {
 //   return inspirationPosts.find((post) => post.id === id);
 // }
+
+export const SidebarItem = [
+  { name: "dashboard", icon: LayoutDashboard, href: '/admin/dashboard' },
+  { name: "products", icon: Boxes,href: '/admin/products' },
+  { name: "inquiries", icon: Mail, href: '/admin/inquiry' },
+  { name: "analytics", icon: ChartColumnDecreasing, href: '/admin/analytics' },
+  { name: "settings", icon: Settings, href: '/admin/settings' },
+];

@@ -2,6 +2,7 @@ import { aboutFooter, shopFooter } from "@/app/constant";
 import { Facebook, Instagram, Twitter } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import CompanyLogo from "../../ui/CompanyLogo/CompanyLogo";
 
 const Footer = () => {
   return (
@@ -9,7 +10,7 @@ const Footer = () => {
       <footer className="w-screen max-w-[1500px] text-gray-500 font-light capitalize px-10 md:py-12 py-6 bg-zinc-100">
         <footer className="grid md:grid-cols-3 grid-cols-2 border-b gap-10 py-10">
         <div className="flex flex-col gap-3 justify-center">
-          <h1 className="text-4xl uppercase">Company Name</h1>
+          <CompanyLogo/>
           <p className=" tracking-wide text-sm">
             Curating the world&apos;s finest handcrafted carpets and rugs
           </p>

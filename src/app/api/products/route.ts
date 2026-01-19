@@ -5,12 +5,12 @@ import path from "path";
 import fs from "fs/promises";
 import Product from "@/app/admin/lib/models/product.model";
 import { generateSlug } from "../utils/slugify";
+import { getSaleState } from "@/app/admin/utils/getSaleState";
 
 export const POST = async (req: Request) => {
   await dbConnect();
   try {
     const formData = await req.formData();
-    
 
     // text-fields
     const title = formData.get("title")?.toString();
@@ -20,9 +20,9 @@ export const POST = async (req: Request) => {
     const description = formData.get("description")?.toString();
 
     const specs = formData.get("specs")
-      ? JSON.parse(formData.get("specs") as string) 
+      ? JSON.parse(formData.get("specs") as string)
       : undefined;
-      const sale = formData.get("sale")
+    const sale = formData.get("sale")
       ? JSON.parse(formData.get("sale") as string)
       : undefined;
 
@@ -45,7 +45,6 @@ export const POST = async (req: Request) => {
         { status: 400 }
       );
     }
-    
 
     // ----- IMAGE FILES -----
     const images = formData.getAll("images") as File[];
@@ -71,8 +70,6 @@ export const POST = async (req: Request) => {
       await fs.writeFile(filePath, buffer);
 
       const uploaded = await uploadOnCloudinary(filePath);
-      
-      
 
       if (!uploaded?.secure_url) {
         return NextResponse.json(
@@ -85,10 +82,9 @@ export const POST = async (req: Request) => {
 
       await fs.unlink(filePath);
     }
-  
-    const slug = await generateSlug(title)
-    console.log('specs==>', specs)
-console.log('sale==>', sale)
+
+    const slug = await generateSlug(title);
+
     const products = await Product.create({
       title,
       description,
@@ -100,24 +96,24 @@ console.log('sale==>', sale)
       sale,
       images: imagesUrl,
     });
+
     // const freshProduct = await Product.findById(products._id);
     return NextResponse.json(
       {
         success: true,
         message: "Products created Successfully",
-        Product: products
+        Product: products,
         // freshProduct({ virtuals: true }),
       },
       { status: 201 }
     );
     // const {title, description,}
   } catch (error) {
-    
     return NextResponse.json(
       {
         success: false,
         message: "Server error:something went wrong",
-        error
+        error,
       },
       { status: 500 }
     );
@@ -159,23 +155,29 @@ export const GET = async (req: Request) => {
 
     const total = await Product.countDocuments(filter);
 
-
     // const new_days = 14;
-    const products = (await Product.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit));
-    // const productsWithIsNew = products.map((product)=> {
-    //   const isNew = Date.now()-new Date(product.createdAt).getTime() < 
-    //   new_days * 24 * 60 * 60 *1000;
-    //   return {
-    //     ...product.toObject(),
-    //     isNew
-    //   }
-    // })
-    console.log(products);
+    const products = await Product.find(filter)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+    const response = products.map((product) => {
+      const saleDetails = getSaleState(product);
+      return {
+        ...products,
+        sale: {
+          ...product.sale,
+          isActive: saleDetails.isActive,
+        },
+        isActive: saleDetails.isActive,
+        finalPrice: saleDetails.finalPrice,
+      };
+    });
+    
     return NextResponse.json(
       {
         status: true,
         message: "products Fetched successfully",
-        products,
+        response,
         pagination: {
           total,
           skip,

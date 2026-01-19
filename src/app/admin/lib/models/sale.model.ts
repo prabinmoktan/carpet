@@ -1,10 +1,9 @@
-import { model, models, Schema } from "mongoose";
+import {  Schema } from "mongoose";
 
 export interface ISale {
     percentage: number;
     startsAt: Date;
     endsAt: Date;
-    isActive: boolean;
 }
 
 export const SaleSchema =new Schema<ISale>(
@@ -23,10 +22,7 @@ export const SaleSchema =new Schema<ISale>(
             type: Date,
             required: true
         },
-        isActive:{
-            type: Boolean,
-            default: true
-        }
+       
         
     },
     {
