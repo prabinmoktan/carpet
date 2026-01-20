@@ -1,37 +1,108 @@
-import React from "react";
+import { EyeClosedIcon, EyeIcon } from "lucide-react";
+import { set } from "mongoose";
+import React, { useState } from "react";
 
 interface AppTextTypes extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   placeholder?: string;
   className: string;
-  value?: string | number ;
+  value?: string | number;
   error?: string;
-  type?: 'text' | 'password' | 'date';
+  type?: "text" | "password" | "date";
   backendError?: string;
 }
 
-
-const AdminInputField= React.forwardRef<HTMLInputElement, AppTextTypes>(
-    ({label, placeholder,className,value,error,type,backendError, ...rest}, ref
-)=> {
-  return (
-    <>
-    <div className={className} >
-
-      <label className="text-sm font-light">{label}</label>
-      <input
-        type={type}
-        ref={ref}
-        placeholder={placeholder || backendError}
-        value={value}
-        className="flex h-9 w-full rounded-md border  px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ring-amber-500"
-        {...rest}
-        />
-        {error && <span className="text-red-500 text-xs">{error}</span>}
+const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(
+  (
+    {
+      label,
+      placeholder,
+      className,
+      value,
+      error,
+      type = "text",
+      backendError,
+      ...rest
+    },
+    ref
+  ) => {
+    const [showPassword, setShowPassword] = useState(false);
+    return (
+      <>
+        <div className={className}>
+          <label className="text-sm font-light">{label}</label>
+          {(type === "text" || type === "date") && (
+            <input
+              type={type}
+              ref={ref}
+              placeholder={placeholder || backendError}
+              value={value}
+              className={`flex h-9 w-full rounded-md border ${
+                error ? "border-red-500" : "border"
+              }  px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ${
+                error ? "ring-red-500" : "ring-amber-500"
+              }`}
+              {...rest}
+            />
+          )}
+          {type === "password" && (
+            <div
+              className={`flex h-9 w-full rounded-md border ${
+                error ? "border-red-500" : "border"
+              }  px-3 py-2 text-base ring-offset-background focus-within:ring-offset-2 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-within:ring-2 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ${
+                error ? "ring-red-500" : "ring-amber-500"
+              }`}
+            >
+              <input
+                type={showPassword ? "text" : "password"}
+                ref={ref}
+                placeholder={placeholder || backendError}
+                value={value}
+                className={` w-full text-sm 
+               placeholder:text-gray-400
+              focus-visible:outline-none focus-visible:ring-0
+              focus-visible:ring-offset-none disabled:cursor-not-allowed 
+              disabled:opacity-50 transition-all duration-200
+             
+              ${
+                error
+                  ? "border-red-500 focus-visible:ring-red-500"
+                  : "border-gray-300 focus-visible:ring-blue-500 hover:border-gray-400"
+              }
+             
+            `}
+                {...rest}
+              />
+              {/* { showPassword ? (
+                <EyeIcon
+                  onClick={() => setShowPassword(!showPassword)}
+                  size={"18px"}
+                />
+              ) : (
+                <EyeClosedIcon
+                  onClick={() => setShowPassword(!showPassword)}
+                  size={"18px"}
+                />
+              )} */}
+              {value && (
+                <button onClick={(e) => {
+                  e.preventDefault()
+                  e.stopPropagation()  
+                  setShowPassword(!showPassword)}}>
+                  {showPassword ? (
+                    <EyeIcon size={"18px"} />
+                  ) : (
+                    <EyeClosedIcon size={"18px"} />
+                  )}
+                </button>
+              )}
+            </div>
+          )}
+          {error && <span className="text-red-500 text-xs">{error}</span>}
         </div>
-    </>
-  );
-}
+      </>
+    );
+  }
 );
 AdminInputField.displayName = "AdminInputField";
 

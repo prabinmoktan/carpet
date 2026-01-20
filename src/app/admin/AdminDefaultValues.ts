@@ -18,3 +18,16 @@ export const ProductDefaultValues = {
       isActive: false,
     },
 }
+
+export const UserLoginDefaultValues ={
+  email: '',
+  password: ''
+}
+
+export const UserRegisterDefaultvalues = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '', 
+  confirmPassword: ''
+}

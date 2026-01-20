@@ -4,8 +4,8 @@
     align-items: center;
     background: url(/loginbg.png);
     background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+    background-repeat: repeat;
+    background-size: contain;
     min-height: 100vh;
     
 }

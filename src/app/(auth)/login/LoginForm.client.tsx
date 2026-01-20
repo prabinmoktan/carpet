@@ -10,26 +10,22 @@ import Button from "@/app/(public)/ui/Button/Button";
 import { LoginPageTypes } from "@/app/admin/AdminType";
 import company from "../../../../public/logo.png";
 import Link from "next/link";
+import { UserLoginDefaultValues } from "@/app/admin/AdminDefaultValues";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { LoginInput, LoginSchema } from "@/app/admin/AdminSchemas";
+import { UseLoginForm } from "./hooks/UseLoginForm";
 
 export default function LoginForm() {
+  const {onsubmit, methods} = UseLoginForm();
   const {
     control,
-    handleSubmit,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      email: "",
-      password: "",
-    },
-  });
-  const onsubmit = (data: LoginPageTypes) => {
-    console.log(data);
-  };
+  } = methods;
   return (
     <>
       <div className={`${style.mainDiv} `}>
         <div className="w-1/4  bg-black/40 backdrop-blur-xs rounded-xl shadow-md border border-white/60 text-white px-10 cursor-pointer space-y-6 py-4">
-          <form onSubmit={handleSubmit(onsubmit)} className="space-y-2">
+          <form onSubmit={onsubmit} className="space-y-2">
             <div className="flex justify-center flex-col">
               <div className="w-full flex justify-center">
                 <Image
@@ -39,7 +35,7 @@ export default function LoginForm() {
                   alt="company-logo"
                 />
               </div>
-              <div className="font-cinzel font-light   text-logo  uppercase leading-none! ">
+              <div className="font-cinzel font-light   text-logo  uppercase leading-none! text-center">
                 <span className="tracking-tight text-4xl">S</span>
                 <span className="text-3xl">anaa yadawiya</span>
               </div>
@@ -47,7 +43,7 @@ export default function LoginForm() {
             <h1 className="text-xs capitalize">
               welcome. please login to cointinue
             </h1>
-            <div className="flex flex-col justify-center">
+            <div className="flex flex-col justify-center gap-4">
               <Button
                 firstIcon={
                   <Image
@@ -76,6 +72,7 @@ export default function LoginForm() {
                   name="email"
                   render={({ field }) => (
                     <AdminInputField
+                    type="text"
                       label={"Email"}
                       error={errors.email?.message}
                       className={""}
@@ -89,7 +86,8 @@ export default function LoginForm() {
                   render={({ field }) => (
                     <AdminInputField
                       label={"Password"}
-                      error={errors.email?.message}
+                      type="password"
+                      error={errors.password?.message}
                       className={""}
                       {...field}
                     />
@@ -105,7 +103,12 @@ export default function LoginForm() {
             </div>
           </form>
           <div>
-            <p className="text-sm">Already have an account? <Link href={'/register'} className="underline hover:scale-105" >Register</Link></p>
+            <p className="text-sm">
+              Dont have an account?{" "}
+              <Link href={"/register"} className="underline hover:scale-105">
+                Register
+              </Link>
+            </p>
           </div>
         </div>
       </div>

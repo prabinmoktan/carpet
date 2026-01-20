@@ -26,3 +26,12 @@ export interface ProductFormValues {
     email: string;
     password: string;
   }
+
+  export interface RegsiterTypes{
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+
+  }

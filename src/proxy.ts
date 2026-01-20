@@ -6,7 +6,7 @@ interface JwtPayload {
   role: "admin" | "moderator" | "user";
 }
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Only protect admin routes
