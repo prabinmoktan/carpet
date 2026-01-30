@@ -4,6 +4,7 @@ export interface User {
   user: {
     _id: string;
     firstName: string;
+    lastName: string;
     email: string;
     role: "admin" | "user";
     isVerified: boolean;
