@@ -37,11 +37,11 @@ interface IUser {
       type: String,
       required: true,
       minLength: 6,
-      maxLength: 20,
+      maxLength: 500,
     },
     role:{
       type:String,
-      enum: ["admin", "moderator", "useer"],
+      enum: ["admin", "moderator", "user"],
       default: "user"
     },
     refreshToken: {

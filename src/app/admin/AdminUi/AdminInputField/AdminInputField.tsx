@@ -1,6 +1,5 @@
 import { EyeClosedIcon, EyeIcon } from "lucide-react";
-import { set } from "mongoose";
-import React, { useState } from "react";
+import React, { FocusEventHandler, useState } from "react";
 
 interface AppTextTypes extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -10,6 +9,7 @@ interface AppTextTypes extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   type?: "text" | "password" | "date";
   backendError?: string;
+  onBlur?: FocusEventHandler<HTMLInputElement>;
 }
 
 const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(
@@ -22,6 +22,7 @@ const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(
       error,
       type = "text",
       backendError,
+      onBlur,
       ...rest
     },
     ref
@@ -37,6 +38,7 @@ const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(
               ref={ref}
               placeholder={placeholder || backendError}
               value={value}
+              onBlur={onBlur}
               className={`flex h-9 w-full rounded-md border ${
                 error ? "border-red-500" : "border"
               }  px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm ${
@@ -44,6 +46,7 @@ const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(
               }`}
               {...rest}
             />
+            
           )}
           {type === "password" && (
             <div
@@ -58,6 +61,7 @@ const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(
                 ref={ref}
                 placeholder={placeholder || backendError}
                 value={value}
+                autoComplete="off"
                 className={` w-full text-sm 
                placeholder:text-gray-400
               focus-visible:outline-none focus-visible:ring-0
@@ -71,34 +75,27 @@ const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(
               }
              
             `}
+            onBlur={onBlur}
                 {...rest}
               />
-              {/* { showPassword ? (
-                <EyeIcon
-                  onClick={() => setShowPassword(!showPassword)}
-                  size={"18px"}
-                />
-              ) : (
-                <EyeClosedIcon
-                  onClick={() => setShowPassword(!showPassword)}
-                  size={"18px"}
-                />
-              )} */}
+             
               {value && (
-                <button onClick={(e) => {
+                <button 
+                tabIndex={-1}
+                onClick={(e) => {
                   e.preventDefault()
                   e.stopPropagation()  
-                  setShowPassword(!showPassword)}}>
+                  setShowPassword((s)=>!s)}}>
                   {showPassword ? (
                     <EyeIcon size={"18px"} />
                   ) : (
                     <EyeClosedIcon size={"18px"} />
                   )}
                 </button>
-              )}
+               )} 
             </div>
           )}
-          {error && <span className="text-red-500 text-xs">{error}</span>}
+          {error && <p className="text-red-500 text-xs"><span className="text-lg">⚠</span>{error}</p>}
         </div>
       </>
     );

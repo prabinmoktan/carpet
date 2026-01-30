@@ -11,10 +11,10 @@ import AdminFileField from "../../AdminUi/AdminFileField/AdminFileField";
 import AdminCheckbox from "../../AdminUi/AdminCheckbox/AdminCheckbox";
 import { motion } from "framer-motion";
 import AdminDateField from "../../AdminUi/AdminDateField/AdminDateField";
+import { useCreateProductMutation } from "./product.api";
 
 const Page = () => {
-  // const [fileInput, setfileInput] = useState<File[] | null>(null);
-
+const [createProduct, {isLoading}] = useCreateProductMutation();
   const {
     handleSubmit,
     control,
@@ -27,8 +27,27 @@ const Page = () => {
     control,
     name: "isSale",
   }) as boolean;
-  const onsubmit = (data: ProductFormValues) => {
-    console.log(data);
+  const onsubmit = async(data: ProductFormValues) => {
+   
+    const formData = new FormData();
+
+  formData.append("title", data.title);
+  formData.append("category", data.category);
+  formData.append("price", String(data.price));
+  formData.append("stock", String(data.stock));
+  formData.append("description", data.description);
+
+  formData.append("specs", JSON.stringify(data.specs));
+
+  if (data.isSale && data.sale) {
+    formData.append("sale", JSON.stringify(data.sale));
+  }
+
+  data.images.forEach((file) => {
+    formData.append("images", file);
+  });
+    const response = await createProduct(formData).unwrap();
+    console.log(response)
   };
   return (
     <>

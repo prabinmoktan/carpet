@@ -6,6 +6,7 @@ import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import MobileHeader from "../MobileHeader/MobileHeader";
 import CompanyLogo from "../../ui/CompanyLogo/CompanyLogo";
+import Logout from "@/app/components/Logout/Logout";
 
 const Header = () => {
   const [scroll, setScroll] = useState(false);
@@ -50,6 +51,7 @@ const Header = () => {
           </nav>
           <div className="flex gap-10">
             {/* <ToggleButton/> */}
+            <Logout/>
             <ShoppingBag size={"1.2rem"} fontWeight={"light"} />
           </div>
         </div>

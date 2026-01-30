@@ -1,15 +1,22 @@
 import { dbConnect } from "../../admin/lib/database/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { uploadOnCloudinary } from "@/app/admin/utils/cloudinary";
 import path from "path";
 import fs from "fs/promises";
 import Product from "@/app/admin/lib/models/product.model";
 import { generateSlug } from "../utils/slugify";
 import { getSaleState } from "@/app/admin/utils/getSaleState";
+import { verifyJWT } from '@/app/admin/lib/jwt';
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   await dbConnect();
   try {
+    
+    const admin = await verifyJWT(req);
+
+    if (!admin || admin.role !== 'admin') {
+      return NextResponse.json({ message: "Admin only" }, { status: 403 });
+    } 
     const formData = await req.formData();
 
     // text-fields
@@ -84,6 +91,7 @@ export const POST = async (req: Request) => {
     }
 
     const slug = await generateSlug(title);
+    console.log('imagesUrl==>', imagesUrl)
 
     const products = await Product.create({
       title,
@@ -103,21 +111,35 @@ export const POST = async (req: Request) => {
         success: true,
         message: "Products created Successfully",
         Product: products,
-        // freshProduct({ virtuals: true }),
+       
       },
       { status: 201 }
     );
     // const {title, description,}
-  } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    if (error.message === "Unauthorized") {
+      return NextResponse.json(
+        { message: "Unauthorized" },
+        { status: 401 }
+      );
+    }
+
+    if (error.message === "Forbidden") {
+      return NextResponse.json(
+        { message: "Admin access required" },
+        { status: 403 }
+      );
+    }
+
     return NextResponse.json(
-      {
-        success: false,
-        message: "Server error:something went wrong",
-        error,
-      },
+      { success: false,
+        message: "Server error" },
       { status: 500 }
     );
   }
+   
+  
 };
 
 export const GET = async (req: Request) => {

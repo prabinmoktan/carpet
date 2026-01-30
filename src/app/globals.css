@@ -11,6 +11,12 @@
     scroll-behavior: smooth;
     transition: background-color 3s ease-in-out, color 3s ease-in-out;
   }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:focus {
+    transition:  5000s ease-in-out 0s;
+  }
+  
 }
 :root {
   --bg-color: #f2f0ef;

@@ -2,7 +2,7 @@ import ms from "ms";
 import { dbConnect } from "@/app/admin/lib/database/db";
 import User from "@/app/admin/lib/models/user.model";
 import { NextRequest, NextResponse } from "next/server";
-import { generateAccessAndRefreshToken } from "../register/route";
+import { generateAccessAndRefreshToken } from "@/app/admin/lib/generateRefreshAndAccessToken";
 
 //take email and password
 //check emaile and password existence
@@ -21,12 +21,15 @@ export const POST = async (req: NextRequest) => {
       );
     }
     const user = await User.findOne({ email });
-    if (!email) {
+    if (!user) {
       return NextResponse.json({
         success: false,
         message: "User/email doesnt exist",
       });
     }
+    const firstName = user.firstName;
+    const lastName = user.lastName;
+    const role = user.role;
     const isPasswordValid = user.isPasswordCorrect(password);
     if (!isPasswordValid) {
       return NextResponse.json({
@@ -34,6 +37,7 @@ export const POST = async (req: NextRequest) => {
         message: "Incorrect Password",
       });
     }
+    const userData = {firstName, lastName, role}
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id as string
     );
@@ -41,31 +45,35 @@ export const POST = async (req: NextRequest) => {
     const accessTokenExpiry = ms(
       (process.env.ACCESS_TOKEN_EXPIRY as ms.StringValue) || "15m"
     );
+    
+
+
     const refreshTokenExpiry = ms(
       (process.env.REFRESH_TOKEN_EXPIRY as ms.StringValue) || "10d"
     );
     const response = NextResponse.json({
       success: true,
-      message: "successfullty logged in",
-      email,
-      user,
-      accessToken,
-      refreshToken,
-    });
+      message: "User logged in successfully",
+      user: userData,
+      redirectTo: user.role === "admin" ? "/admin" : "/"
+    }, {status: 200});
     // Set HTTP-only cookies
-    response.cookies.set("access_token", accessToken, {
+    response.cookies.set("accessToken", accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: accessTokenExpiry,
+      maxAge: accessTokenExpiry / 1000,
+      // expires: accessTokenExpiry,
       path: "/",
     });
 
-    response.cookies.set("refresh_token", refreshToken, {
+    response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: refreshTokenExpiry,
+      maxAge: refreshTokenExpiry / 1000,
+      // expires: refreshTokenExpiry,
       path: "/",
     });
+   
     return response;
   } catch (error) {
     return NextResponse.json(

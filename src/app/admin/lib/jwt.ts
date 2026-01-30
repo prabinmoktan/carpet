@@ -27,7 +27,13 @@ export async function verifyJWT(req: NextRequest) {
     const user = await User.findById(decoded._id).select(
       "-password -refreshToken"
     );
-
+    if (!user) {
+      throw new Error("Unauthorized");
+    }
+  
+    if (user.role !== "admin") {
+      throw new Error("Forbidden");
+    }
     return user || null;
   } catch {
     return null;

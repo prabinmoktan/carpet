@@ -1,45 +1,14 @@
 import { dbConnect } from "@/app/admin/lib/database/db";
+import { generateAccessAndRefreshToken } from "@/app/admin/lib/generateRefreshAndAccessToken";
 import User from "@/app/admin/lib/models/user.model";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-interface GenerateTokensResponse {
-  accessToken: string;
-  refreshToken: string;
-}
 
-export const generateAccessAndRefreshToken = async (
-  userId: string
-): Promise<GenerateTokensResponse> => {
-  try {
-    const user = await User.findById(userId);
 
-    if (!user) {
-      throw new Error("User not found");
-    }
-    const accessToken = user.generateAccessToken();
-    const refreshToken = user.generateRefreshToken();
-
-    user.refreshToken = refreshToken;
-
-    await user?.save({
-      validateBeforeSave: false,
-    });
-    return {
-      accessToken,
-      refreshToken,
-    };
-  } catch (error) {
-    console.error("Error generating tokens:", error);
-
-    throw Error(
-      "Sometin went wrong while generating access Token and Refres Token"
-    );
-  }
-};
-
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   await dbConnect();
   try {
+   
     const { firstName, lastName, email, password, role } = await req.json();
     if (
       [firstName, lastName, email, password].some(
@@ -56,7 +25,6 @@ export const POST = async (req: Request) => {
     const existingUser = await User.findOne({
       email,
     }).select("-password -refreshToken");
-    console.log("existingUser==>", existingUser);
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: "User/Email already exists" },
@@ -70,7 +38,7 @@ export const POST = async (req: Request) => {
       password,
       role: userRole,
     });
-    console.log("user==>", user);
+  
     const createdUser = await User.findById(user._id).select(
       "-password -refreshToken"
     );
@@ -83,9 +51,11 @@ export const POST = async (req: Request) => {
         { status: 402 }
       );
     }
+
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
       user._id
     );
+    
     return NextResponse.json(
       {
         success: false,

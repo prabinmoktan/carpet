@@ -1,49 +1,42 @@
-import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import { NextRequest, NextResponse } from "next/server";
 
-interface JwtPayload {
-  _id: string;
-  role: "admin" | "moderator" | "user";
-}
+export default function proxy(req: NextRequest) {
+  const pathname = req.nextUrl.pathname;
 
-export function proxy(req: NextRequest) {
-  const { pathname } = req.nextUrl;
+  const accessToken = req.cookies.get("accessToken")?.value;
+  const refreshToken = req.cookies.get("refreshToken")?.value;
 
-  // Only protect admin routes
-  if (!pathname.startsWith("/admin")) {
-    return NextResponse.next();
-  }
-
-  const token =
-    req.cookies.get("access_token")?.value ||
-    req.headers.get("authorization")?.replace("Bearer ", "");
-
-  // 🚫 Not logged in
-  if (!token) {
-    return NextResponse.redirect(new URL("/login", req.url));
-  }
-
-  try {
-    const decoded = jwt.verify(
-      token,
-      process.env.ACCESS_TOKEN_SECRET!
-    ) as JwtPayload;
-
-    // 🚫 Logged in but not admin/moderator
-    if (!["admin", "moderator"].includes(decoded.role)) {
-      return NextResponse.redirect(new URL("/", req.url));
+  if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
+    if (accessToken || refreshToken) {
+      try {
+        const decoded = jwt.decode(accessToken!) as { role?: string };
+        const role = decoded.role;
+        if (role === "admin") {
+          return NextResponse.redirect(new URL("/admin", req.url));
+        }
+        return NextResponse.redirect(new URL("/", req.url));
+      } catch {
+        return NextResponse.redirect(new URL("/", req.url));
+      }
     }
-
-    // ✅ Allowed
     return NextResponse.next();
-  } catch {
-    // 🚫 Invalid / expired token
-    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  if (pathname.startsWith("/admin")) {
+    if (!refreshToken) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    }
+    if (accessToken) {
+      const decoded = jwt.decode(accessToken) as { role?: string };
+      const role = decoded?.role;
+      if (role !== "admin") {
+        return NextResponse.redirect(new URL("/unauthorized", req.url));
+      }
+    } 
   }
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/login", "/register", "/admin/:path*"],
 };
-
-
