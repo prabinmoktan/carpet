@@ -11,13 +11,13 @@ interface DynamicTableProps<T> {
   columns: Column<T>[];
   data: T[];
   onEdit: (item: T) => void;
-  handleDelete: (item: T) => void;
+  onDelete: (item: T) => void;
 }
 
 const ProductTable = <T,>({
   columns,
   data,
-  handleDelete,
+  onDelete,
   onEdit,
 }: DynamicTableProps<T>) => {
   return (
@@ -70,7 +70,7 @@ const ProductTable = <T,>({
                       <SquarePen className="text-md" />
                     </button>
                     <button
-                      onClick={() => handleDelete(item)}
+                      onClick={() => onDelete(item)}
                       className="p-1.5 rounded-md text-red-600 transition-colors cursor-pointer"
                       aria-label="Delete"
                     >

@@ -14,11 +14,7 @@ import Button from "@/app/(public)/ui/Button/Button";
 
 const ProductForm = () => {
   const { handleSubmit, control, errors, isSale, isLoading, isValid, isDirty } = useProductHooks();
-  const canSubmit = isValid && isDirty;
-  console.log('dirty',isDirty)
-  console.log('vlid',isValid)
-  console.log( 'sale',isSale)
-  console.log('canSubmit=>', canSubmit)
+  
 
   return (
     <>

@@ -10,11 +10,11 @@ const productApi = baseApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    getProducts: builder.query<GetProductsResponse, void>({
-      query: () => ({
+    getProducts: builder.query<GetProductsResponse,  { page?: number; limit?: number }>({
+      query: ({page= 1, limit= 10}) => ({
         url: "/products",
         method: "GET",
-        
+        params:  { page, limit }
       }),
     }),
   }),
