@@ -7,14 +7,12 @@ import { useForm } from "react-hook-form";
 import { useLoginUserMutation } from "../../auth.api";
 import { LoginPageTypes } from "@/app/admin/AdminType";
 import { useRouter } from "next/navigation";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/app/redux/store";
+
 import { toast } from "sonner";
-import { setUser } from "@/app/redux/slice/auth.slice";
 
 export const UseLoginForm = () => {
    const router = useRouter();
- const dispatch = useDispatch<AppDispatch>()
+ 
   
   const {handleSubmit, control, setError, formState: {errors}} = useForm({
     defaultValues: UserLoginDefaultValues,
@@ -22,7 +20,7 @@ export const UseLoginForm = () => {
     mode: "onTouched",
     reValidateMode: "onChange",
   });
-   const [loginUser,{ isLoading, isError, error }] = useLoginUserMutation();
+   const [loginUser,{ isLoading}] = useLoginUserMutation();
   
 
   const onSubmit=async(data: LoginPageTypes)=> {
@@ -31,7 +29,7 @@ export const UseLoginForm = () => {
    const response = await loginUser(data).unwrap();
    console.log('response==>', response)
    if(response.success){
-    dispatch(setUser(response.user));
+  
     toast.success(`${response.message}`, {position: "bottom-right"});
     router.push(response.redirectTo)
    }else if(response.sucess === false){

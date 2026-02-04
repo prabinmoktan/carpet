@@ -36,7 +36,7 @@ const ProductSchema = new Schema<ICarpet>(
     },
     category: {
       type: String,
-      enum: ["carpet", "prayer-mat"],
+      enum: ["prayer-mat"],
       required: true,
     },
 

@@ -1,5 +1,5 @@
 "use client";
-import { CircleX } from "lucide-react";
+import { CircleX, UploadCloud } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 interface AdminFileFieldTypes {
@@ -11,43 +11,54 @@ interface AdminFileFieldTypes {
   accept?: string;
   multiple?: boolean;
   file: File[];
-  setFile:(file: File[])=> void;
+  // value?: string;
+  setFile: (file: File[]) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
   (
-    { className, type, label, error, multiple, accept,  placeholder, file, setFile },
+    {
+      className,
+      type,
+      label,
+      error,
+      multiple,
+      accept,
+      placeholder,
+      file,
+      // value,
+      setFile,
+    },
     ref
   ) => {
     const [preview, setPreview] = useState<string[]>([]);
+
+    useEffect(() => {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      if (file.length === 0) setPreview([]);
+    }, [file]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const selectedFiles = e.target.files;
       if (!selectedFiles) return;
 
-      const mergedFiles = [...file, ...selectedFiles]
+      const mergedFiles = [...file, ...selectedFiles];
       setFile(mergedFiles);
 
-      const urls = Array.from(selectedFiles).map((photo) => URL.createObjectURL(photo));
+      const urls = Array.from(selectedFiles).map((photo) =>
+        URL.createObjectURL(photo)
+      );
       // ✅ CALL the updater function directly
       setPreview((prev) => [...prev, ...urls]); // Spread urls!
 
-      console.log("URLs added:", urls);
-      console.log(preview);
       // onChange?.(e);
       // reset input so same file can be re-selected
-    e.target.value = "";
+      e.target.value = "";
     };
 
-    // useEffect(() => {
-    //   return () => {
-    //     preview.forEach((url) => URL.revokeObjectURL(url));
-    //   };
-    // }, [preview]);
-
     const handleDelete = (item: number) => {
-      const updatedFiles = file.filter((_, i)=> i !== item)
+      const updatedFiles = file.filter((_, i) => i !== item);
       const filteredItem = preview?.filter((_, index) => index !== item);
       setFile(updatedFiles);
       setPreview(filteredItem);
@@ -55,7 +66,7 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
 
     return (
       <>
-        <div className={className}>
+        <div className={`${className} relative  `}>
           {label && <label className="text-sm font-light">{label}</label>}
 
           <input
@@ -63,9 +74,15 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
             type={type}
             multiple={multiple}
             accept={accept}
+            // value={value}
             onChange={handleFileChange}
             placeholder={placeholder}
-            className="flex w-full rounded-md  px-3 py-2 h-48 relative opacity-0 border-2"
+            className="flex w-full rounded-md  px-3 py-2 h-20 relative opacity-0 border-2 z-10"
+          />
+          <UploadCloud
+            size={48}
+            color="green"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none"
           />
 
           {error && <span className="text-red-500 text-xs">{error}</span>}
@@ -89,7 +106,7 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
                   alt="preview"
                   width={20}
                   height={20}
-                  className="w-20 h-20 object-cover rounded border"
+                  className="w-20 h-20 object-cover rounded"
                 />
               </div>
             ))}

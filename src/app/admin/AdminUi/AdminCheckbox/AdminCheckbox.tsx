@@ -24,8 +24,8 @@ const AdminCheckbox = React.forwardRef<HTMLInputElement, AdminCheckboxTypes>(
               onChange={(e)=> onChange(e.target.checked)}   
               {...rest}
             />
-            <div className="relative w-9 h-5 bg-neutral-quaternary  shadow peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand"></div>
-            <span className="select-none ms-3 text-sm font-medium text-heading">
+            <div className={`relative w-9 h-5 bg-neutral-quaternary  shadow peer-focus:ring-brand-soft dark:peer-focus:ring-brand-soft rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-buffer after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand ${checked ? "bg-amber-600" : "bg-transparent"}`}></div>
+            <span className="select-none ms-3 text-sm font-medium text-heading bg">
               {label}
             </span>
           </label>

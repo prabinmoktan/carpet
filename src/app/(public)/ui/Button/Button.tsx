@@ -8,12 +8,16 @@ interface ButtonTypes {
   firstIcon?: React.ReactNode;
   secondIcon?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  type?: "submit"
+  type?: "submit";
+  isLoading?: boolean;
+  disabled?: boolean;
+ 
 }
 
 const buttonVariant = {
   default: "px-3 py-1 bg-gray-500 text-white cursor-pointer hover:bg-gray-600",
-  primary: "px-3 py-2 bg-amber-700 text-white cursor-pointer rounded-md active:bg-amber-700 hover:bg-amber-800 transition-easeOut duration-300 flex gap-3 border-none",
+  primary:
+    "px-3 py-2 bg-amber-700 text-white cursor-pointer rounded-md active:bg-amber-700 hover:bg-amber-800 transition-easeOut duration-300 flex gap-3 border-none",
   destruction: "px-3 py-1 bg-red-500 text-white cursor-pointer",
   glass:
     "bg-black/5 backdrop-blur-xs rounded-xl shadow-md border border-white/10 text-white px-10 py-2 cursor-pointer",
@@ -25,15 +29,26 @@ const Button: React.FC<ButtonTypes> = ({
   firstIcon,
   secondIcon,
   onClick,
-  type= "submit",
+  isLoading=false,
+  disabled,
+  type = "submit",
   className,
-  
 }) => {
+ 
   return (
     <>
-      <button className={clsx(buttonVariant[variant], className)} onClick={onClick} type={type}>
+      <button
+      disabled={disabled}
+        className={clsx(
+          buttonVariant[variant],
+          disabled && "opacity-50 cursor-not-allowed pointer-events-none",
+          className
+        )}
+        onClick={onClick}
+        type={type}
+      >
         {firstIcon && firstIcon}
-        <p className="capitalize">{title}</p>
+        <p className="capitalize">{isLoading ? "Processing" : title}</p>
         {secondIcon && secondIcon}
       </button>
     </>

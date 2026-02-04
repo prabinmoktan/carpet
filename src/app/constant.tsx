@@ -14,7 +14,10 @@ import { Settings } from "lucide-react";
 import { Boxes } from "lucide-react";
 import { Mail } from "lucide-react";
 import { ChartColumnDecreasing } from "lucide-react";
-
+// import {  } from "./admin/AdminType";
+import { Column } from "./admin/AdminUi/ProductTable/ProductTable";
+import Image from "next/image";
+import { ProductFormValues } from "./admin/AdminType";
 
 export const navItems = [
   { label: "Shop", href: "/shop" },
@@ -372,9 +375,61 @@ export const inspirationPosts = [
 // }
 
 export const SidebarItem = [
-  { name: "dashboard", icon: LayoutDashboard, href: '/admin/dashboard' },
-  { name: "products", icon: Boxes,href: '/admin/products' },
-  { name: "inquiries", icon: Mail, href: '/admin/inquiry' },
-  { name: "analytics", icon: ChartColumnDecreasing, href: '/admin/analytics' },
-  { name: "settings", icon: Settings, href: '/admin/settings' },
+  { name: "dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
+  { name: "products", icon: Boxes, href: "/admin/products" },
+  { name: "inquiries", icon: Mail, href: "/admin/inquiry" },
+  { name: "analytics", icon: ChartColumnDecreasing, href: "/admin/analytics" },
+  { name: "settings", icon: Settings, href: "/admin/settings" },
+];
+
+export const category = [{ id: "prayer-mat", name: "prayer-mat" }];
+
+
+
+// ✅ Make sure accessor keys match your actual data keys exactly
+export const ProductTableHeader: Column<ProductFormValues>[] = [
+  {
+    header: "Title",
+    accessor: "title",
+  },
+  {
+    header: "Category",
+    accessor: "category",
+  },
+  {
+    header: "Price",
+    accessor: "price",
+  },
+  {
+    header: "Stock",
+    accessor: "stock",
+  },
+  // {
+  //   header: "Description",
+  //   accessor: "description",
+  // },
+  {
+    header: "Size",
+    // ✅ specs.size is nested, so use function accessor
+    accessor: (item) => item.specs?.size,
+  },
+  {
+    header: "Material",
+    accessor: (item) => item.specs?.material,
+  },
+  {
+    header: "Country",
+    accessor: (item) => item.specs?.country,
+  },
+  {
+    header: "Images",
+    // ✅ Images is an array, render as image or count
+    accessor: (item) => (
+      <Image src={item.images?.[0]} alt="product"className="w-auto h-auto" width={25} height={35} />
+    ),
+  },
+  {
+    header: "On Sale",
+    accessor: (item) => (item?.sale?.isActive ? "Yes" : "No"),
+  },
 ];

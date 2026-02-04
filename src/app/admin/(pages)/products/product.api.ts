@@ -1,4 +1,5 @@
 import { baseApiSlice } from "@/app/axios/baseApiConfig";
+import { GetProductsResponse } from "../../AdminType";
 
 const productApi = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,10 +10,11 @@ const productApi = baseApiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    getProducts: builder.query({
+    getProducts: builder.query<GetProductsResponse, void>({
       query: () => ({
         url: "/products",
         method: "GET",
+        
       }),
     }),
   }),

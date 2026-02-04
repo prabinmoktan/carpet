@@ -1,33 +1,33 @@
 export const ProductDefaultValues = {
-    title: "",
-    category: "carpet",
-    price: 0,
-    images: [],
-    description: "",
-    specs: {
-      size: "",
-      material: "",
-      country: "",
-    },
-    stock: 0,
-    isSale: false,
-    sale: {
-      percentage: 0,
-      startsAt: "",
-      endsAt: "",
-      isActive: false,
-    },
-}
+  title: "",
+  category: "prayer-mat",
+  price: 0,
+  images: [],
+  description: "",
+  specs: {
+    size: "",
+    material: "",
+    country: "",
+  },
+  stock: 0,
+  isSale: false,
+  sale: {
+    percentage: 0,
+    startsAt: "",
+    endsAt: "",
+  },
+  
+};
 
-export const UserLoginDefaultValues ={
-  email: '',
-  password: ''
-}
+export const UserLoginDefaultValues = {
+  email: "",
+  password: "",
+};
 
 export const UserRegisterDefaultvalues = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  password: '', 
-  confirmPassword: ''
-}
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};

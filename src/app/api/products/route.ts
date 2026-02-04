@@ -178,22 +178,25 @@ export const GET = async (req: Request) => {
     const total = await Product.countDocuments(filter);
 
     // const new_days = 14;
-    const products = await Product.find(filter)
+    const products = await Product.find()
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .select("-__v")
+      .lean();
+
     const response = products.map((product) => {
       const saleDetails = getSaleState(product);
       return {
-        ...products,
+        ...product,
         sale: {
           ...product.sale,
           isActive: saleDetails.isActive,
         },
-        isActive: saleDetails.isActive,
         finalPrice: saleDetails.finalPrice,
       };
     });
+    
     
     return NextResponse.json(
       {

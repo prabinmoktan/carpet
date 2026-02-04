@@ -10,7 +10,7 @@ const Sidebar = () => {
       
         <nav className="space-y-2">
           {SidebarItem?.map((item, index) => (
-            <Link key={index} href={item.href} className="flex items-center capitalize gap-3 hover:bg-logo/70 p-3 duration-300 rounded-xl text-[#1F1F1F]">
+            <Link key={index} href={item.href} className="flex items-center capitalize gap-3 hover:bg-logo/20 p-3 duration-300 rounded-md hover:shadow-2xl text-[#1F1F1F]">
                 <span>{<item.icon size={18}/>}</span>
                 <p>{item.name}</p>
             </Link>

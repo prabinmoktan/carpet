@@ -7,6 +7,8 @@ export default function proxy(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken")?.value;
   const refreshToken = req.cookies.get("refreshToken")?.value;
 
+
+
   if (pathname.startsWith("/login") || pathname.startsWith("/register")) {
     if (accessToken || refreshToken) {
       try {
@@ -34,7 +36,9 @@ export default function proxy(req: NextRequest) {
         return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
     } 
+    return NextResponse.next();
   }
+  return NextResponse.next();
 }
 
 export const config = {

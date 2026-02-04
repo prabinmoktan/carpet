@@ -4,7 +4,7 @@ export function getSaleState(product: ICarpet){
     const now =  new Date();
     if(!product.sale){
         return{
-            isActive: false,
+            onSale: false,
             finalPrice: product.price,
             discountAmount: 0
         }

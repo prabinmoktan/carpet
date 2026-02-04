@@ -1,3 +1,4 @@
+'use client';
 import { EyeClosedIcon, EyeIcon } from "lucide-react";
 import React, { FocusEventHandler, useState } from "react";
 

@@ -1,6 +1,6 @@
 interface UserAvatarTypes {
   firstName?: string;
-  lastName?: string;
+  lastName? : string;
   size?: "sm" | "md" | "lg";
   className?: string;
 }
