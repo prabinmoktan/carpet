@@ -389,13 +389,22 @@ export const category = [{ id: "prayer-mat", name: "prayer-mat" }];
 // ✅ Make sure accessor keys match your actual data keys exactly
 export const ProductTableHeader: Column<ProductFormValues>[] = [
   {
+    header: "Images",
+    // ✅ Images is an array, render as image or count
+    accessor: (item) => (
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      <Image src={item.images?.[0]} alt="product"className="w-auto h-auto" width={25} height={35} />
+    ),
+  },
+  {
     header: "Title",
     accessor: "title",
   },
-  {
-    header: "Category",
-    accessor: "category",
-  },
+  // {
+  //   header: "Category",
+  //   accessor: "category",
+  // },
   {
     header: "Price",
     accessor: "price",
@@ -408,26 +417,20 @@ export const ProductTableHeader: Column<ProductFormValues>[] = [
   //   header: "Description",
   //   accessor: "description",
   // },
-  {
-    header: "Size",
-    // ✅ specs.size is nested, so use function accessor
-    accessor: (item) => item.specs?.size,
-  },
-  {
-    header: "Material",
-    accessor: (item) => item.specs?.material,
-  },
-  {
-    header: "Country",
-    accessor: (item) => item.specs?.country,
-  },
-  {
-    header: "Images",
-    // ✅ Images is an array, render as image or count
-    accessor: (item) => (
-      <Image src={item.images?.[0]} alt="product"className="w-auto h-auto" width={25} height={35} />
-    ),
-  },
+  // {
+  //   header: "Size",
+  //   // ✅ specs.size is nested, so use function accessor
+  //   accessor: (item) => item.specs?.size,
+  // },
+  // {
+  //   header: "Material",
+  //   accessor: (item) => item.specs?.material,
+  // },
+  // {
+  //   header: "Country",
+  //   accessor: (item) => item.specs?.country,
+  // },
+  
   {
     header: "On Sale",
     accessor: (item) => (item?.sale?.isActive ? "Yes" : "No"),

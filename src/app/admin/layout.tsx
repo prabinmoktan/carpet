@@ -12,7 +12,7 @@ export default function layout({ children }: { children: React.ReactNode }) {
           <aside className="w-72  shrink-0">
             <Sidebar />
           </aside>
-          <main className="flex-1  overflow-scroll max-w-400 bg-color ">
+          <main className="flex-1  overflow-scroll max-w-400 bg-color relative ">
             {children}
           </main>
         </section>

@@ -56,65 +56,54 @@ export const LoginSchema = z.object({
 export type LoginInput = z.infer<typeof LoginSchema>;
 
 
+const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
-
-// Specs schema
 const specsSchema = z.object({
-  size: z.string().min(1, { message: "Size is required" }),
-  material: z.string().min(1, { message: "Material is required" }),
-  country: z.string().min(1, { message: "Country is required" }),
+  size: z.string().min(1, "Size is required"),
+  material: z.string().min(1, "Material is required"),
+  country: z.string().min(1, "Country is required"),
 });
 
-// Sale schema
 const saleSchema = z.object({
-  percentage: z
-    .number({ message: "Sale percentage is required" })
-    .min(1, { message: "Percentage must be at least 1%" })
-    .max(100, { message: "Percentage cannot exceed 100%" }),
-  startsAt: z.string({ message: "Start date is required" }),
-  endsAt: z.string({ message: "End date is required" }),
+  startsAt: z.string().min(1, "Starting Date is required"),
+  endsAt: z.string().min(1, "Sale Ending date is required"),
+  percentage: z.coerce
+    .number()
+    .min(1, "Percentage must be at least 1%")
+    .max(100, "Percentage cannot exceed 100%"),
 });
 
-// Main product schema
-export const productSchema = z
-  .object({
-    title: z.string().min(2, { message: "Title is required" }),
-    category: z.string().min(1, { message: "Category is required" }),
-    description: z.string().min(5, { message: "Description is required" }),
-    price: z
-      .number("Price is required")
-      .min(1, { message: "Price must be greater than 0" }),
-    stock: z
-      .number( "Stock is required" )
-      .min(0, { message: "Stock cannot be negative" }),
-    specs: specsSchema,
-    images: z
-      .array(z.instanceof(File))
-      .min(1, { message: "At least one image is required" })
-      .max(10, { message: "Maximum 10 images allowed" }),
-    isSale: z.boolean().optional(),
-    sale: z.union([saleSchema]), // conditional requirement handled in refine
-  })
-  .refine(
-    (data) => {
-      // Sale fields are required only if isSale = true
-      if (data.isSale) {
-        return (
-          data.sale.percentage !== undefined &&
-          !!data.sale.startsAt &&
-          !!data.sale.endsAt
-        );
-      }
-      return true;
-    },
-    {
-      message: "Sale fields are required when 'On Sale' is checked",
-      path: ["sale"],
-    }
-  );
+const baseProduct = {
+  title: z.string().min(2, "Title is required"),
+  category: z.string().min(1, "Category is required"),
+  description: z.string().min(5, "Description is required"),
+  price: z.coerce.number().min(1, "Price must be greater than 0"),
+  stock: z.coerce.number().min(0, "Stock cannot be negative"),
+  specs: specsSchema,
+  images: z
+    .array(z.instanceof(File))
+    .min(1, "At least 1 images required")
+    .max(5, "Max 5 images allowed")
+    .refine(
+      (files) =>
+        files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
+      { message: "Invalid file type (PNG/JPG/WebP only)" }
+    ),
+};
 
-// Infer TypeScript type directly from schema
+export const productSchema = z.discriminatedUnion("isSale", [
+  // ❌ NOT ON SALE
+  z.object({
+    ...baseProduct,
+    isSale: z.literal(false),
+    sale: z.undefined(),
+  }),
+
+  // ✅ ON SALE
+  z.object({
+    ...baseProduct,
+    isSale: z.literal(true),
+    sale: saleSchema,
+  }),
+]);
 export type ProductFormValues = z.infer<typeof productSchema>;
-
-
-

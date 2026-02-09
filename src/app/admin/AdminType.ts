@@ -1,9 +1,12 @@
+
+
 // types/product-form.ts
 export interface ProductFormValues {
+  _id?: string;
   title: string;
   category: string;
   price: number;
-  images: string[];
+  images: string[] | File[] ;
   description: string;
   specs: {
     size: string;

@@ -1,12 +1,11 @@
 import { useForm, useWatch } from "react-hook-form";
 import { useCreateProductMutation } from "../product.api";
-import { ProductDefaultValues } from "@/app/admin/AdminDefaultValues";
 import { ProductFormValues } from "@/app/admin/AdminType";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productSchema } from "@/app/admin/AdminSchemas";
 
-export const    useProductHooks = () => {
+export const useProductHooks = () => {
   const [createProduct, { isLoading }] = useCreateProductMutation();
 
   const {
@@ -15,20 +14,33 @@ export const    useProductHooks = () => {
     reset,
     formState: { errors, isDirty, isValid },
   } = useForm({
-    defaultValues: ProductDefaultValues,
+    defaultValues: {
+      isSale: false,
+      title: "",
+      category: "",
+      description: "",
+      price: 0,
+      stock: 0,
+      specs: {
+        size: "",
+        material: "",
+        country: "",
+      },
+      images: [],
+    },
     resolver: zodResolver(productSchema),
-    mode: "onChange",
+    shouldUnregister: true
+    // mode: "onChange",
   });
   const isSale = useWatch({
     control,
     name: "isSale",
   }) as boolean;
 
- 
-
   const onsubmit = async (data: ProductFormValues) => {
-    const formData = new FormData();
-
+    try {
+      const formData = new FormData();
+    console.log(formData);
     formData.append("title", data.title);
     formData.append("category", data.category);
     formData.append("price", String(data.price));
@@ -40,20 +52,39 @@ export const    useProductHooks = () => {
     if (data.isSale && data.sale) {
       formData.append("sale", JSON.stringify(data.sale));
     }
-
-    data.images.forEach((file:File) => {
+     // data.images.forEach((file:File) => {
+    //   formData.append("images", file);
+    // });
+    for (const file of data.images) {
       formData.append("images", file);
-    });
-    console.log(control._fields)
-    const response = await createProduct(formData).unwrap();
-    
-    if(response.success){
-        toast.success(`${response.message}`, {position: "bottom-right"})
-        reset({...ProductDefaultValues, images: []});
     }
+    console.log(control._fields);
+    const response = await createProduct(formData).unwrap();
+
+    if (response.success) {
+      toast.success(response.message, { position: "bottom-right" });
+      reset({  images: [] });
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.error("Submit error:", error);
+      toast.error(error.data?.message || "Failed to create product", {
+        position: "bottom-right",
+      });
+    }
+    
+    
+
+   
   };
 
   return {
-    handleSubmit: handleSubmit(onsubmit), errors, isSale,control, isLoading, isValid, isDirty
+    handleSubmit: handleSubmit(onsubmit),
+    errors,
+    isSale,
+    control,
+    isLoading,
+    isValid,
+    isDirty,
   };
 };

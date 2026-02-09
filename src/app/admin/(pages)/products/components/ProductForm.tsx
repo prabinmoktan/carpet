@@ -1,7 +1,12 @@
 "use client";
-import React, { Activity } from "react";
-import { useProductHooks } from "../useProductHooks/useProductHooks";
-import { Controller } from "react-hook-form";
+import React from "react";
+import { useProductHooks } from "../ProductHooks/useProductHooks";
+import {
+  Controller,
+  FieldError,
+  FieldErrorsImpl,
+  Merge,
+} from "react-hook-form";
 import AdminInputField from "@/app/admin/AdminUi/AdminInputField/AdminInputField";
 import AdminSelectInput from "@/app/admin/AdminUi/AdminSelectInput";
 import AdminTextArea from "@/app/admin/AdminUi/AdminTextArea/AdminTextArea";
@@ -10,11 +15,31 @@ import AdminCheckbox from "@/app/admin/AdminUi/AdminCheckbox/AdminCheckbox";
 import AdminDateField from "@/app/admin/AdminUi/AdminDateField/AdminDateField";
 import { motion } from "framer-motion";
 import Button from "@/app/(public)/ui/Button/Button";
+import GlassLoader from "@/app/components/GlassLoader/GlassLoader";
+import { Loader } from "lucide-react";
 
+type SaleFieldErrors = Merge<
+  FieldError,
+  FieldErrorsImpl<{
+    startsAt: string;
+    endsAt: string;
+    percentage: number;
+  }>
+>;
+
+function isSaleFieldErrors(error: unknown): error is SaleFieldErrors {
+  return typeof error === "object" && error !== null && !("message" in error);
+}
 
 const ProductForm = () => {
-  const { handleSubmit, control, errors, isSale, isLoading, isValid, isDirty } = useProductHooks();
-  
+  const { handleSubmit, control, errors, isSale, isLoading, isValid, isDirty } =
+    useProductHooks();
+
+  if (isLoading) {
+    return <GlassLoader />;
+  }
+
+  const saleError = isSaleFieldErrors(errors.sale) ? errors.sale : undefined;
 
   return (
     <>
@@ -107,7 +132,9 @@ const ProductForm = () => {
             <AdminInputField
               label={"Price"}
               className="flex flex-col gap-2"
+              error={errors.price?.message}
               {...field}
+              value={field.value as number}
             />
           )}
         />
@@ -118,7 +145,9 @@ const ProductForm = () => {
             <AdminInputField
               label={"Stock"}
               className="flex flex-col gap-2"
+              error={errors.stock?.message}
               {...field}
+              value={field.value as number}
             />
           )}
         />
@@ -127,10 +156,15 @@ const ProductForm = () => {
           name="isSale"
           control={control}
           render={({ field }) => (
-            <AdminCheckbox checked={!!field.value} label="On Sale" {...field} />
+            <AdminCheckbox
+              checked={field.value as boolean}
+              label="On Sale"
+              {...field}
+            />
           )}
         />
-        <Activity mode={isSale ? "visible" : "hidden"}>
+        {/* <Activity mode={isSale ? "visible" : "hidden"}> */}
+        {isSale && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -146,7 +180,9 @@ const ProductForm = () => {
                   label={"startsAt"}
                   type="start"
                   className={"w-full"}
+                  error={saleError?.startsAt?.message}
                   {...field}
+                  value={field.value as string}
                 />
               )}
             />{" "}
@@ -158,7 +194,9 @@ const ProductForm = () => {
                   label={"endsAt"}
                   type="end"
                   className={"w-full"}
+                  error={saleError?.endsAt?.message}
                   {...field}
+                  value={field.value as string}
                 />
               )}
             />{" "}
@@ -169,12 +207,15 @@ const ProductForm = () => {
                 <AdminInputField
                   label={"sale percentage"}
                   className={"w-full"}
+                  error={saleError?.percentage?.message}
                   {...field}
+                  value={field?.value as number ?? ""}
                 />
               )}
             />
           </motion.div>
-        </Activity>
+        )}
+        {/* </Activity> */}
         <div className="w-full">
           <h1>Product Images</h1>
 
@@ -197,7 +238,13 @@ const ProductForm = () => {
             )}
           />
         </div>
-       <Button title={"Upload Product"} variant={"primary"} isLoading={isLoading}  />
+        <Button
+          title={isLoading ? "Uploading": "Upload Product"}
+          variant={"primary"}
+          firstIcon={isLoading && <Loader/>}
+          isLoading={isLoading}
+          type="submit"
+        />
       </form>
     </>
   );

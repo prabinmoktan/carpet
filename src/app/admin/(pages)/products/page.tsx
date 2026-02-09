@@ -1,20 +1,23 @@
+"use client";
 import Button from "@/app/(public)/ui/Button/Button";
-import ProductForm from "./components/ProductForm";
 import { Plus } from "lucide-react";
 import ProductData from "./components/ProductData";
-
-
+import { useRouter } from "next/navigation";
 
 const Page = () => {
- 
+  const router = useRouter();
 
   return (
     <>
-    <Button title={"Add Products"} variant={"primary"} firstIcon={<Plus/>} />
       <section className="flex flex-col px-5">
-
-      {/* <ProductForm/> */}
-      <ProductData/>
+        <Button
+          title={"Add Products"}
+          variant={"primary"}
+          firstIcon={<Plus />}
+          onClick={() => router.push("/admin/products/AddProducts")}
+          className="w-46"
+        />
+        <ProductData/>
       </section>
     </>
   );

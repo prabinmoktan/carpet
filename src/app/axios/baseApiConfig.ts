@@ -52,5 +52,5 @@ import { axiosInstance } from "./axios.interceptor";
     reducerPath: "baseApi",
     baseQuery,
     endpoints: () => ({}), // Empty initially, to be injected later
-    tagTypes: ["Product", "Auth", "USer"],
+    tagTypes: ["Products", "Auth", "User"],
   });

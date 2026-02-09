@@ -2,32 +2,22 @@
 import ProductTable from "@/app/admin/AdminUi/ProductTable/ProductTable";
 import { ProductTableHeader } from "@/app/constant";
 import React, { useState } from "react";
-import { useGetProductsQuery } from "../product.api";
 import AppModal from "@/app/components/AppModal/AppModal";
 import Pagination from "@/app/components/Pagination/Pagination";
 import { ProductFormValues } from "@/app/admin/AdminType";
+import { useProduct } from "../ProductHooks/useProduct";
+import GlassLoader from "@/app/components/GlassLoader/GlassLoader";
+import { useDispatch } from "react-redux";
+
 
 const ProductData = () => {
-  const limit = 10;
-  const [page, setPage] = useState(1);
-  const { data, isLoading } = useGetProductsQuery({ limit: limit, page });
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(
-    null
-  );
+  
+//   const dispatch = useDispatch();
+// console.log("dispatch", dispatch);
 
-  const [open, setOpen] = useState(false);
-  console.log(data);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleDelete = (product: any) => {
-    setOpen(true);
-    setSelectedProductId(product._id);
-  };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleEdit = (product: any) => {};
+  const {data, isLoading, page, setPage, handleEdit, handleDelete, confirmDelete, open, setOpen } =useProduct();
 
-  const confirmDelete = () => {
-    console.log(selectedProductId);
-  };
+    console.log('page', page)
 
   return (
     <>
@@ -49,7 +39,7 @@ const ProductData = () => {
         title={"Delete a Product"}
         description={"Are you sure to delete this product?"}
         onCancel={() => setOpen(false)}
-        onConfirm={()=>confirmDelete()}
+        onConfirm={() => confirmDelete()}
       />
     </>
   );

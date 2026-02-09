@@ -6,11 +6,12 @@ interface AppTextTypes extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   placeholder?: string;
   className: string;
-  value?: string | number;
+  value?: string | number | undefined;
   error?: string;
   type?: "text" | "password" | "date";
   backendError?: string;
   onBlur?: FocusEventHandler<HTMLInputElement>;
+  
 }
 
 const AdminInputField = React.forwardRef<HTMLInputElement, AppTextTypes>(

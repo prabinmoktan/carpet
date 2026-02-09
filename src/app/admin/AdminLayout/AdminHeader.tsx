@@ -6,7 +6,7 @@ import { Bell } from "lucide-react";
 import React from "react";
 
 const AdminHeader = () => {
-  const { data } = useMeQuery();
+  const { data, isLoading } = useMeQuery();
   const person = data?.user;
   //  console.log(user?.email)
 
@@ -18,18 +18,18 @@ const AdminHeader = () => {
         <Bell />
 
         <div className="capitalize flex gap-4">
-        <UserAvatar
-          firstName={person?.firstName}
-          lastName={person?.lastName}
-          className="bg-amber-500"
-        />
-        <span>
-
-          <h1 >
-            {person?.firstName} {person?.lastName}
-          </h1>
-          <p className="text-xs">{person?.role}</p>
-        </span>
+          <UserAvatar
+            firstName={person?.firstName}
+            lastName={person?.lastName}
+            className="bg-amber-500"
+          />
+          <span>
+          <h1>
+                  {person?.firstName} {person?.lastName}
+                </h1>
+                <p className="text-xs">{person?.role}</p>
+           
+          </span>
         </div>
       </div>
     </header>
