@@ -1,5 +1,5 @@
 import { baseApiSlice } from "@/app/axios/baseApiConfig";
-import { GetProductsResponse } from "../../AdminType";
+import { GetProductsResponse } from "../admin/AdminType";
 
 const productApi = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -28,9 +28,15 @@ const productApi = baseApiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Products"]
     }),
-    
+    getProductById: builder.query({
+      query: (id)=> ({
+        url: `/products/${id}`,
+        method: "GET",
+        body: id
+      })
+    })
   }),
   
 });
 
-export const { useCreateProductMutation, useGetProductsQuery, useDeleteProductMutation } = productApi;
+export const { useCreateProductMutation, useGetProductsQuery, useDeleteProductMutation, useGetProductByIdQuery } = productApi;

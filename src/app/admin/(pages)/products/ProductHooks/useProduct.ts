@@ -1,25 +1,25 @@
 "use client";
 import { useMemo, useState } from "react";
-import { useGetProductsQuery, useDeleteProductMutation } from "../product.api";
+import { useGetProductsQuery, useDeleteProductMutation } from "../../../../services/product.api";
 import { toast } from "sonner";
 import { ProductFormValues } from "@/app/admin/AdminType";
 
 
 export const useProduct = () => {
-  const limit = 8;
+  const limit = 6;
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const queryArgs = useMemo(() => ({ limit, page }), [limit, page]);
   
-  const { data, isLoading, } = useGetProductsQuery({limit: limit, page},{refetchOnMountOrArgChange: true});
+  const { data, isLoading, } = useGetProductsQuery(queryArgs,{refetchOnMountOrArgChange: true});
   
 
   const [deleteProduct] = useDeleteProductMutation();
 
   const handleEdit = (product: ProductFormValues) => {
-    console.log(product.title);
+
   };
 
   const handleDelete = (product: ProductFormValues) => {

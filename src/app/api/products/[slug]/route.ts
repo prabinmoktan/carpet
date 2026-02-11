@@ -18,7 +18,7 @@ export const GET = async (
       });
     }
     const product = await Product.findById(slug);
-    console.log(product);
+
     return NextResponse.json(
       { success: true, message: "data fetched successfully", product },
       { status: 200 }

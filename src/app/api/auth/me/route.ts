@@ -10,7 +10,7 @@ export async function GET(req: NextRequest){
     const refreshToken = req.cookies.get("refreshToken")?.value;
 
     if(!accessToken || !refreshToken){
-        console.log('no access token or refresh token')
+     
         return NextResponse.json({status: 401})
     }
     return NextResponse.json({user});

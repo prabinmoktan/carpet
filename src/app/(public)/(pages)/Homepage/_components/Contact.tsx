@@ -15,7 +15,7 @@ const Contact = () => {
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onSubmit = (data: any) => {
-    console.log(data);
+  
   };
   return (
     <section className=" md:px-10 px-2 space-y-10">

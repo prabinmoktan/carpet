@@ -184,10 +184,10 @@ export const aboutFooter = [
   { name: "Contact", id: 3, link: "/contact" },
 ];
 
-export const carpetSize = ["6 * 9", "8 * 10", "10 * 14"];
+export const carpetSize = ["80 * 120",];
 
 export const SpecificationHeader = [
-  { value: "specification", label: "specification" },
+  { value: "specs", label: "specification" },
   { value: "care guide", label: "care guide" },
   { value: "shipping info", label: "shipping info" },
 ];

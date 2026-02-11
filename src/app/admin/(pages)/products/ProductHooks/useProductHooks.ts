@@ -1,5 +1,5 @@
 import { useForm, useWatch } from "react-hook-form";
-import { useCreateProductMutation } from "../product.api";
+import { useCreateProductMutation } from "../../../../services/product.api";
 import { ProductFormValues } from "@/app/admin/AdminType";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,6 +15,7 @@ export const useProductHooks = () => {
     formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
+      isLatest: false,
       isSale: false,
       title: "",
       category: "",
@@ -40,7 +41,7 @@ export const useProductHooks = () => {
   const onsubmit = async (data: ProductFormValues) => {
     try {
       const formData = new FormData();
-    console.log(formData);
+
     formData.append("title", data.title);
     formData.append("category", data.category);
     formData.append("price", String(data.price));
@@ -58,7 +59,7 @@ export const useProductHooks = () => {
     for (const file of data.images) {
       formData.append("images", file);
     }
-    console.log(control._fields);
+
     const response = await createProduct(formData).unwrap();
 
     if (response.success) {
@@ -79,7 +80,7 @@ export const useProductHooks = () => {
   };
 
   return {
-    handleSubmit: handleSubmit(onsubmit),
+    handleSubmit: onsubmit,
     errors,
     isSale,
     control,

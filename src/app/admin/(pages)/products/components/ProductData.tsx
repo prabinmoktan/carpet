@@ -1,23 +1,28 @@
 "use client";
 import ProductTable from "@/app/admin/AdminUi/ProductTable/ProductTable";
 import { ProductTableHeader } from "@/app/constant";
-import React, { useState } from "react";
+import React  from "react";
 import AppModal from "@/app/components/AppModal/AppModal";
 import Pagination from "@/app/components/Pagination/Pagination";
 import { ProductFormValues } from "@/app/admin/AdminType";
 import { useProduct } from "../ProductHooks/useProduct";
-import GlassLoader from "@/app/components/GlassLoader/GlassLoader";
-import { useDispatch } from "react-redux";
-
+import TableSkeleton from "@/app/components/TableSkeleton/TableSkeleton";
 
 const ProductData = () => {
-  
-//   const dispatch = useDispatch();
-// console.log("dispatch", dispatch);
+  const {
+    data,
+    isLoading,
+    page,
+    setPage,
+    handleEdit,
+    handleDelete,
+    confirmDelete,
+    open,
+    setOpen,
+  } = useProduct();
 
-  const {data, isLoading, page, setPage, handleEdit, handleDelete, confirmDelete, open, setOpen } =useProduct();
+  if(isLoading)return <TableSkeleton/>
 
-    console.log('page', page)
 
   return (
     <>

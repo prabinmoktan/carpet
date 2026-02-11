@@ -8,7 +8,7 @@ import React from "react";
 const AdminHeader = () => {
   const { data, isLoading } = useMeQuery();
   const person = data?.user;
-  //  console.log(user?.email)
+
 
   return (
     <header className="border-b border-[#E6DED3] px-2 flex justify-between ">

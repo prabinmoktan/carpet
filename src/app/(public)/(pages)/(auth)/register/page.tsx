@@ -32,11 +32,11 @@ const Page = () => {
   });
 
   const onSubmit = async (data: RegsiterTypes) => {
-    console.log(data);
+  
 
     try {
       const response = await registerUser(data);
-      console.log(response);
+ 
 
       if (response.data?.message) {
         toast.success(response.data?.message, { position: "bottom-right", 

@@ -18,6 +18,7 @@ export interface ICarpet {
   slug: string;
   stock: number;
   sale?: ISale;
+  isLatest?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
  
@@ -71,26 +72,27 @@ const ProductSchema = new Schema<ICarpet>(
     sale: {
       type: SaleSchema,
     },
-    // isNew: { type: Boolean, index: true }
+   
   },
   {
     timestamps: true,
   }
 );
 
-ProductSchema.virtual("isNew").get(function (this) {
+// ProductSchema.virtual("isLatest").get(function (this) {
  
-  const NEW_DAYS = 15;
+//   const NEW_DAYS = 15;
 
-  
+//   if (!this.createdAt) return false;
+//   console.log('this.createdAt',this.createdAt)
 
-  if (!this.createdAt) return false;
+//   const diff =
+//     Date.now() - this.createdAt.getTime();
+//     console.log('diff==>', diff)
+// console.log('isLatest',diff <= NEW_DAYS * 24 * 60 * 60 * 1000)
+//   return diff <= NEW_DAYS * 24 * 60 * 60 * 1000;
+// });
 
-  const diff =
-    Date.now() - this.createdAt.getTime();
-
-  return diff <= NEW_DAYS * 24 * 60 * 60 * 1000;
-});
 
 ProductSchema.virtual("onSale").get(function () {
   if (!this.sale) return false;
@@ -105,9 +107,6 @@ ProductSchema.virtual("onSale").get(function () {
 
 ProductSchema.virtual("finalPrice").get(function () {
   if (!this.sale
-    // !this.sale?.isActive ||
-    // !this.sale?.startsAt.getTime() ||
-    // !this.sale?.endsAt.getTime()
   ) {
     return this.price;
   }
@@ -116,6 +115,8 @@ ProductSchema.virtual("finalPrice").get(function () {
 
 ProductSchema.set("toJSON", { virtuals: true });
 ProductSchema.set("toObject", { virtuals: true });
+
+
 
 const Product = models.Product || model<ICarpet>("Product", ProductSchema);
 export default Product;

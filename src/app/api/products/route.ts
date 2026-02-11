@@ -91,7 +91,7 @@ export const POST = async (req: NextRequest) => {
     }
 
     const slug = await generateSlug(title);
-    console.log('imagesUrl==>', imagesUrl)
+ 
 
     const products = await Product.create({
       title,
@@ -105,6 +105,7 @@ export const POST = async (req: NextRequest) => {
       images: imagesUrl,
     });
 
+   
     // const freshProduct = await Product.findById(products._id);
     return NextResponse.json(
       {
@@ -184,11 +185,17 @@ export const GET = async (req: Request) => {
       .limit(limit)
       .select("-__v")
       .lean();
+      
+      
 
     const response = products.map((product) => {
       const saleDetails = getSaleState(product);
+      const NEW_DAYS = 15;
+      const isLatest = !!product.createdAt &&
+      Date.now() - new Date(product.createdAt).getTime() <= NEW_DAYS *24 * 60 * 60 * 1000;
       return {
         ...product,
+        isLatest,
         sale: {
           ...product.sale,
           isActive: saleDetails.isActive,

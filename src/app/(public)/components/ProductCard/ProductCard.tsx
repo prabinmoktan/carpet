@@ -3,14 +3,15 @@ import Image, { StaticImageData } from "next/image";
 import React, { useState } from "react";
 import Badge from "../../ui/Badge/Badge";
 import {motion } from 'framer-motion';
+import fallback_image from '../../../../../public/placeholder.png';
 
 interface ProductCardTypes {
   id: string;
   name: string;
   category: string;
   price: number;
-  image: string | StaticImageData;
-  isNew: boolean;
+  images?: string | StaticImageData ;
+  isNew?: boolean;
   onClick?: React.MouseEventHandler;
 }
 
@@ -19,25 +20,31 @@ const ProductCard: React.FC<ProductCardTypes> = ({
   name,
   category,
   price,
-  image,
+  images,
   onClick,
   isNew=false,
 }) => {
     const [isHover, setIsHover] = useState(false);
+    const imageSrc: string | StaticImageData   = images ??  fallback_image;
+    
   return (
     <>
-      <div className=" relative h-full  rounded-xl overflow-hidden bg-gray-100 w-full  border-gray-100 border "
+      <div className="relative h-full  rounded-xl overflow-hidden bg-gray-100 w-full  border-gray-100 border "
       onMouseEnter={()=> setIsHover(true)}
       onMouseLeave={()=>setIsHover(false)}
       onClick={onClick}>
        
-        <div className={`overflow-hidden aspect-square `}>
+        <div className={`overflow-hidden aspect-square  flex justify-center`}>
 
         <Image
-          src={image}
+          src={imageSrc}
+          width={500}
+          height={300}
+          // fill
           loading="lazy"
           alt={name}
-          className={`object-cover duration-500 transition-transform ${isHover ? 'scale-125' : 'scale-100'}`}
+          // quality={85}
+          className={`object-cover duration-500 transition-transform h-auto w-auto ${isHover ? 'scale-125' : 'scale-100'}`}
         />
         {
         isNew && 

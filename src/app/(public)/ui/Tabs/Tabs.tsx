@@ -21,7 +21,7 @@ const Tabs: React.FC<TabTypes> = ({ tabs, defaultValue, className }) => {
   const activeTab = tabs.find((tab)=> tab.value === active)
 
 
-  console.log(tabs);
+
   return (
     <>
       <div className={`w-full ${className}`}>

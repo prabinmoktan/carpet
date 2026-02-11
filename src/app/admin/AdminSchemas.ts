@@ -80,6 +80,7 @@ const baseProduct = {
   price: z.coerce.number().min(1, "Price must be greater than 0"),
   stock: z.coerce.number().min(0, "Stock cannot be negative"),
   specs: specsSchema,
+  isLatest: false,
   images: z
     .array(z.instanceof(File))
     .min(1, "At least 1 images required")

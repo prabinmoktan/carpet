@@ -2,11 +2,12 @@
 
 // types/product-form.ts
 export interface ProductFormValues {
+  isLatest: boolean;
   _id?: string;
   title: string;
   category: string;
   price: number;
-  images: string[] | File[] ;
+  images: string[] | string | File[] ;
   description: string;
   specs: {
     size: string;
@@ -21,6 +22,7 @@ export interface ProductFormValues {
     endsAt: string;
     isActive?: boolean;
   };
+  
 }
 export interface Pagination {
   total: number;

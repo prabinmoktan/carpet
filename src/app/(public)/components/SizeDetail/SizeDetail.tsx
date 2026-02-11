@@ -5,9 +5,9 @@ import React, { useState } from "react";
 const SizeDetail = () => {
   const [selectedSize, setSelectedSize] = useState<string | null>();
   const handleSize = (item: string) => {
-    console.log(item);
+
     setSelectedSize((prev)=> (prev === item ? null : item))
-    console.log(selectedSize)
+
   };
   return (
     <>

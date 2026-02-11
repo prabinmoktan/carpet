@@ -27,7 +27,7 @@ export const UseLoginForm = () => {
     try {
  
    const response = await loginUser(data).unwrap();
-   console.log('response==>', response)
+  
    if(response.success){
   
     toast.success(`${response.message}`, {position: "bottom-right"});
