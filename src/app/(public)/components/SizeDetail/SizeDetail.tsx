@@ -11,8 +11,8 @@ const SizeDetail = () => {
   };
   return (
     <>
-      <div className="space-y-5">
-        <h1 className="uppercase font-light ">size</h1>
+      <div className="space-y-1">
+        <h1 className="uppercase font-light ">Available sizes</h1>
         <div className="flex gap-4">
           {carpetSize?.map((carpet) => (
             <div

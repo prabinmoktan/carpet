@@ -1,24 +1,30 @@
-'use client';
-import { useGetProductByIdQuery } from '@/app/services/product.api'
-import React from 'react'
-import ProductData from './ProductData';
-import ProductSpecs from './ProductSpec';
+"use client";
+import { useGetProductByIdQuery } from "@/app/services/product.api";
+import React from "react";
+import ProductData from "./ProductData";
+import ProductSpecs from "./ProductSpec";
+import ProductDataSkeleton from "./ProductDataskeleton";
+import ProductSpecsSkeleton from "./ProductSpecSkeleton";
 
+const ProductDetail = ({ slug }: { slug: string }) => {
+  const { data, isLoading } = useGetProductByIdQuery(slug);
+  const product = data?.product;
 
-
-const ProductDetail = ({slug}: {slug: string}) => {
-
-    
-    const {data, isLoading} = useGetProductByIdQuery(slug);
-    const product = data?.product;
-  
   return (
     <>
-    <ProductData product={product}/>
-    <ProductSpecs specs={product?.specs}/>
+      {isLoading ? (
+       <>
+        <ProductDataSkeleton />
+        <ProductSpecsSkeleton/>
+       </>
+      ) : (
+        <>
+          <ProductData product={product} />
+          <ProductSpecs specs={product?.specs} />
+        </>
+      )}
     </>
+  );
+};
 
-  )
-}
-
-export default ProductDetail
+export default ProductDetail;
