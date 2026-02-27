@@ -1,5 +1,5 @@
 import { baseApiSlice } from "@/app/axios/baseApiConfig";
-import { GetProductsResponse } from "../admin/AdminType";
+import { GetProductsParams, GetProductsResponse } from "../admin/AdminType";
 
 const productApi = baseApiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -11,12 +11,31 @@ const productApi = baseApiSlice.injectEndpoints({
       }),
       invalidatesTags:["Products"]
     }),
-    getProducts: builder.query<GetProductsResponse,  { page?: number; limit?: number }>({
-      query: ({page, limit}) => ({
-        url: "/products",
-        method: "GET",
-        params:  { page, limit }
-      }),
+    getProducts: builder.query<GetProductsResponse,  GetProductsParams>({
+      query: ({page, limit, minPrice, maxPrice, sort}) => {
+        const params = new URLSearchParams();
+
+        if (minPrice !== undefined)
+          params.append("minPrice", String(minPrice));
+    
+        if (maxPrice !== undefined)
+          params.append("maxPrice", String(maxPrice));
+    
+        if (sort)
+          params.append("sort", sort);
+    
+        if (page)
+          params.append("page", String(page));
+    
+        if (limit)
+          params.append("limit", String(limit));
+        return{
+          url: `/products?${params.toString()}`,
+          method: "GET",
+          params:  { page, limit, minPrice, maxPrice, sort }
+
+        }
+      },
       providesTags:["Products"]
     }),
     deleteProduct: builder.mutation({

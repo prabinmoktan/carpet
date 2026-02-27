@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   await dbConnect();
+ try {
   const cookieStore = await cookies();
   const refreshToken =
     cookieStore.get("refreshToken")?.value ||
@@ -34,5 +35,13 @@ export const POST = async (req: NextRequest) => {
   );
   cookieStore.delete("accessToken");
   cookieStore.delete("refreshToken");
-  NextResponse.json({ success: true, message: "User Logged out Successfully" });
+  return NextResponse.json({ success: true, message: "User Logged out Successfully" });
+ } catch (error) {
+  console.error("Logout error:", error);
+  return NextResponse.json(
+    { success: false, message: "Logout failed" },
+    { status: 500 }
+  );
+
+ }
 };

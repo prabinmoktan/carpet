@@ -6,13 +6,14 @@ import fs from "fs/promises";
 import Product from "@/app/admin/lib/models/product.model";
 import { generateSlug } from "../utils/slugify";
 import { getSaleState } from "@/app/admin/utils/getSaleState";
-import { verifyJWT } from '@/app/admin/lib/jwt';
+import { requireAdmin } from "@/app/admin/lib/requireAdmin";
 
 export const POST = async (req: NextRequest) => {
   await dbConnect();
   try {
     
-    const admin = await verifyJWT(req);
+    const admin = await requireAdmin(req);
+    console.log('admin', admin)
 
     if (!admin || admin.role !== 'admin') {
       return NextResponse.json({ message: "Admin only" }, { status: 403 });
@@ -169,6 +170,12 @@ export const GET = async (req: Request) => {
       if (maxPrice) filter.price.$lte = Number(maxPrice);
     }
 
+    const sort = searchParams.get("sort");
+    let sortOption : Record<string, 1 | -1> = {createdAt: -1}
+    if (sort === "price_asc") sortOption = { price: 1 };
+    if (sort === "price_desc") sortOption = { price: -1 };
+
+
     const ALLOWED_SPECS = ["size", "material"];
 
     ALLOWED_SPECS.forEach((key) => {
@@ -179,15 +186,14 @@ export const GET = async (req: Request) => {
     const total = await Product.countDocuments(filter);
 
     // const new_days = 14;
-    const products = await Product.find()
-      .sort({ createdAt: -1 })
+    const products = await Product.find(filter)
+      .sort(sortOption)
       .skip(skip)
       .limit(limit)
       .select("-__v")
       .lean();
       
-      
-
+      console.log('filter', filter)
     const response = products.map((product) => {
       const saleDetails = getSaleState(product);
       const NEW_DAYS = 15;
@@ -204,7 +210,11 @@ export const GET = async (req: Request) => {
       };
     });
     
-    
+    if(sort === "price_asc"){
+      response.sort((a,b)=> a.finalPrice - b.finalPrice)
+    }else if(sort === "price_desc"){
+      response.sort((a,b)=> b.finalPrice - a.finalPrice)
+    }
     return NextResponse.json(
       {
         status: true,

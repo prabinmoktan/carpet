@@ -48,12 +48,12 @@ const Collection = () => {
                       <ProductCard
                         images={product?.images?.[0] as string}
                         price={product.price}
-                        id={""}
+                        _id={product._id as string}
                         name={product.title}
                         category={product.category}
                         isNew={product.isLatest}
-                        onClick={() => route.push(`/shop/${product._id}`)}
-                      />
+                        onClick={() => route.push(`/shop/${product._id}`)} 
+                        finalPrice={product.finalPrice}                      />
                     </div>
                   );
                 })}

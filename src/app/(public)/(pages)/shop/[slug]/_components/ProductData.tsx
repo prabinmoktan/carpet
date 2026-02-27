@@ -9,24 +9,31 @@ import fallback_image from "../../../../../../../public/placeholder.png";
 import React from "react";
 import QuantityButton from "@/app/(public)/ui/QuantityButton/QuantityButton";
 import ImageMagnifier from "@/app/(public)/components/ImageMagnifier/ImageMagnifier";
+import { useDispatch } from "react-redux";
+import { addToCart } from "@/app/redux/slice/cart.slice";
 
-interface Props {
-  product: {
-    title: string;
-    category?: string;
-    images?: string[];
-    description: string;
-    price: number;
-    isLatest?: boolean;
-    stock?: number;
-    onSale?: boolean;
-    sale?: {
-      startsAt: Date;
-      endsAt: Date;
-      percentage: number;
-    };
-    finalPrice?: number;
+export interface productTypes {
+  quantity: number;
+  _id: string;
+  title: string;
+  category?: string;
+  images?: string[];
+  description?: string;
+  price: number;
+  isLatest?: boolean;
+  stock?: number;
+  onSale?: boolean;
+  sale?: {
+    startsAt: Date;
+    endsAt: Date;
+    percentage: number;
   };
+  finalPrice?: number;
+  // quantity?: number;
+}
+
+export interface Props {
+  product: productTypes;
 }
 
 const ProductData = ({ product }: Props) => {
@@ -34,13 +41,17 @@ const ProductData = ({ product }: Props) => {
     product?.images && product.images?.length > 0
       ? product.images[0]
       : fallback_image;
+  const dispatch = useDispatch();
+  const handleAddToCart = () => {
+    dispatch(addToCart(product));
+  };
 
   return (
     <>
       <section className="grid grid-cols-1 md:grid-cols-2 mt-10 py-10 gap-16 ">
-        <div className=" aspect-4/5 object-contain rounded-lg w-full  flex justify-center ">
+        <div className=" aspect-2/3 object-contain rounded-lg w-full  flex justify-center ">
           <div className="max-w-125 relative">
-            <ImageMagnifier src={imageSrc} className="bg-contain absolute" />
+            <ImageMagnifier src={imageSrc} className=" absolute h-150" />
             {product?.sale?.percentage && (
               <Badge
                 title={`${product.sale?.percentage}%`}
@@ -87,7 +98,7 @@ const ProductData = ({ product }: Props) => {
 
             {product?.sale?.percentage && (
               <h1 className="bg-red-500 px-5  rounded-2xl text-white">
-                {" "}
+              
                 -{product?.sale?.percentage}%
               </h1>
             )}
@@ -104,12 +115,13 @@ const ProductData = ({ product }: Props) => {
           <p className="font-light text-justify">{product?.description}</p>
 
           <SizeDetail />
-          <QuantityButton stock={product?.stock || 6} />
+         
           <Button
             title="add to cart"
             variant="primary"
             firstIcon={<ShoppingCart />}
             className="px-10 w-full flex justify-center gap-5"
+            onClick={handleAddToCart}
           />
         </div>
       </section>

@@ -80,7 +80,7 @@ const baseProduct = {
   price: z.coerce.number().min(1, "Price must be greater than 0"),
   stock: z.coerce.number().min(0, "Stock cannot be negative"),
   specs: specsSchema,
-  isLatest: false,
+  // isLatest: false,
   images: z
     .array(z.instanceof(File))
     .min(1, "At least 1 images required")
@@ -108,3 +108,64 @@ export const productSchema = z.discriminatedUnion("isSale", [
   }),
 ]);
 export type ProductFormValues = z.infer<typeof productSchema>;
+
+
+// AdminSchemas.ts
+
+
+// const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+
+// const specsSchema = z.object({
+//   size: z.string().min(1, "Size is required"),
+//   material: z.string().min(1, "Material is required"),
+//   country: z.string().min(1, "Country is required"),
+// });
+
+// const saleSchema = z.object({
+//   startsAt: z.string().min(1, "Starting Date is required"),
+//   endsAt: z.string().min(1, "Sale Ending date is required"),
+//   percentage: z.coerce
+//     .number()
+//     .min(1, "Percentage must be at least 1%")
+//     .max(100, "Percentage cannot exceed 100%"),
+// });
+
+// // ✅ Use a simple object with refine instead of discriminatedUnion
+// export const productSchema = z
+//   .object({
+//     title: z.string().min(2, "Title is required"),
+//     category: z.string().min(1, "Category is required"),
+//     description: z.string().min(5, "Description is required"),
+//     price: z.coerce.number().min(1, "Price must be greater than 0"),
+//     stock: z.coerce.number().min(0, "Stock cannot be negative"),
+//     specs: specsSchema,
+//     images: z
+//       .array(z.instanceof(File))
+//       .min(1, "At least 1 image required")
+//       .max(5, "Max 5 images allowed")
+//       .refine(
+//         (files) => files.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
+//         { message: "Invalid file type (PNG/JPG/WebP only)" }
+//       ),
+//     isSale: z.boolean().default(false),
+//     sale: saleSchema.optional(),
+//   })
+//   .refine(
+//     (data) => {
+//       // If isSale is true, sale must be fully filled
+//       if (data.isSale) {
+//         return !!(
+//           data.sale?.percentage &&
+//           data.sale?.startsAt &&
+//           data.sale?.endsAt
+//         );
+//       }
+//       return true;
+//     },
+//     {
+//       message: "All sale fields are required when 'On Sale' is checked",
+//       path: ["sale"],
+//     }
+//   );
+
+// export type ProductFormValues = z.infer<typeof productSchema>;

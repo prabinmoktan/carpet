@@ -30,7 +30,7 @@ interface GenerateTokensResponse {
       console.error("Error generating tokens:", error);
   
       throw Error(
-        "Sometin went wrong while generating access Token and Refres Token"
+        "Sometin went wrong while generating access Token and Refresh Token"
       );
     }
   };

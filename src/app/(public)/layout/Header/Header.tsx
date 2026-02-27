@@ -2,13 +2,17 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { navItems } from "@/app/constant";
-import { ShoppingBag } from "lucide-react";
+
 import Link from "next/link";
 import MobileHeader from "../MobileHeader/MobileHeader";
 import CompanyLogo from "../../ui/CompanyLogo/CompanyLogo";
 import Logout from "@/app/components/Logout/Logout";
 
-const Header = () => {
+import dynamic from "next/dynamic";
+
+const Cart = dynamic(() => import("@/app/(public)/components/Cart/Cart"));
+
+const Header = ({ user }: {user: {firstName: string}}) => {
   const [scroll, setScroll] = useState(false);
 
   useEffect(() => {
@@ -24,7 +28,7 @@ const Header = () => {
   return (
     <>
       <header
-        className={`w-full max-w-[1500px] fixed  top-0 z-50 left-0 mx-auto right-0 transition-all duration-300 
+        className={`w-full max-w-375 fixed  top-0 z-50 left-0 mx-auto right-0 transition-all duration-300 
           
           ${scroll ? "bg-white/95 backdrop-blur-md " : "bg-transparent"}`}
       >
@@ -51,8 +55,8 @@ const Header = () => {
           </nav>
           <div className="flex gap-10">
             {/* <ToggleButton/> */}
-            <Logout/>
-            <ShoppingBag size={"1.2rem"} fontWeight={"light"} />
+            {user && <Logout />}
+            <Cart />
           </div>
         </div>
 

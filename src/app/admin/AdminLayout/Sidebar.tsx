@@ -1,4 +1,5 @@
 "use client";
+import Logout from "@/app/components/Logout/Logout";
 import { SidebarItem } from "@/app/constant";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -26,7 +27,7 @@ const Sidebar = () => {
         </nav>
         <div className="flex justify-center ">
           <button className="capitalize bg-pink-600 px-10 py-2 absolute bottom-20 rounded-xl  hover:bg-pink-700">
-            log out
+            <Logout/>
           </button>
         </div>
       </aside>

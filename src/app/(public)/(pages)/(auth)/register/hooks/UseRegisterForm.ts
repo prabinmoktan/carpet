@@ -7,12 +7,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRegisterUserMutation } from "../../auth.api";
 
+import { useRouter } from "next/navigation";
+import { showError, showSuccess } from "@/app/services/toastService";
+
 export function UseRegisterForm() {
   const [userRegister, { isLoading }] = useRegisterUserMutation();
+  const router = useRouter();
   const {
     control,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     defaultValues: UserRegisterDefaultvalues,
     resolver: zodResolver(RegisterSchemaWithConfirm),
@@ -21,11 +26,24 @@ export function UseRegisterForm() {
   const onSubmit = async (data: RegsiterTypes) => {
     try {
       const response = await userRegister(data).unwrap();
-    } catch {}
+      console.log('response from regsiter form', response)
+
+      if (response?.message) {
+        showSuccess(response?.message)
+      }
+      router.replace('/')
+
+      reset();
+    } catch(error) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      showError(error?.data.message as string)
+    }
   };
   return {
     control,
     handleSubmit:handleSubmit(onSubmit),
-    errors
+    errors,
+    isLoading
   };
 }

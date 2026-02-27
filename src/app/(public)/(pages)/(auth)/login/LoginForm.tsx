@@ -13,18 +13,20 @@ import LoginHeader from "./components/LoginHeader";
 import LoginFooter from "./components/LoginFooter";
 
 
+
 export default function LoginForm() {
 
 
 
-const {control, setError, handleSubmit, errors} = UseLoginForm();
+const {control, submitHandler, errors} = UseLoginForm();
+console.log('errors= from tsx', errors)
  
  
   return (
     <>
       <div className={`${style.mainDiv} `}>
         <div className="w-1/4  bg-black/40 backdrop-blur-xs rounded-xl shadow-md border border-white/60 text-white px-10 cursor-pointer space-y-6 py-4">
-          <form onSubmit={handleSubmit} className="space-y-2">
+          <form onSubmit={submitHandler} className="space-y-2">
             <LoginHeader/>
            
              
@@ -35,11 +37,11 @@ const {control, setError, handleSubmit, errors} = UseLoginForm();
                   name="email"
                   render={({ field }) => (
                     <AdminInputField
-                      {...field}
-                      type="text"
-                      label={"Email"}
-                      error={errors.email?.message}
-                      className={""}
+                    type="text"
+                    label={"Email"}
+                    error={errors.email?.message}
+                    className={""}
+                    {...field}
                     />
                   )}
                 />

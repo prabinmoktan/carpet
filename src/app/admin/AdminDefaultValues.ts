@@ -11,11 +11,8 @@ export const ProductDefaultValues = {
   },
   stock: 0,
   isSale: false,
-  sale: {
-    percentage: 0,
-    startsAt: "",
-    endsAt: "",
-  },
+  sale: undefined,
+  // isLatest: false,
   
 };
 

@@ -1,32 +1,26 @@
-// import Button from '@/app/(public)/ui/Button/Button'
-// import React from 'react'
-
-// const Logout = () => {
-
-//     const handleLogout = async() => {
-//         try {
-//             const response = await logoutUser();
-//             console.log(response);
-//             return response
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     }
-//   return (
-//     <>
-//     <Button title={'Logout'} variant={'default'} onClick={handleLogout}/>
-//     </>
-//   )
-// }
-
-// export default Logout
-
-import React from 'react'
+'use client'
+import { useLogoutUserMutation } from "@/app/(public)/(pages)/(auth)/auth.api";
+import { showError, showSuccess } from "@/app/services/toastService";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 const Logout = () => {
-  return (
-    <div>Logout</div>
-  )
-}
+  const [ logoutUser, {isLoading} ]= useLogoutUserMutation();
+  const router = useRouter();
 
-export default Logout
+
+  const handleLogout = async () => {
+    try {
+      await logoutUser({}).unwrap();
+      showSuccess("Logged out successfully")
+      router.replace('/')
+
+    } catch (error) {
+     showError("Failed to Logout. Please try again.")
+    }
+  };
+
+  return <div onClick={handleLogout}>Logout</div>;
+};
+
+export default Logout;

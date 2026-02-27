@@ -2,7 +2,9 @@
 
 // types/product-form.ts
 export interface ProductFormValues {
+  finalPrice: number;
   isLatest: boolean;
+  // isLatest: boolean;
   _id?: string;
   title: string;
   category: string;
@@ -16,12 +18,7 @@ export interface ProductFormValues {
   };
   stock: number;
   isSale?: boolean;
-  sale?: {
-    percentage: number;
-    startsAt: string;
-    endsAt: string;
-    isActive?: boolean;
-  };
+  sale: undefined;
   
 }
 export interface Pagination {
@@ -29,12 +26,24 @@ export interface Pagination {
   skip: number;
   page: number;
   pages: number;
+  minPrice?: number;
+  maxPrice?: number;
+  sort?: "price_asc" | "price_desc";
+
+}
+export interface GetProductsParams {
+  page?: number;
+  limit?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  sort?: "price_asc" | "price_desc";
 }
 export interface GetProductsResponse {
   success: boolean;
   message: string;
   pagination: Pagination;
   response: ProductFormValues[]; // This is what your backend actually returns
+
 }
 
 export interface LoginPageTypes {

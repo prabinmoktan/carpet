@@ -14,8 +14,8 @@ const CompanyLogo = () => {
           className="object-contain shrink-0 "
         />
 
-        <div className="font-cinzel font-light   text-logo  uppercase mt-5 leading-none! ">
-          <span className="tracking-tight text-4xl">S</span>
+        <div className="font-cinzel font-light   text-logo  uppercase mt-5 hidden sm:block md:block lg:block leading-none ">
+          <span className="tracking-tight text-4xl ">S</span>
           <span className="text-3xl">anaa yadawiya</span>
         </div>
       </div>

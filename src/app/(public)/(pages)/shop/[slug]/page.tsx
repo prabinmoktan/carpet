@@ -58,6 +58,7 @@ const Page = async ({ params }: paramsTypes) => {
 
   return (
     <section className="md:px-10 px-2">
+      
       <ProductDetail slug={slug} />
     </section>
   );

@@ -251,3 +251,7 @@ body {
   );
 }
 
+.magnifier-container img {
+  max-height: 600px !important;
+  object-fit: contain;
+}

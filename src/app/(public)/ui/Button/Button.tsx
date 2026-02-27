@@ -20,7 +20,7 @@ const buttonVariant = {
     "px-3 py-2 bg-amber-700 text-white cursor-pointer rounded-md active:bg-amber-700 hover:bg-amber-800 transition-easeOut duration-300 flex gap-3 border-none",
   destruction: "px-3 py-1 bg-red-500 text-white cursor-pointer rounded-md",
   glass:
-    "bg-black/5 backdrop-blur-xs rounded-xl shadow-md border border-white/10 text-white px-10 py-2 cursor-pointer",
+    "bg-black/5 backdrop-blur-xs rounded-md shadow-md border border-white/10  px-10 py-2 cursor-pointer text-white",
 };
 
 const Button: React.FC<ButtonTypes> = ({

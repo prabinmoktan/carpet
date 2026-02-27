@@ -1,95 +1,72 @@
-import axios from "axios";
-// import { usePathname } from "next/navigation";
-import { toast } from "sonner";
+  import axios from "axios";
+  // import { usePathname } from "next/navigation";
+  import { toast } from "sonner";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-export const axiosInstance = axios.create({
-  baseURL: baseUrl,
-  withCredentials: true,
-});
+  export const axiosInstance = axios.create({
+    baseURL: baseUrl,
+    withCredentials: true,
+  });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    if (
-      config.url?.includes("/login") ||
-      config.url?.includes("refreshToken")
-    ) {
+  axiosInstance.interceptors.request.use(
+    (config) => {
+      if (
+        config.url?.includes("/login") ||
+        config.url?.includes("refreshToken")
+      ) {
+        return config;
+      }
+      if (!window.navigator.onLine) {
+        toast.error("No Internet Connection", { position: "bottom-right" });
+      }
+      if (!config.headers) {
+        config.headers = new axios.AxiosHeaders();
+      }
+      if (config?.data instanceof FormData) {
+        config.headers["Content-Type"] = "multipart/form-data";
+      } else {
+        config.headers["Content-Type"] = "application/json";
+      }
+
       return config;
+    },
+    (error) => {
+      return Promise.reject(error);
     }
-    if (!window.navigator.onLine) {
-      toast.error("No Internet Connection", { position: "bottom-right" });
-    }
-    if (!config.headers) {
-      config.headers = new axios.AxiosHeaders();
-    }
-    if (config?.data instanceof FormData) {
-      config.headers["Content-Type"] = "multipart/form-data";
-    } else {
-      config.headers["Content-Type"] = "application/json";
-    }
+  );
 
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
 
-// axiosInstance.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     const originalRequest = error.config;
+  let isRefreshing = false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let queue: any[] = [];
 
-//     if (
-//       error.response?.status === 401 &&
-//       !originalRequest._retry &&
-//       !originalRequest.url.includes("/login")
-//     ) {
-//       originalRequest._retry = true;
+  axiosInstance.interceptors.response.use(
+    res => res,
+    async error => {
+      const originalRequest = error.config;
 
-//       try {
-//         await axiosInstance.post("/auth/refreshAccessToken");
+      if (error.response?.status === 401 && !originalRequest._retry) {
+        if (isRefreshing) {
+          return new Promise((resolve) => {
+            queue.push(() => resolve(axiosInstance(originalRequest)));
+          });
+        }
 
-//         return axiosInstance(originalRequest);
-//       } catch (err) {
-//         window.location.href = "/login";
-//         return Promise.reject(err);
-//       }
-//     }
+        originalRequest._retry = true;
+        isRefreshing = true;
 
-//     return Promise.reject(error);
-//   }
-// );
-let isRefreshing = false;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let queue: any[] = [];
-
-axiosInstance.interceptors.response.use(
-  res => res,
-  async error => {
-    const originalRequest = error.config;
-
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      if (isRefreshing) {
-        return new Promise((resolve) => {
-          queue.push(() => resolve(axiosInstance(originalRequest)));
-        });
+        try {
+          await axiosInstance.post("/auth/refreshAccessToken");
+          queue.forEach(cb => cb());
+          queue = [];
+          console.log('refresing access token done')
+          return axiosInstance(originalRequest);
+        } finally {
+          isRefreshing = false;
+        }
       }
 
-      originalRequest._retry = true;
-      isRefreshing = true;
-
-      try {
-        await axiosInstance.post("/auth/refreshAccessToken");
-        queue.forEach(cb => cb());
-        queue = [];
-        return axiosInstance(originalRequest);
-      } finally {
-        isRefreshing = false;
-      }
+      return Promise.reject(error);
     }
-
-    return Promise.reject(error);
-  }
-);
+  );

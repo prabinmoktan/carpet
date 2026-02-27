@@ -1,8 +1,8 @@
-import { verifyJWT } from "@/app/admin/lib/jwt";
+import { getAuthenticatedUser } from "@/app/admin/lib/getAuthenticatedUser";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest){
-    const user = await verifyJWT(req);
+    const user = await getAuthenticatedUser();
     if(!user){
         return NextResponse.json({user: null}, {status:401})
     }

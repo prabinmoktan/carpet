@@ -1,5 +1,5 @@
 import { dbConnect } from "@/app/admin/lib/database/db";
-import { verifyJWT } from "@/app/admin/lib/jwt";
+import { getAuthenticatedUser } from "@/app/admin/lib/getAuthenticatedUser";
 import Product from "@/app/admin/lib/models/product.model";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -42,7 +42,7 @@ export const DELETE = async (
   await dbConnect();
 
   try {
-    const admin = await verifyJWT(req);
+    const admin = await getAuthenticatedUser(req);
 
     if (!admin || admin.role !== "admin") {
       return NextResponse.json({ message: "Admin only" }, { status: 403 });

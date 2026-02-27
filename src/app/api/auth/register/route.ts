@@ -25,19 +25,23 @@ export const POST = async (req: NextRequest) => {
     const existingUser = await User.findOne({
       email,
     }).select("-password -refreshToken");
+
     if (existingUser) {
       return NextResponse.json(
         { success: false, message: "User/Email already exists" },
         { status: 400 }
       );
     }
+
     const user = await User.create({
       firstName,
       lastName,
       email,
       password,
       role: userRole,
+
     });
+
   
     const createdUser = await User.findById(user._id).select(
       "-password -refreshToken"
@@ -56,9 +60,10 @@ export const POST = async (req: NextRequest) => {
       user._id
     );
     
+    
     return NextResponse.json(
       {
-        success: false,
+        success: true,
         message: "User account created successfully",
         createdUser,
         refreshToken,

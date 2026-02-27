@@ -15,7 +15,7 @@ export const useProductHooks = () => {
     formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
-      isLatest: false,
+      // isLatest: false,
       isSale: false,
       title: "",
       category: "",
@@ -28,17 +28,18 @@ export const useProductHooks = () => {
         country: "",
       },
       images: [],
+      sale:undefined
     },
     resolver: zodResolver(productSchema),
-    shouldUnregister: true
-    // mode: "onChange",
+    // shouldUnregister: true
+    mode: "onChange",
   });
   const isSale = useWatch({
     control,
     name: "isSale",
   }) as boolean;
 
-  const onsubmit = async (data: ProductFormValues) => {
+  const onSubmit = async (data: ProductFormValues) => {
     try {
       const formData = new FormData();
 
@@ -80,7 +81,9 @@ export const useProductHooks = () => {
   };
 
   return {
-    handleSubmit: onsubmit,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    handleSubmit:handleSubmit(onSubmit),
     errors,
     isSale,
     control,

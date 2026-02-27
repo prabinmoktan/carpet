@@ -7,6 +7,8 @@ import {
 import "./globals.css";
 import { Toaster } from "sonner";
 import ReduxProvider from "./ReduxProvider";
+
+import { getAuthenticatedUser } from "./admin/lib/getAuthenticatedUser";
 import AuthLayout from "./AuthLayout";
 
 export const cormorantGaramond = Cormorant_Garamond({
@@ -35,22 +37,21 @@ export const metadata: Metadata = {
   description: "Company Slogan  ",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  
   return (
     <html lang="en">
       <body
         className={`${cormorantGaramond.variable} ${cormorant.variable} ${playfairDisplaySC.variable} antialiased`}
       >
         <ReduxProvider>
-          <AuthLayout>
+          {/* <AuthLayout> */}
             <Toaster />
             {children}
-          </AuthLayout>
+          {/* </AuthLayout> */}
         </ReduxProvider>
       </body>
     </html>

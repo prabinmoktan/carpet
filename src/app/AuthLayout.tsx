@@ -6,6 +6,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
  
   const {data, isLoading} = useMeQuery();
  
+ 
   return <>{children}</>;
 };
 

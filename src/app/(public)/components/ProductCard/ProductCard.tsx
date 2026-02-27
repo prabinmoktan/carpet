@@ -6,26 +6,30 @@ import {motion } from 'framer-motion';
 import fallback_image from '../../../../../public/placeholder.png';
 
 interface ProductCardTypes {
-  id: string;
+  _id: string;
   name: string;
   category: string;
   price: number;
   images?: string | StaticImageData ;
+  finalPrice: number;
   isNew?: boolean;
   onClick?: React.MouseEventHandler;
+
 }
 
 const ProductCard: React.FC<ProductCardTypes> = ({
-  id,
+  _id,
   name,
   category,
   price,
   images,
   onClick,
+  finalPrice,
   isNew=false,
 }) => {
     const [isHover, setIsHover] = useState(false);
     const imageSrc: string | StaticImageData   = images ??  fallback_image;
+   
     
   return (
     <>
@@ -56,10 +60,21 @@ const ProductCard: React.FC<ProductCardTypes> = ({
         animate={{opacity: isHover ? 1 : 0}} className={`absolute inset-0 bg-black/20 cursor-pointer`}>
 
         </motion.div>
-        <div className="p-6 space-y-2">
+        <div className="p-3 ">
+          <div className=" ">
           <p className="text-gray-500 text-sm text-muted-foreground  tracking-widest">{category}</p>
-          <h1 className="font-light font-serif text-2xl">{name}</h1>
-          <p className="font-light  text-lg">${price}</p>
+          <h1 className="font-light font-serif text-2xl">{name.length > 40 ? name.slice(0, 40) + "..." : name}</h1>
+
+          </div>
+          <div className=" flex flex-col ">
+          <p className="font-medium  text-md text-amber-500">QAR {finalPrice}</p>
+          {
+            finalPrice < price && 
+
+          <p className="text-gray-500 line-through text-sm">QAR{price}</p>
+          }
+
+          </div>
         </div>
       </div>
     </>

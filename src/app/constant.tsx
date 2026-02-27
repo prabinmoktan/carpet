@@ -433,6 +433,19 @@ export const ProductTableHeader: Column<ProductFormValues>[] = [
   
   {
     header: "On Sale",
-    accessor: (item) => (item?.sale?.isActive ? "Yes" : "No"),
+    accessor: (item) => (item?.isSale ? "Yes" : "No"),
   },
 ];
+
+
+export const priceRanges = [
+  { label: "QAR 3000 - QAR 4000 ", minPrice: 3000, maxPrice: 4000 },
+  { label: "QAR 4000 - QAR 5500 ", minPrice: 4000, maxPrice: 5500 },
+  { label: " QAR 5500 - QAR 7000 ", minPrice: 5500, maxPrice: 7000 },
+];
+
+export const sortOptions =[
+  { label: "Price: Low → High", value: "price_asc" },
+  { label: "Price: High → Low", value: "price_desc" },
+  { label: "Newest First", value: "newest" },
+]
