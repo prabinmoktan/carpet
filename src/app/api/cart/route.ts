@@ -7,16 +7,16 @@ import { NextRequest, NextResponse } from "next/server";
 export const POST = async(req: NextRequest) => {
     await dbConnect();
     try {
-        const user = await getAuthenticatedUser(req);
+        const user = await getAuthenticatedUser();
         if(!user){
             return NextResponse.json({success: false, message: "User not available"}, {status: 401})
         }
 
         const {items} = await req.json();
-        let cart = await Cart.findOne({userId: user._id})
+        let cart = await Cart.findOne({userId: user.id})
         if(!cart){
-            cart = await cart.create({
-                userId: user._id,
+            cart = await Cart.create({
+                userId: user.id,
                 items: []
             })  
         }

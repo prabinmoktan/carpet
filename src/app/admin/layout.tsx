@@ -3,12 +3,12 @@ import Sidebar from "./AdminLayout/Sidebar";
 import { requireAdmin } from "./lib/requireAdmin";
 
 export default async function layout({ children }: { children: React.ReactNode }) {
-  const user = await requireAdmin()
+ 
   return (
     <>
       <div className="flex flex-col  overflow-hidden w-full min-h-screen h-screen">
         <header className="w-full h-16">
-          <AdminHeader user={user}/>
+          <AdminHeader />
         </header>
         <section className="flex h-[calc(100vh-4rem)] overflow-hidden">
           <aside className="w-72  shrink-0">

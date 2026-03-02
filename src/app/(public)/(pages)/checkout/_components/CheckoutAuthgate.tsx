@@ -1,6 +1,6 @@
 "use client";
 import CartCard from "@/app/(public)/components/CartCard/CartCard";
-import { selectCart } from "@/app/redux/slice/cart.selector";
+import { selectCart } from "@/app/redux/slice/cart/cart.selector";
 import { StaticImageData } from "next/image";
 import Link from "next/link";
 import React from "react";

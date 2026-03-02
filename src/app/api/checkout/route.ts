@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 export const GET = async(req: NextRequest)=> {
     dbConnect();
     try {
-        const user = await getAuthenticatedUser(req);
+        const user = await getAuthenticatedUser();
         if(!user){
             return NextResponse.json({success: false, message: "user not available. Login again"},{status: 401})
         }

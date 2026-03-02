@@ -1,4 +1,4 @@
-import { removeFromCart, updateQuantity } from "@/app/redux/slice/cart.slice";
+import { removeFromCart, updateQuantity } from "@/app/redux/slice/cart/cart.slice";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import React from "react";
 import { useDispatch } from "react-redux";

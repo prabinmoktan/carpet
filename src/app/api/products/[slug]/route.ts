@@ -42,7 +42,7 @@ export const DELETE = async (
   await dbConnect();
 
   try {
-    const admin = await getAuthenticatedUser(req);
+    const admin = await getAuthenticatedUser();
 
     if (!admin || admin.role !== "admin") {
       return NextResponse.json({ message: "Admin only" }, { status: 403 });

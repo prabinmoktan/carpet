@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { MoveRight } from "lucide-react";
 import CartCard from "../../components/CartCard/CartCard";
 import Button from "../../ui/Button/Button";
-import { clearCart } from "@/app/redux/slice/cart.slice";
+import { clearCart } from "@/app/redux/slice/cart/cart.slice";
 import CartSkeleton from "./_components/cartSkeleton";
 
 import Link from "next/link";

@@ -12,7 +12,7 @@ export const POST = async (req: NextRequest) => {
   await dbConnect();
   try {
     
-    const admin = await requireAdmin(req);
+    const admin = await requireAdmin();
     console.log('admin', admin)
 
     if (!admin || admin.role !== 'admin') {

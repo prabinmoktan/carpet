@@ -10,7 +10,7 @@ import React from "react";
 import QuantityButton from "@/app/(public)/ui/QuantityButton/QuantityButton";
 import ImageMagnifier from "@/app/(public)/components/ImageMagnifier/ImageMagnifier";
 import { useDispatch } from "react-redux";
-import { addToCart } from "@/app/redux/slice/cart.slice";
+import { addToCart } from "@/app/redux/slice/cart/cart.slice";
 
 export interface productTypes {
   quantity: number;

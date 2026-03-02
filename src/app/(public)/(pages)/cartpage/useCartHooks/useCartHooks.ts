@@ -5,8 +5,8 @@ import {
   selectOriginalPrice,
   selectTotalAmount,
   selectTotalQuantity,
-} from "@/app/redux/slice/cart.selector";
-import { clearCart } from "@/app/redux/slice/cart.slice";
+} from "@/app/redux/slice/cart/cart.selector";
+import { clearCart } from "@/app/redux/slice/cart/cart.slice";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 

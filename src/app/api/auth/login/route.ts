@@ -14,7 +14,7 @@ export const POST = async (req: NextRequest) => {
   await dbConnect();
   try {
     const { email, password } = await req.json();
-    if (!(email || password)) {
+    if (!email || !password) {
       return NextResponse.json(
         { success: false, message: "All fields are Required" },
         { status: 401 }
@@ -30,33 +30,36 @@ export const POST = async (req: NextRequest) => {
     const firstName = user.firstName;
     const lastName = user.lastName;
     const role = user.role;
-    const isPasswordValid = user.isPasswordCorrect(password);
+
+    const isPasswordValid = await user.isPasswordCorrect(password);
     if (!isPasswordValid) {
       return NextResponse.json({
         success: false,
         message: "Incorrect Password",
       });
     }
-    const userData = {firstName, lastName, role}
+    const userData = { firstName, lastName, role };
     const { accessToken, refreshToken } = await generateAccessAndRefreshToken(
-      user._id as string
+      user._id.toString()
     );
+   
     // ✅ Convert env duration → ms
     const accessTokenExpiry = ms(
       (process.env.ACCESS_TOKEN_EXPIRY as ms.StringValue) || "15m"
     );
-    
-
 
     const refreshTokenExpiry = ms(
       (process.env.REFRESH_TOKEN_EXPIRY as ms.StringValue) || "10d"
     );
-    const response = NextResponse.json({
-      success: true,
-      message: "User logged in successfully",
-      user: userData,
-      redirectTo: user.role === "admin" ? "/admin" : "/"
-    }, {status: 200});
+    const response = NextResponse.json(
+      {
+        success: true,
+        message: "User logged in successfully",
+        user: userData,
+        redirectTo: user.role === "admin" ? "/admin" : "/",
+      },
+      { status: 200 }
+    );
     // Set HTTP-only cookies
     response.cookies.set("accessToken", accessToken, {
       httpOnly: true,
@@ -73,7 +76,7 @@ export const POST = async (req: NextRequest) => {
       // expires: refreshTokenExpiry,
       path: "/",
     });
-   
+
     return response;
   } catch (error) {
     return NextResponse.json(

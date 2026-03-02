@@ -1,7 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 
 import { baseApiSlice } from "../axios/baseApiConfig";
-import cartReducer from "./slice/cart.slice";
+import cartReducer from "./slice/cart/cart.slice";
+import authReducer from "./slice/auth/auth.slice"
 import {
   persistStore,
   persistReducer,
@@ -22,6 +23,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   cart: cartReducer,
+  auth: authReducer,
   [baseApiSlice.reducerPath]: baseApiSlice.reducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);

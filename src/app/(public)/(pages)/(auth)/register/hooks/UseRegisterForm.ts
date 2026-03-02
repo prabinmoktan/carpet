@@ -31,7 +31,7 @@ export function UseRegisterForm() {
       if (response?.message) {
         showSuccess(response?.message)
       }
-      router.replace('/')
+      router.replace('/login')
 
       reset();
     } catch(error) {

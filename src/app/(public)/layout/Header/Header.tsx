@@ -9,11 +9,15 @@ import CompanyLogo from "../../ui/CompanyLogo/CompanyLogo";
 import Logout from "@/app/components/Logout/Logout";
 
 import dynamic from "next/dynamic";
+import { useSelector } from "react-redux";
+import { user } from "@/app/redux/slice/auth/auth.selector";
 
 const Cart = dynamic(() => import("@/app/(public)/components/Cart/Cart"));
 
-const Header = ({ user }: {user: {firstName: string}}) => {
+const Header = () => {
   const [scroll, setScroll] = useState(false);
+  const userData = useSelector(user);
+  console.log("userData", userData)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -55,7 +59,7 @@ const Header = ({ user }: {user: {firstName: string}}) => {
           </nav>
           <div className="flex gap-10">
             {/* <ToggleButton/> */}
-            {user && <Logout />}
+            {userData && <Logout />}
             <Cart />
           </div>
         </div>

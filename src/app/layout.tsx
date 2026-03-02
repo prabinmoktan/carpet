@@ -48,10 +48,10 @@ export default async function RootLayout({
         className={`${cormorantGaramond.variable} ${cormorant.variable} ${playfairDisplaySC.variable} antialiased`}
       >
         <ReduxProvider>
-          {/* <AuthLayout> */}
+          <AuthLayout>
             <Toaster />
             {children}
-          {/* </AuthLayout> */}
+          </AuthLayout>
         </ReduxProvider>
       </body>
     </html>
