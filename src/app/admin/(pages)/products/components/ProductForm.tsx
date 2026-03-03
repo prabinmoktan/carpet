@@ -209,7 +209,7 @@ const ProductForm = () => {
                   className={"w-full"}
                   error={saleError?.percentage?.message}
                   {...field}
-                  value={field?.value as number ?? ""}
+                  value={(field?.value as number) ?? ""}
                 />
               )}
             />
@@ -239,9 +239,9 @@ const ProductForm = () => {
           />
         </div>
         <Button
-          title={isLoading ? "Uploading": "Upload Product"}
+          title={isLoading ? "Uploading" : "Upload Product"}
           variant={"primary"}
-          firstIcon={isLoading && <Loader/>}
+          firstIcon={isLoading && <Loader />}
           isLoading={isLoading}
           type="submit"
         />

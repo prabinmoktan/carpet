@@ -8,6 +8,7 @@ import burgundyPrayer from "../../public/burgundyPrayer.png";
 import emeraldPrayer from "../../public/emeraldPrayer.png";
 import creamPrayer from "../../public/creamPrayer.png";
 import pm4 from "../../public/pm4.png";
+import fallback_image from "../../public/placeholder.png"
 
 import { LayoutDashboard } from "lucide-react";
 import { Settings } from "lucide-react";
@@ -18,6 +19,8 @@ import { ChartColumnDecreasing } from "lucide-react";
 import { Column } from "./admin/AdminUi/ProductTable/ProductTable";
 import Image from "next/image";
 import { ProductFormValues } from "./admin/AdminType";
+import { cloudinaryUrl } from "./admin/utils/cloudinaryUrl";
+import OptimizedImage from "./(public)/components/OptimizedImage/OptimizedImage";
 
 export const navItems = [
   { label: "Shop", href: "/shop" },
@@ -386,16 +389,44 @@ export const category = [{ id: "prayer-mat", name: "prayer-mat" }];
 
 
 
+
+
 // ✅ Make sure accessor keys match your actual data keys exactly
 export const ProductTableHeader: Column<ProductFormValues>[] = [
+  // {
+  //   header: "Images",
+  //   // ✅ Images is an array, render as image or count
+  //   accessor: (item) => 
+  //   {
+  //     const public_id = item.images?.[0];
+  //     if(!public_id)return null;
+
+  //     const imageUrl = cloudinaryUrl(public_id as string, {
+  //       width: 50, 
+  //       height: 50,
+  //       crop: "fill",
+  //       quality: "auto",
+  //       format: "avif"
+  //     })
+  //     return (
+  //     <Image src={imageUrl ?? fallback_image} alt="item.title" className="w-auto h-auto" width={50} height={50} />
+  //   )
+  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  //     // @ts-ignore
+      
+  // },
+  // },
   {
-    header: "Images",
-    // ✅ Images is an array, render as image or count
-    accessor: (item) => (
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      <Image src={item.images?.[0]} alt="product"className="w-auto h-auto" width={25} height={35} />
-    ),
+    header: "Images", 
+    accessor: (item)=> {
+
+      const public_id = item?.images?.[0];
+      return (
+
+        <OptimizedImage publicId={public_id as string} alt={item.title} width={35} height={45}/>
+      )
+    }
+    
   },
   {
     header: "Title",

@@ -2,6 +2,7 @@ import { model, models, Schema } from "mongoose";
 import { ISale, SaleSchema } from "./sale.model";
 
 import { HydratedDocument } from "mongoose";
+import { generateSKU } from "../../utils/generateSKU";
 
 export type CarpetDocument = HydratedDocument<ICarpet>;
 
@@ -18,10 +19,10 @@ export interface ICarpet {
   slug: string;
   stock: number;
   sale?: ISale;
+  sku?: string;
   isLatest?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
- 
 }
 
 const ProductSchema = new Schema<ICarpet>(
@@ -57,6 +58,11 @@ const ProductSchema = new Schema<ICarpet>(
       type: String,
       required: true,
     },
+    sku: {
+      type: String,
+      unique: true,
+      index: true,
+    },
 
     specs: {
       type: Map,
@@ -72,27 +78,20 @@ const ProductSchema = new Schema<ICarpet>(
     sale: {
       type: SaleSchema,
     },
-   
   },
   {
     timestamps: true,
   }
 );
 
-// ProductSchema.virtual("isLatest").get(function (this) {
- 
-//   const NEW_DAYS = 15;
-
-//   if (!this.createdAt) return false;
-//   console.log('this.createdAt',this.createdAt)
-
-//   const diff =
-//     Date.now() - this.createdAt.getTime();
-//     console.log('diff==>', diff)
-// console.log('isLatest',diff <= NEW_DAYS * 24 * 60 * 60 * 1000)
-//   return diff <= NEW_DAYS * 24 * 60 * 60 * 1000;
-// });
-
+ProductSchema.pre("save", async function () {
+  if (!this.sku) {
+    this.sku = generateSKU({
+      category: this.category, 
+      material: this.specs?.material
+    })
+  }
+});
 
 ProductSchema.virtual("onSale").get(function () {
   if (!this.sale) return false;
@@ -106,8 +105,7 @@ ProductSchema.virtual("onSale").get(function () {
 });
 
 ProductSchema.virtual("finalPrice").get(function () {
-  if (!this.sale
-  ) {
+  if (!this.sale) {
     return this.price;
   }
   return Math.round(this.price - (this.price * this.sale.percentage) / 100);
@@ -115,8 +113,6 @@ ProductSchema.virtual("finalPrice").get(function () {
 
 ProductSchema.set("toJSON", { virtuals: true });
 ProductSchema.set("toObject", { virtuals: true });
-
-
 
 const Product = models.Product || model<ICarpet>("Product", ProductSchema);
 export default Product;

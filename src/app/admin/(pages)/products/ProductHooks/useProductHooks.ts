@@ -54,9 +54,7 @@ export const useProductHooks = () => {
     if (data.isSale && data.sale) {
       formData.append("sale", JSON.stringify(data.sale));
     }
-     // data.images.forEach((file:File) => {
-    //   formData.append("images", file);
-    // });
+    
     for (const file of data.images) {
       formData.append("images", file);
     }
@@ -69,7 +67,7 @@ export const useProductHooks = () => {
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      console.error("Submit error:", error);
+     
       toast.error(error.data?.message || "Failed to create product", {
         position: "bottom-right",
       });

@@ -6,11 +6,12 @@ import TitleHeader from "@/app/(public)/ui/TitleHeader/TitleHeader";
 import { Check, ShoppingCart } from "lucide-react";
 
 import fallback_image from "../../../../../../../public/placeholder.png";
-import React from "react";
+import React, { useState } from "react";
 import QuantityButton from "@/app/(public)/ui/QuantityButton/QuantityButton";
 import ImageMagnifier from "@/app/(public)/components/ImageMagnifier/ImageMagnifier";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/app/redux/slice/cart/cart.slice";
+import OptimizedImage from "@/app/(public)/components/OptimizedImage/OptimizedImage";
 
 export interface productTypes {
   quantity: number;
@@ -37,10 +38,13 @@ export interface Props {
 }
 
 const ProductData = ({ product }: Props) => {
-  const imageSrc =
-    product?.images && product.images?.length > 0
-      ? product.images[0]
-      : fallback_image;
+  const images = product.images ?? [];
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(images[0]);
+  // const imageSrc =
+  //   product?.images && product.images?.length > 0
+  //     ? product.images[0]
+  //     : fallback_image ;
+
   const dispatch = useDispatch();
   const handleAddToCart = () => {
     dispatch(addToCart(product));
@@ -48,10 +52,13 @@ const ProductData = ({ product }: Props) => {
 
   return (
     <>
-      <section className="grid grid-cols-1 md:grid-cols-2 mt-10 py-10 gap-16 ">
-        <div className=" aspect-2/3 object-contain rounded-lg w-full  flex justify-center ">
+      <section className="grid grid-cols-1 md:grid-cols-2 mt-10 py-10 gap-16 mb-10 ">
+        <div className=" aspect-square object-contain rounded-lg w-full  flex justify-center ">
           <div className="max-w-125 relative">
-            <ImageMagnifier src={imageSrc} className=" absolute h-150" />
+            <ImageMagnifier
+              src={selectedImage ?? fallback_image} 
+              className=" absolute"
+            />
             {product?.sale?.percentage && (
               <Badge
                 title={`${product.sale?.percentage}%`}
@@ -59,7 +66,23 @@ const ProductData = ({ product }: Props) => {
                 className="z-10 absolute top-2 left-2"
               />
             )}
-            <span></span>
+            <div className="flex flex-wrap gap-3">
+              {product.images &&
+                product.images.length > 1 &&
+                product.images?.map((item, index) => (
+                  <div key={index} onClick={()=>setSelectedImage(item)}>
+                    <OptimizedImage
+                      publicId={item}
+                      alt={product.title}
+                      width={100}
+                      height={150}
+                      className={`border cursor-pointer p-1 ${
+                        selectedImage === item ? "border-amber-500 border-2" : "border-gray-700"
+                      }`}
+                    />
+                  </div>
+                ))}
+            </div>
           </div>
         </div>
         <div className="space-y-8">
@@ -98,7 +121,6 @@ const ProductData = ({ product }: Props) => {
 
             {product?.sale?.percentage && (
               <h1 className="bg-red-500 px-5  rounded-2xl text-white">
-              
                 -{product?.sale?.percentage}%
               </h1>
             )}
@@ -115,7 +137,7 @@ const ProductData = ({ product }: Props) => {
           <p className="font-light text-justify">{product?.description}</p>
 
           <SizeDetail />
-         
+
           <Button
             title="add to cart"
             variant="primary"

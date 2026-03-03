@@ -7,17 +7,17 @@ import Product from "@/app/admin/lib/models/product.model";
 import { generateSlug } from "../utils/slugify";
 import { getSaleState } from "@/app/admin/utils/getSaleState";
 import { requireAdmin } from "@/app/admin/lib/requireAdmin";
+import { generateSKU } from "@/app/admin/utils/generateSKU";
 
 export const POST = async (req: NextRequest) => {
   await dbConnect();
   try {
-    
     const admin = await requireAdmin();
-    console.log('admin', admin)
+    console.log("admin =>", admin);
 
-    if (!admin || admin.role !== 'admin') {
+    if (!admin || admin.role !== "admin") {
       return NextResponse.json({ message: "Admin only" }, { status: 403 });
-    } 
+    }
     const formData = await req.formData();
 
     // text-fields
@@ -79,20 +79,23 @@ export const POST = async (req: NextRequest) => {
 
       const uploaded = await uploadOnCloudinary(filePath);
 
-      if (!uploaded?.secure_url) {
+      if (!uploaded?.public_id) {
         return NextResponse.json(
           { message: "Image upload failed" },
           { status: 500 }
         );
       }
-
-      imagesUrl.push(uploaded?.secure_url);
+console.log('uploaded=>', uploaded)
+      imagesUrl.push(uploaded?.public_id);
 
       await fs.unlink(filePath);
     }
 
     const slug = await generateSlug(title);
- 
+    const sku = generateSKU({
+      category, 
+      material: specs?.material
+    })
 
     const products = await Product.create({
       title,
@@ -103,28 +106,25 @@ export const POST = async (req: NextRequest) => {
       specs,
       slug,
       sale,
+      sku,
       images: imagesUrl,
     });
 
-   
     // const freshProduct = await Product.findById(products._id);
     return NextResponse.json(
       {
         success: true,
         message: "Products created Successfully",
         Product: products,
-       
       },
       { status: 201 }
     );
     // const {title, description,}
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    console.log('error while creating product', error)
     if (error.message === "Unauthorized") {
-      return NextResponse.json(
-        { message: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     if (error.message === "Forbidden") {
@@ -135,13 +135,10 @@ export const POST = async (req: NextRequest) => {
     }
 
     return NextResponse.json(
-      { success: false,
-        message: "Server error" },
+      { success: false, message: "Server error while createing product data", error },
       { status: 500 }
     );
   }
-   
-  
 };
 
 export const GET = async (req: Request) => {
@@ -171,10 +168,9 @@ export const GET = async (req: Request) => {
     }
 
     const sort = searchParams.get("sort");
-    let sortOption : Record<string, 1 | -1> = {createdAt: -1}
+    let sortOption: Record<string, 1 | -1> = { createdAt: -1 };
     if (sort === "price_asc") sortOption = { price: 1 };
     if (sort === "price_desc") sortOption = { price: -1 };
-
 
     const ALLOWED_SPECS = ["size", "material"];
 
@@ -192,13 +188,15 @@ export const GET = async (req: Request) => {
       .limit(limit)
       .select("-__v")
       .lean();
-      
-      console.log('filter', filter)
+
+    console.log("filter", filter);
     const response = products.map((product) => {
       const saleDetails = getSaleState(product);
       const NEW_DAYS = 15;
-      const isLatest = !!product.createdAt &&
-      Date.now() - new Date(product.createdAt).getTime() <= NEW_DAYS *24 * 60 * 60 * 1000;
+      const isLatest =
+        !!product.createdAt &&
+        Date.now() - new Date(product.createdAt).getTime() <=
+          NEW_DAYS * 24 * 60 * 60 * 1000;
       return {
         ...product,
         isLatest,
@@ -209,11 +207,11 @@ export const GET = async (req: Request) => {
         finalPrice: saleDetails.finalPrice,
       };
     });
-    
-    if(sort === "price_asc"){
-      response.sort((a,b)=> a.finalPrice - b.finalPrice)
-    }else if(sort === "price_desc"){
-      response.sort((a,b)=> b.finalPrice - a.finalPrice)
+
+    if (sort === "price_asc") {
+      response.sort((a, b) => a.finalPrice - b.finalPrice);
+    } else if (sort === "price_desc") {
+      response.sort((a, b) => b.finalPrice - a.finalPrice);
     }
     return NextResponse.json(
       {
