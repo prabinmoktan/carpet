@@ -393,29 +393,7 @@ export const category = [{ id: "prayer-mat", name: "prayer-mat" }];
 
 // ✅ Make sure accessor keys match your actual data keys exactly
 export const ProductTableHeader: Column<ProductFormValues>[] = [
-  // {
-  //   header: "Images",
-  //   // ✅ Images is an array, render as image or count
-  //   accessor: (item) => 
-  //   {
-  //     const public_id = item.images?.[0];
-  //     if(!public_id)return null;
-
-  //     const imageUrl = cloudinaryUrl(public_id as string, {
-  //       width: 50, 
-  //       height: 50,
-  //       crop: "fill",
-  //       quality: "auto",
-  //       format: "avif"
-  //     })
-  //     return (
-  //     <Image src={imageUrl ?? fallback_image} alt="item.title" className="w-auto h-auto" width={50} height={50} />
-  //   )
-  //     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  //     // @ts-ignore
-      
-  // },
-  // },
+  
   {
     header: "Images", 
     accessor: (item)=> {
@@ -464,7 +442,7 @@ export const ProductTableHeader: Column<ProductFormValues>[] = [
   
   {
     header: "On Sale",
-    accessor: (item) => (item?.isSale ? "Yes" : "No"),
+    accessor: (item) => (item?.sale?.isActive ? "Yes" : "No"),
   },
 ];
 

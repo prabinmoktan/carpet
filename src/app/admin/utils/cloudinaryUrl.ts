@@ -25,7 +25,7 @@ export function cloudinaryUrl(publicId: string, options: CloudinaryOptions) {
     ? `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${transformationStr}/${publicId}`
     : `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${publicId}`;
 
- console.log('finalUrl=>', finalUrl)
+
  
   return finalUrl;
 }

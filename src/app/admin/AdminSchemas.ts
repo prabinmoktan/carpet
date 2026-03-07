@@ -55,7 +55,6 @@ export const LoginSchema = z.object({
 
 export type LoginInput = z.infer<typeof LoginSchema>;
 
-
 const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp"];
 
 const specsSchema = z.object({
@@ -92,26 +91,60 @@ const baseProduct = {
     ),
 };
 
-export const productSchema = z.discriminatedUnion("isSale", [
-  // ❌ NOT ON SALE
-  z.object({
-    ...baseProduct,
-    isSale: z.literal(false),
-    sale: z.undefined(),
-  }),
+// export const productSchema = z.discriminatedUnion("isSale", [
+//   // ❌ NOT ON SALE
+//   z.object({
+//     ...baseProduct,
 
-  // ✅ ON SALE
-  z.object({
-    ...baseProduct,
-    isSale: z.literal(true),
-    sale: saleSchema,
-  }),
-]);
+//     sale: z.undefined(),
+//   }),
+
+//   // ✅ ON SALE
+//   z.object({
+//     ...baseProduct,
+
+//     sale: saleSchema,
+//   }),
+// ]);
+export const productSchema = z.object({
+  title: z.string().min(2, "Title is required"),
+  category: z.string().min(1, "Category is required"),
+  description: z.string().min(5, "Description is required"),
+  price: z.coerce.number().min(1, "Price must be greater than 0"),
+  stock: z.coerce.number().min(0, "Stock cannot be negative"),
+  specs: specsSchema,
+  // isLatest: false,
+  images: z
+  .array(
+    z.union([z.instanceof(File), z.string()]) // ✅ each item can be File OR string
+  )
+  .min(1, "At least 1 image required")
+  .max(5, "Max 5 images allowed")
+  .refine(
+    (files) =>
+      files.every(
+        (file) =>
+          typeof file === "string" || // ✅ existing URLs pass through
+          ACCEPTED_IMAGE_TYPES.includes((file as File).type)
+      ),
+    { message: "Invalid file type (PNG/JPG/WebP only)" }
+  ),
+  
+  sale: z
+    .object({
+      startsAt: z.string().optional(),
+      endsAt: z.string().optional(),
+      discountPercent: z.coerce.number().min(1).max(90).optional(), // ✅ was likely z.unknown() or mistyped
+      isActive: z.boolean().optional(),
+    })
+    .nullable()
+    .optional(), // ✅ .nullable() allows null, .optional() allows undefined
+    isSale: z.boolean().optional()
+});
+
 export type ProductFormValues = z.infer<typeof productSchema>;
 
-
 // AdminSchemas.ts
-
 
 // const ACCEPTED_IMAGE_TYPES = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
 

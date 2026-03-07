@@ -1,4 +1,5 @@
 "use client";
+import OptimizedImage from "@/app/(public)/components/OptimizedImage/OptimizedImage";
 import { CircleX, UploadCloud } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
@@ -14,6 +15,9 @@ interface AdminFileFieldTypes {
   // value?: string;
   setFile: (file: File[]) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  existingImages?: string[]; // pass existing image IDs from DB
+  setExistingImages?: (images: string[]) => void; // optional setter for parent
+
 }
 
 const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
@@ -29,10 +33,16 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
       file,
       // value,
       setFile,
+      existingImages=[],
+      setExistingImages
     },
     ref
   ) => {
     const [preview, setPreview] = useState<string[]>([]);
+  
+
+    console.log("preview==>", preview)
+    console.log("existingImages==>", existingImages)
 
     useEffect(() => {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -43,7 +53,7 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
       const selectedFiles = e.target.files;
       if (!selectedFiles) return;
 
-      const mergedFiles = [...file, ...selectedFiles];
+      const mergedFiles = [...file, ...Array.from(selectedFiles)];
       setFile(mergedFiles);
 
       const urls = Array.from(selectedFiles).map((photo) =>
@@ -62,6 +72,20 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
       const filteredItem = preview?.filter((_, index) => index !== item);
       setFile(updatedFiles);
       setPreview(filteredItem);
+    };
+
+    const handleDeleteExistingImage = (item: number) => {
+
+      const imageToRemove = existingImages[item];
+
+      const updatedExisting = existingImages.filter((_, i) => i !== item);
+      if(setExistingImages)setExistingImages(updatedExisting);
+
+        //removing from form images 
+        const updatedFiles = file.filter((img)=> img!== imageToRemove);
+        setFile(updatedFiles);
+
+
     };
 
     return (
@@ -87,6 +111,32 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
 
           {error && <span className="text-red-500 text-xs">{error}</span>}
         </div>
+      {
+        existingImages.length > 0 && (
+          <div className="flex gap-3 mt-3">
+          {existingImages.map((src, index) => (
+            <div key={index} className="relative">
+              <CircleX
+                color="red"
+                className="absolute 
+           right-0 top-0
+            z-10"
+                onClick={() => handleDeleteExistingImage(index)}
+              />
+
+              <OptimizedImage
+                publicId={src}
+                alt="preview"
+                width={200}
+                height={200}
+                className="w-20 h-20 object-cover rounded"
+              />
+            </div>
+          ))}
+        </div>
+        )
+
+      }
 
         {preview.length > 0 && (
           <div className="flex gap-3 mt-3">

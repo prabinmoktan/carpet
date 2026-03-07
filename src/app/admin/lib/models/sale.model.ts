@@ -1,14 +1,14 @@
 import {  Schema } from "mongoose";
 
 export interface ISale {
-    percentage: number;
+    discountPercent: number;
     startsAt: Date;
     endsAt: Date;
 }
 
 export const SaleSchema =new Schema<ISale>(
     {
-        percentage: {
+        discountPercent: {
             type:Number,
             min: 1,
             max: 60,

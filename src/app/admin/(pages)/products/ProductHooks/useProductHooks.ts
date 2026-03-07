@@ -1,22 +1,46 @@
-import { useForm, useWatch } from "react-hook-form";
-import { useCreateProductMutation } from "../../../../services/product.api";
+import { useForm, useWatch, Watch } from "react-hook-form";
+import {
+  useCreateProductMutation,
+  useEditProductMutation,
+} from "../../../../services/product.api";
 import { ProductFormValues } from "@/app/admin/AdminType";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { productSchema } from "@/app/admin/AdminSchemas";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-export const useProductHooks = () => {
-  const [createProduct, { isLoading }] = useCreateProductMutation();
+export interface UseProductHookProps {
+  mode: "create" | "edit";
+  productId?: string;
+  defaultValues?: Partial<ProductFormValues>;
+}
+
+export const useProductHooks = ({
+  mode,
+  productId,
+  defaultValues,
+}: UseProductHookProps) => {
+  const [createProduct, { isLoading: isCreating }] = useCreateProductMutation();
+  const [updateProduct, { isLoading: isEditting }] = useEditProductMutation();
+
+  const route = useRouter();
+  
+
+  const hasSaleData = !!(
+    defaultValues?.sale?.discountPercent  as number||
+    defaultValues?.sale?.startsAt ||
+    defaultValues?.sale?.endsAt
+  );
 
   const {
     handleSubmit,
     control,
     reset,
+
     formState: { errors, isDirty, isValid },
   } = useForm({
     defaultValues: {
-      // isLatest: false,
-      isSale: false,
       title: "",
       category: "",
       description: "",
@@ -27,65 +51,102 @@ export const useProductHooks = () => {
         material: "",
         country: "",
       },
-      images: [],
-      sale:undefined
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      images: defaultValues?.images || [],
+      sale: hasSaleData ? defaultValues?.sale : null,
+      isSale: defaultValues?.isSale ?? hasSaleData, // spread override
+      ...defaultValues,
     },
     resolver: zodResolver(productSchema),
     // shouldUnregister: true
     mode: "onChange",
   });
-  const isSale = useWatch({
-    control,
-    name: "isSale",
-  }) as boolean;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const isSaleWatched = useWatch({ control, name: "isSale" });
+  // Show sale fields if checkbox is on OR if defaultValues already has sale data
+  const sale =
+    isSaleWatched ||
+    !!(
+      defaultValues?.sale?.discountPercent ||
+      defaultValues?.sale?.startsAt ||
+      defaultValues?.sale?.endsAt
+    );
 
   const onSubmit = async (data: ProductFormValues) => {
     try {
       const formData = new FormData();
 
-    formData.append("title", data.title);
-    formData.append("category", data.category);
-    formData.append("price", String(data.price));
-    formData.append("stock", String(data.stock));
-    formData.append("description", data.description);
+      formData.append("title", data.title);
+      formData.append("category", data.category);
+      formData.append("price", String(data.price));
+      formData.append("stock", String(data.stock));
+      formData.append("description", data.description);
 
-    formData.append("specs", JSON.stringify(data.specs));
+      formData.append("specs", JSON.stringify(data.specs));
 
-    if (data.isSale && data.sale) {
-      formData.append("sale", JSON.stringify(data.sale));
-    }
-    
-    for (const file of data.images) {
-      formData.append("images", file);
-    }
+      if (data.isSale && data.sale) {
+        formData.append("sale", JSON.stringify(data.sale));
+      }
 
-    const response = await createProduct(formData).unwrap();
+      const existingImages: string[] = [];
+      const newFiles: File[] = [];
 
-    if (response.success) {
+      for(const image of data.images as (File | string)[]){
+          if(typeof image === "string"){
+            // console.log(existingImages.push(image))
+            existingImages.push(image)
+          }else if(image instanceof File){
+            // console.log(newFiles.push(image))
+            newFiles.push(image)
+
+          }
+      }
+//apending files
+      for (const file of newFiles) {
+        formData.append("images", file);
+      }
+      formData.append("existingImages", JSON.stringify(existingImages));
+
+      let response;
+      if (mode === "create") {
+        response = await createProduct(formData).unwrap();
+      }
+      if (mode === "edit") {
+        console.log("its edit mode");
+        if (!productId) {
+          throw new Error("Product Id Missing");
+        }
+        response = await updateProduct({ productId, data: formData }).unwrap();
+
+        console.log('formData==>', formData)
+        console.log("response from edit mode", response);
+        route.replace("/admin/products");
+      }
       toast.success(response.message, { position: "bottom-right" });
-      reset({  images: [] });
-    }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (mode === "create") {
+        reset({ images: [] });
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-     
       toast.error(error.data?.message || "Failed to create product", {
         position: "bottom-right",
       });
     }
-    
-    
-
-   
   };
 
   return {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    handleSubmit:handleSubmit(onSubmit),
+    handleSubmit: handleSubmit(onSubmit, (errors)=>console.log("validators errors:", errors)),
     errors,
-    isSale,
+    sale,
     control,
-    isLoading,
+    isLoading: isCreating || isEditting,
+
     isValid,
     isDirty,
   };

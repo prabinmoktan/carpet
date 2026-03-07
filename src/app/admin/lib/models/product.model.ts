@@ -98,7 +98,7 @@ ProductSchema.virtual("onSale").get(function () {
   const now = Date.now();
 
   return (
-    this.sale.percentage > 0 &&
+    this.sale.discountPercent > 0 &&
     now >= this.sale.startsAt.getTime() &&
     now <= this.sale.endsAt.getTime()
   );
@@ -108,7 +108,7 @@ ProductSchema.virtual("finalPrice").get(function () {
   if (!this.sale) {
     return this.price;
   }
-  return Math.round(this.price - (this.price * this.sale.percentage) / 100);
+  return Math.round(this.price - (this.price * this.sale.discountPercent) / 100);
 });
 
 ProductSchema.set("toJSON", { virtuals: true });

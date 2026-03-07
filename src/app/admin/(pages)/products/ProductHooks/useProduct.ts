@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useGetProductsQuery, useDeleteProductMutation } from "../../../../services/product.api";
 import { toast } from "sonner";
 import { ProductFormValues } from "@/app/admin/AdminType";
+import { useRouter } from "next/navigation";
 
 
 export const useProduct = () => {
@@ -10,6 +11,7 @@ export const useProduct = () => {
   const [page, setPage] = useState(1);
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const router = useRouter();
 
   const queryArgs = useMemo(() => ({ limit, page }), [limit, page]);
   
@@ -19,7 +21,7 @@ export const useProduct = () => {
   const [deleteProduct] = useDeleteProductMutation();
 
   const handleEdit = (product: ProductFormValues) => {
-
+    router.push(`/admin/products/${product._id}/editProduct`)
   };
 
   const handleDelete = (product: ProductFormValues) => {

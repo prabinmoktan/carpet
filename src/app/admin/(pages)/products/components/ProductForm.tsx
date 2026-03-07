@@ -1,6 +1,9 @@
 "use client";
-import React from "react";
-import { useProductHooks } from "../ProductHooks/useProductHooks";
+import React, { useState } from "react";
+import {
+  UseProductHookProps,
+  useProductHooks,
+} from "../ProductHooks/useProductHooks";
 import {
   Controller,
   FieldError,
@@ -23,7 +26,7 @@ type SaleFieldErrors = Merge<
   FieldErrorsImpl<{
     startsAt: string;
     endsAt: string;
-    percentage: number;
+    discountPercent: number;
   }>
 >;
 
@@ -31,9 +34,17 @@ function isSaleFieldErrors(error: unknown): error is SaleFieldErrors {
   return typeof error === "object" && error !== null && !("message" in error);
 }
 
-const ProductForm = () => {
-  const { handleSubmit, control, errors, isSale, isLoading, isValid, isDirty } =
-    useProductHooks();
+const ProductForm = ({
+  mode,
+  productId,
+  defaultValues,
+}: UseProductHookProps) => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const [existingImages, setExistingImages] = useState<string[]>(defaultValues?.images);
+
+  const { handleSubmit, control, errors, sale, isLoading, isValid, isDirty } =
+    useProductHooks({ mode, productId, defaultValues });
 
   if (isLoading) {
     return <GlassLoader />;
@@ -164,7 +175,7 @@ const ProductForm = () => {
           )}
         />
         {/* <Activity mode={isSale ? "visible" : "hidden"}> */}
-        {isSale && (
+        {sale && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -199,15 +210,16 @@ const ProductForm = () => {
                   value={field.value as string}
                 />
               )}
-            />{" "}
+            />
             <Controller
               control={control}
-              name="sale.percentage"
+              name="sale.discountPercent"
               render={({ field }) => (
                 <AdminInputField
                   label={"sale percentage"}
                   className={"w-full"}
-                  error={saleError?.percentage?.message}
+                  type="text"
+                  error={saleError?.discountPercent?.message}
                   {...field}
                   value={(field?.value as number) ?? ""}
                 />
@@ -227,19 +239,27 @@ const ProductForm = () => {
                 <AdminFileField
                   type="file"
                   file={field.value}
-                  setFile={(files) => field.onChange(files)}
+                  setFile={field.onChange}
                   multiple={true}
                   placeholder="Upload  image"
                   error={errors.images?.message?.toString()}
                   className={"border border-dashed rounded-md"}
-                  {...field}
+                  existingImages={existingImages}
+                  setExistingImages={setExistingImages}
+                  // {...field}
                 />
               </div>
             )}
           />
         </div>
         <Button
-          title={isLoading ? "Uploading" : "Upload Product"}
+          title={
+            mode === "create"
+              ? isLoading
+                ? "Uploading"
+                : "Upload Product"
+              : "Update Product"
+          }
           variant={"primary"}
           firstIcon={isLoading && <Loader />}
           isLoading={isLoading}

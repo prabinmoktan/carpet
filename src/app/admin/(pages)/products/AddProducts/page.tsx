@@ -6,7 +6,7 @@ const page = () => {
    <>
    <section className='px-4'>
 
-   <ProductForm/>
+   <ProductForm mode={"create"} productId={undefined} defaultValues={undefined} />
    </section>
    </>
   )

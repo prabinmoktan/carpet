@@ -85,7 +85,7 @@ export const POST = async (req: NextRequest) => {
           { status: 500 }
         );
       }
-console.log('uploaded=>', uploaded)
+
       imagesUrl.push(uploaded?.public_id);
 
       await fs.unlink(filePath);

@@ -18,7 +18,12 @@ export interface ProductFormValues {
   };
   stock: number;
   isSale?: boolean;
-  sale: undefined;
+  sale?: {
+    startsAt?: string;
+    endsAt?: string;
+    discountPercent?: number;
+    isActive?: boolean;
+  } | null | undefined;
   
 }
 export interface Pagination {
