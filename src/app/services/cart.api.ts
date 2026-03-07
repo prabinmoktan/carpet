@@ -8,7 +8,7 @@ const cartApi = baseApiSlice.injectEndpoints({
                 method: "POST",
                 body: data
             }),
-            // invalidatesTags: ["Cart"]
+            invalidatesTags: ["Cart"]
         })
     })
 })

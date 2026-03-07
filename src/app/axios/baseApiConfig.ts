@@ -48,5 +48,5 @@ export const baseApiSlice = createApi({
   reducerPath: "baseApi",
   baseQuery,
   endpoints: () => ({}), // Empty initially, to be injected later
-  tagTypes: ["Products", "Auth", "User"],
+  tagTypes: ["Products", "Auth", "User", "Cart"],
 });

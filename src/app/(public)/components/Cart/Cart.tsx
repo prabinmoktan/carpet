@@ -7,6 +7,7 @@ import Image from "next/image";
 import Button from "../../ui/Button/Button";
 import "../../../../../public/placeholder.png";
 import { useRouter } from "next/navigation";
+import OptimizedImage from "../OptimizedImage/OptimizedImage";
 
 
 const Cart = () => {
@@ -62,12 +63,13 @@ const Cart = () => {
             }
             {product?.map((item) => (
               <div key={item._id} className="flex gap-4 h-10 justify-between backdrop-blur-3xl">
-                <Image
+                {/* <Image
                   width={25}
                   height={30}
                   alt={item.title}
                   src={(item.images?.[0] as string) || "/placeholder.png"}
-                />
+                /> */}
+                <OptimizedImage publicId={item.images?.[0] as string} alt={item.title} width={25} height={30} />
                 <p className="text-sm">
                   {item?.title.length > 20
                     ? item.title.slice(0, 30) + "..."

@@ -1,6 +1,7 @@
 import React from "react";
 import QuantityButton from "../../ui/QuantityButton/QuantityButton";
 import Image from "next/image";
+import OptimizedImage from "../OptimizedImage/OptimizedImage";
 
 
 interface CartCardTypes {
@@ -28,13 +29,14 @@ const CartCard: React.FC<CartCardTypes> = ({
     <>
       <div className="space-y-4   md:flex md:items-center md:justify-between md:gap-6 md:space-y-0  px-3 py-1">
         <a href="#" className=" shrink-0 md:order-1 flex-1">
-          <Image
+          {/* <Image
             src={images}
             alt={title}
             width={150}
             height={250}
             className=" aspect-3/4"
-          />
+          /> */}
+          <OptimizedImage publicId={images} alt={title} width={150} height={200}/>
         </a>
         <div className="w-full min-w-0 flex-2 space-y-4 md:order-2 md:max-w-md flex flex-col items-start">
             <span>
