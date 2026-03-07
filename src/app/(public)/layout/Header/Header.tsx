@@ -17,7 +17,7 @@ const Cart = dynamic(() => import("@/app/(public)/components/Cart/Cart"));
 const Header = () => {
   const [scroll, setScroll] = useState(false);
   const userData = useSelector(user);
-  console.log("userData", userData)
+ 
 
   useEffect(() => {
     const handleScroll = () => {

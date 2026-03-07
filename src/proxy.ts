@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export default function proxy(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
-  console.log("MIDDLEWARE RUNNING ON:", req.nextUrl.pathname);
+  
 
   const accessToken = req.cookies.get("accessToken")?.value;
   const refreshToken = req.cookies.get("refreshToken")?.value;

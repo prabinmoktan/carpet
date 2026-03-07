@@ -26,7 +26,7 @@ export function UseRegisterForm() {
   const onSubmit = async (data: RegsiterTypes) => {
     try {
       const response = await userRegister(data).unwrap();
-      console.log('response from regsiter form', response)
+      
 
       if (response?.message) {
         showSuccess(response?.message)

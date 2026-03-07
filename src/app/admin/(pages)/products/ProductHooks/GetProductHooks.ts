@@ -12,12 +12,9 @@ export const GetProductHooks = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const queryArgs = useMemo(() => ({ limit, page }), [limit, page]);
-  console.log(page, limit)
-  const { data, isLoading, isFetching, error, refetch } = useGetProductsQuery(queryArgs,{refetchOnMountOrArgChange: true});
-  console.log('error', error)
-  console.log('data==>', data)
-  console.log('isLoading==>', isLoading)
-  console.log('isFetching==>', isFetching)
+ 
+  const { data, isLoading } = useGetProductsQuery(queryArgs,{refetchOnMountOrArgChange: true});
+ 
 
   const [deleteProduct] = useDeleteProductMutation();
 
@@ -26,7 +23,7 @@ export const GetProductHooks = () => {
   };
 
   const handleDelete = (product: ProductFormValues) => {
-    setSelectedId(product._id);
+    setSelectedId(product?._id || '');
     setOpen(true);
   };
 

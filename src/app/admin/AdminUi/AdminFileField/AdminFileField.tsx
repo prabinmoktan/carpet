@@ -11,9 +11,9 @@ interface AdminFileFieldTypes {
   placeholder?: string;
   accept?: string;
   multiple?: boolean;
-  file: File[];
+  file: (string | File)[];
   // value?: string;
-  setFile: (file: File[]) => void;
+  setFile: (file: (File | string)[]) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   existingImages?: string[]; // pass existing image IDs from DB
   setExistingImages?: (images: string[]) => void; // optional setter for parent
@@ -41,8 +41,7 @@ const AdminFileField = React.forwardRef<HTMLInputElement, AdminFileFieldTypes>(
     const [preview, setPreview] = useState<string[]>([]);
   
 
-    console.log("preview==>", preview)
-    console.log("existingImages==>", existingImages)
+   
 
     useEffect(() => {
       // eslint-disable-next-line react-hooks/set-state-in-effect

@@ -9,7 +9,7 @@ import ProductSpecsSkeleton from "./ProductSpecSkeleton";
 const ProductDetail = ({ slug }: { slug: string }) => {
   const { data, isLoading } = useGetProductByIdQuery(slug);
   const product = data?.product;
-  console.log('product', product)
+  
 
   return (
     <>

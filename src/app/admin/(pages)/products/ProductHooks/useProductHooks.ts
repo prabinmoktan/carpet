@@ -96,10 +96,10 @@ export const useProductHooks = ({
 
       for(const image of data.images as (File | string)[]){
           if(typeof image === "string"){
-            // console.log(existingImages.push(image))
+          
             existingImages.push(image)
           }else if(image instanceof File){
-            // console.log(newFiles.push(image))
+          
             newFiles.push(image)
 
           }
@@ -115,14 +115,12 @@ export const useProductHooks = ({
         response = await createProduct(formData).unwrap();
       }
       if (mode === "edit") {
-        console.log("its edit mode");
+       
         if (!productId) {
           throw new Error("Product Id Missing");
         }
         response = await updateProduct({ productId, data: formData }).unwrap();
 
-        console.log('formData==>', formData)
-        console.log("response from edit mode", response);
         route.replace("/admin/products");
       }
       toast.success(response.message, { position: "bottom-right" });

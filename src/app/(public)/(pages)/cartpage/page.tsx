@@ -27,7 +27,7 @@ const Page = () => {
 
   
 
-  console.log("originalPrice", originalPrice);
+
 
   if (!cart) return <CartSkeleton />;
   return (

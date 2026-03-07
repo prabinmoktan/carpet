@@ -24,13 +24,12 @@ export const UseLoginForm = () => {
     reValidateMode: "onChange"
   })
   const [loginUser, { isLoading }] = useLoginUserMutation();
-  console.log(useForm);
+ 
 
-  console.log("formState", errors);
-  const onSubmit = async (data: LoginPageTypes) => {
+    const onSubmit = async (data: LoginPageTypes) => {
     try {
       const response = await loginUser(data).unwrap();
-      console.log("response==>", response);
+      
       if (response.success === true) {
         showSuccess(`${response.message}`);
 

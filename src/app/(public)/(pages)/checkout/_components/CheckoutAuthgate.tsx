@@ -17,7 +17,7 @@ interface CheckoutAuthgateTypes {
 
 const CheckoutAuthgate: React.FC<CheckoutAuthgateTypes> = ({ cartItems }) => {
   const cart = useSelector(selectCart);
-  console.log(cart);
+  
   return (
     <section>
       <div>

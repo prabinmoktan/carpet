@@ -13,7 +13,7 @@ export const POST = async (req: NextRequest) => {
   await dbConnect();
   try {
     const admin = await requireAdmin();
-    console.log("admin =>", admin);
+
 
     if (!admin || admin.role !== "admin") {
       return NextResponse.json({ message: "Admin only" }, { status: 403 });
@@ -122,7 +122,7 @@ export const POST = async (req: NextRequest) => {
     // const {title, description,}
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    console.log('error while creating product', error)
+   
     if (error.message === "Unauthorized") {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
@@ -189,7 +189,7 @@ export const GET = async (req: Request) => {
       .select("-__v")
       .lean();
 
-    console.log("filter", filter);
+
     const response = products.map((product) => {
       const saleDetails = getSaleState(product);
       const NEW_DAYS = 15;

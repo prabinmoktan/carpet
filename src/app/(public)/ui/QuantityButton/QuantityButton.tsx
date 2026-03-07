@@ -16,17 +16,15 @@ const QuantityButton = ({
   const dispatch = useDispatch();
   const handleUpdateQuantity = (change: number) => {
     const newQuantity = quantity + change;
-    console.log(quantity)
-    console.log(change)
-    console.log(newQuantity)
+   
     if(newQuantity){
-      console.log('its running remove from cart')
+      
       dispatch(updateQuantity({_id: productId, quantity: newQuantity}))
       return;
     }
     if(newQuantity > stock) return;
     if(quantity === 1){
-      console.log('its not clicked ')
+     
       dispatch(removeFromCart(productId));
 
     }

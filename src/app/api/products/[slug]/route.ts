@@ -151,7 +151,7 @@ export const PATCH = async (
             { status: 500 }
           );
         }
-        console.log("uploaded=>", uploaded);
+       
         imagesUrl.push(uploaded?.public_id);
 
         await fs.unlink(filePath);
@@ -185,7 +185,7 @@ export const PATCH = async (
         runValidators: true, // run schema validation
       }
     );
-    console.log("updatedProduct=>", updatedProduct);
+    
     if (!updatedProduct) {
       return NextResponse.json(
         { success: false, message: "Product not updated" },

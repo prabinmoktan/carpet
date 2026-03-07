@@ -34,7 +34,7 @@ const ProductCard: React.FC<ProductCardTypes> = ({
       : typeof images === "string"
       ? images
       : fallback_image;
-  console.log("imageSrc=>", imageSrc);
+ 
   return (
     <>
       <div
