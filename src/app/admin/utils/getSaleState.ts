@@ -9,9 +9,9 @@ export function getSaleState(product: ICarpet){
             discountAmount: 0
         }
     }
-    const {percentage, startsAt, endsAt} = product.sale;
+    const {discountPercent, startsAt, endsAt} = product.sale;
 
-    const isActive = percentage > 0 && 
+    const isActive = discountPercent > 0 && 
     startsAt &&
     endsAt &&
     now >= new Date(startsAt) && 
@@ -24,7 +24,7 @@ export function getSaleState(product: ICarpet){
             discountAmount: 0
         }
     }
-    const discountAmount = Math.round((product.price * percentage) / 100)
+    const discountAmount = Math.round((product.price * discountPercent) / 100)
     return {
         isActive: true,
         finalPrice: product.price - discountAmount,

@@ -27,7 +27,7 @@ const PrayerMat = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 sm:grid-cols-2 gap-8 justify-items-center place-items-center">
 
         {prayerMats?.map((mat)=>(
-            <ProductCard  key={mat.id} id="" name={mat.name} category={""} price={mat.price} image={mat.image} isNew={!!mat.isNew} onClick={()=>router.push(`/shop/${mat.id}`)}/>
+            <ProductCard  key={mat.id} name={mat.name} price={mat.price} images={mat?.image} isNew={!!mat.isNew} onClick={() => router.push(`/shop/${mat.id}`)}  finalPrice={0}/>
         ))}
         </div>
         <div className="flex justify-center ">

@@ -1,8 +1,13 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ShopPage from "./ShopPage";
 
 const page = () => {
-  return <ShopPage />;
+  return(
+
+  <Suspense fallback={<div>Loading...</div>}>
+    <ShopPage />
+  </Suspense>
+  )
 };
 
 export default page;

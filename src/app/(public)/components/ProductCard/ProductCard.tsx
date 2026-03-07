@@ -7,9 +7,9 @@ import fallback_image from "../../../../../public/placeholder.png";
 import OptimizedImage from "../OptimizedImage/OptimizedImage";
 
 interface ProductCardTypes {
-  _id: string;
+  _id?: string;
   name: string;
-  category: string;
+  category?: string;
   price: number;
   images?: string | StaticImageData;
   finalPrice: number;

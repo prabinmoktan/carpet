@@ -22,14 +22,13 @@ const Page = () => {
           {prayerMats?.map((product) => (
             <ProductCard
               key={product.id}
-              id={""}
+              _id={product.id}
               name={product.name}
               category={'Prayer Mat'}
               price={product.price}
-              image={product.image}
+              images={product.image}
               isNew={!!product.isNew}
-              onClick={()=>router.push(`/shop/${product.id}`)}
-            />
+              onClick={() => router.push(`/shop/${product.id}`)} finalPrice={0}            />
           ))}
         </div>
       </section>
