@@ -1,7 +1,7 @@
 import { dbConnect } from "@/app/admin/lib/database/db";
 import { getAuthenticatedUser } from "@/app/admin/lib/getAuthenticatedUser";
 import { Cart } from "@/app/admin/lib/models/cart.model";
-import Product, { ICarpet } from "@/app/admin/lib/models/product.model";
+import Product from "@/app/admin/lib/models/product.model";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -63,7 +63,7 @@ export const POST = async (req: NextRequest) => {
         });
       }
     }
-    console.log("cart from route==>", cart);
+   
 
     await cart.save();
     return NextResponse.json({ success: true, cart });
@@ -75,3 +75,35 @@ export const POST = async (req: NextRequest) => {
     });
   }
 };
+
+export const DELETE = async() => {
+  await dbConnect();
+  try {
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not available" },
+        { status: 401 }
+      );
+    }
+    const cart = await Cart.findByIdAndDelete({userId: user.id});
+    if(!cart){
+      return NextResponse.json(
+        { success: false, message: "Cart not found." },
+        { status: 404 }
+      );
+    }
+    return NextResponse.json(
+      { success: true, message: "Cart cleared successfully." },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("DELETE /api/cart error:", error);
+    return NextResponse.json(
+      { success: false, message: "Internal server error." },
+      { status: 500 }
+    );
+  
+  }
+
+}
