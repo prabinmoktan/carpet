@@ -6,11 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useLoginUserMutation } from "../../auth.api";
 import { LoginPageTypes } from "@/app/admin/AdminType";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { showError, showSuccess } from "@/app/services/toastService";
 
 export const UseLoginForm = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnTo = searchParams.get('returnTo');
 
   const {
     handleSubmit,
@@ -33,7 +35,7 @@ export const UseLoginForm = () => {
       if (response.success === true) {
         showSuccess(`${response.message}`);
 
-        router.push(response.redirectTo);
+        router.push(returnTo || response.redirectTo );
       }
       if (response.success === false) {
         const errorMessage = response.message;

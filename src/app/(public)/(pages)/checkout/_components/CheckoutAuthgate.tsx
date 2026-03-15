@@ -19,14 +19,14 @@ const CheckoutAuthgate: React.FC<CheckoutAuthgateTypes> = ({ cartItems }) => {
   const cart = useSelector(selectCart);
   
   return (
-    <section>
+    <section className="md:pt-16 pt-8">
       <div>
         <h1>Login Required</h1>
         <p>You need to login to complete your checkout</p>
       </div>
       <div>
         <Link
-          href="/login?redirect=/checkout"
+          href="/login?returnTo=/checkout"
           className="bg-amber-500 px-10 py-2 rounded-2xl"
         >
           Login

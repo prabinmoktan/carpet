@@ -27,23 +27,6 @@ interface Product {
   };
 }
 
-// export async function generateMetadata({params}: {params: {id: string}}) {
-//   const product = await fetchProduct(params?.id)
-//   if(!product){
-//     return {
-//       title: "NO PRODUCT FOUND"
-//     };
-//   }
-//   return {
-//     title: product?.title,
-//     description: product.description,
-//     openGraph: {
-//       title: product.title,
-//       description: product.description,
-//       images: product.images,
-//     },
-//   }
-// }
 
 interface paramsTypes {
   params: Promise<{ slug: string }>;

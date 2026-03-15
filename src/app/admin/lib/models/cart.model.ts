@@ -7,6 +7,7 @@ export interface ICartItem {
   titleSnapshot: string;
   imageSnapshot: string;
   priceSnapshot: number;
+  finalPriceSnapshot: number;
   quantity: number;
 }
 
@@ -33,6 +34,10 @@ const CartItemSchema = new Schema<ICartItem>(
     priceSnapshot: {
       type: Number,
       required: true,
+    },
+    finalPriceSnapshot: {
+      type: Number,
+      
     },
     quantity: {
       type: Number,

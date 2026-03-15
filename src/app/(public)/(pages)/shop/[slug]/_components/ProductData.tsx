@@ -7,11 +7,14 @@ import { Check, ShoppingCart } from "lucide-react";
 
 import fallback_image from "../../../../../../../public/placeholder.png";
 import React, { useState } from "react";
-import QuantityButton from "@/app/(public)/ui/QuantityButton/QuantityButton";
+import QuantityButton from "@/app/(public)/components/QuantityButton/QuantityButton";
 import ImageMagnifier from "@/app/(public)/components/ImageMagnifier/ImageMagnifier";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/app/redux/slice/cart/cart.slice";
 import OptimizedImage from "@/app/(public)/components/OptimizedImage/OptimizedImage";
+import { selectCart } from "@/app/redux/slice/cart/cart.selector";
+import { useMeQuery } from "../../../(auth)/auth.api";
+import { usePostCartItemsMutation } from "@/app/services/cart.api";
 
 export interface productTypes {
   quantity: number;
@@ -39,16 +42,39 @@ export interface Props {
 
 const ProductData = ({ product }: Props) => {
   const images = product.images ?? [];
-  const [selectedImage, setSelectedImage] = useState<string | undefined>(images[0]);
-  // const imageSrc =
-  //   product?.images && product.images?.length > 0
-  //     ? product.images[0]
-  //     : fallback_image ;
+  const [selectedImage, setSelectedImage] = useState<string | undefined>(
+    images[0]
+  );
+
+  const { data, isLoading } = useMeQuery();
+  const [postToCart] = usePostCartItemsMutation();
+  const isUserLogged = !!data?.user;
+  console.log("isUserLogged==>", isUserLogged)
 
   const dispatch = useDispatch();
-  const handleAddToCart = () => {
-    dispatch(addToCart(product));
+  const cart = useSelector(selectCart);
+  const formattedCart = {
+    items: cart.map((item) => ({
+      productId: item._id,
+      titleSnapshot: item.title,
+      imageSnapshot: item.images?.[0],
+      priceSnapshot: item.finalPrice,
+      quantity: item.quantity,
+    })),
   };
+  const handleAddToCart = async () => {
+    if (isUserLogged) {
+      await postToCart(formattedCart).unwrap();
+    } else {
+      dispatch(addToCart(product));
+    }
+  };
+
+  const cartItem = cart.find((item) => item._id === product._id);
+  const cartQuantity = cartItem?.quantity ?? 0;
+  const totalStock = product.stock ?? 0;
+
+  const remainingQuantity = totalStock - cartQuantity;
 
   return (
     <>
@@ -56,7 +82,7 @@ const ProductData = ({ product }: Props) => {
         <div className=" aspect-square object-contain rounded-lg w-full  flex justify-center ">
           <div className="max-w-125 relative">
             <ImageMagnifier
-              src={selectedImage ?? fallback_image} 
+              src={selectedImage ?? fallback_image}
               className=" absolute"
             />
             {product?.sale?.percentage && (
@@ -70,14 +96,16 @@ const ProductData = ({ product }: Props) => {
               {product.images &&
                 product.images.length > 1 &&
                 product.images?.map((item, index) => (
-                  <div key={index} onClick={()=>setSelectedImage(item)}>
+                  <div key={index} onClick={() => setSelectedImage(item)}>
                     <OptimizedImage
                       publicId={item}
                       alt={product.title}
                       width={100}
                       height={150}
                       className={`border cursor-pointer p-1 ${
-                        selectedImage === item ? "border-amber-500 border-2" : "border-gray-700"
+                        selectedImage === item
+                          ? "border-amber-500 border-2"
+                          : "border-gray-700"
                       }`}
                     />
                   </div>
@@ -125,14 +153,21 @@ const ProductData = ({ product }: Props) => {
               </h1>
             )}
           </div>
-          <Badge
-            variant="stock"
-            title={"In Stock"}
-            icon={<Check size={"14px"} strokeWidth={"4px"} />}
-            className="font-extrabold"
-          />
+          {remainingQuantity > 0 && (
+            <Badge
+              variant="stock"
+              title={"In Stock"}
+              icon={<Check size={"14px"} strokeWidth={"4px"} />}
+              className="font-extrabold"
+            />
+          )}
+          {remainingQuantity <= 0 && (
+            <p className="text-red-600 font-bold">
+              This product is currently unavailable
+            </p>
+          )}
 
-          <p>{product?.stock} stocks available</p>
+          <p>{product?.stock} stock available</p>
 
           <p className="font-light text-justify">{product?.description}</p>
 
@@ -141,6 +176,7 @@ const ProductData = ({ product }: Props) => {
           <Button
             title="add to cart"
             variant="primary"
+            disabled={remainingQuantity <= 0}
             firstIcon={<ShoppingCart />}
             className="px-10 w-full flex justify-center gap-5"
             onClick={handleAddToCart}

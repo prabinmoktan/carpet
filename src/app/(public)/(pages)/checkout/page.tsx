@@ -6,14 +6,15 @@ import React from "react";
 import { requireUser } from "@/app/admin/lib/requireUser";
 import CheckoutAuthgate from "./_components/CheckoutAuthgate";
 
-const CheckoutPage = () => {
+const CheckoutPage = async() => {
   // const router = useRouter();
-  const user = requireUser();
+  const user =await requireUser();
+  console.log("user", user)
 
   if(!user)return<CheckoutAuthgate />
 
   return (
-    <section className="min-h-screen bg-neutral-50 ">
+    <section className="min-h-screen bg-neutral-50 md:pt-16 pt-8 ">
       <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12">
 
         {/* LEFT SIDE - FORM */}

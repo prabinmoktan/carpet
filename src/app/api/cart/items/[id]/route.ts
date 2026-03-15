@@ -43,7 +43,7 @@ export const DELETE = async (
     );
     await cart.save();
     return NextResponse.json(
-      { success: false, message: "Product removed from cart", cart },
+      { success: true, message: "Product removed from cart", cart },
       { status: 200 }
     );
   } catch (error) {
@@ -109,6 +109,7 @@ export const PATCH = async (
         );
       }
       items.quantity += 1;
+      items.finalPriceSnapshot = items.priceSnapshot * items.quantity; // ✅ update price
     } else if (action === "decrement") {
       if (items.quantity <= 1) {
         cart.items = cart.items.filter(
@@ -117,12 +118,14 @@ export const PATCH = async (
         );
       } else {
         items.quantity -= 1;
+        items.finalPriceSnapshot = items.priceSnapshot * items.quantity; // ✅ update price
+
       }
     }
     await cart.save();
     return NextResponse.json(
       {
-        success: false,
+        success: true,
         message: "Cart Updated",
         cart,
       },
