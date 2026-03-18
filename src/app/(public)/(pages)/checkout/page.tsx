@@ -5,6 +5,9 @@ import React from "react";
 // import { useRouter } from "next/navigation";
 import { requireUser } from "@/app/admin/lib/requireUser";
 import CheckoutAuthgate from "./_components/CheckoutAuthgate";
+import AppText from "../../ui/AppText/AppText";
+import { Controller } from "react-hook-form";
+import CheckoutForm from "./_components/CheckoutForm";
 
 const CheckoutPage = async() => {
   // const router = useRouter();
@@ -32,23 +35,7 @@ const CheckoutPage = async() => {
           </div>
 
           {/* Contact Information */}
-          <div className="bg-white p-8 rounded-3xl border border-neutral-200 space-y-6 shadow-sm">
-            <h2 className="text-lg font-medium tracking-wide text-neutral-800">
-              Contact Information
-            </h2>
-
-            <input
-              type="email"
-              placeholder="Email Address"
-              className="w-full border border-neutral-200 px-4 py-3 rounded-2xl focus:outline-none focus:ring-1 focus:ring-amber-500"
-            />
-
-            <input
-              type="text"
-              placeholder="Phone Number"
-              className="w-full border border-neutral-200 px-4 py-3 rounded-2xl focus:outline-none focus:ring-1 focus:ring-amber-500"
-            />
-          </div>
+         
 
           {/* Shipping Address */}
           <div className="bg-white p-8 rounded-3xl border border-neutral-200 space-y-6 shadow-sm">
@@ -56,42 +43,7 @@ const CheckoutPage = async() => {
               Shipping Address
             </h2>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <input
-                type="text"
-                placeholder="First Name"
-                className="border border-neutral-200 px-4 py-3 rounded-2xl focus:ring-1 focus:ring-amber-500"
-              />
-              <input
-                type="text"
-                placeholder="Last Name"
-                className="border border-neutral-200 px-4 py-3 rounded-2xl focus:ring-1 focus:ring-amber-500"
-              />
-            </div>
-
-            <input
-              type="text"
-              placeholder="Street Address"
-              className="w-full border border-neutral-200 px-4 py-3 rounded-2xl focus:ring-1 focus:ring-amber-500"
-            />
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <input
-                type="text"
-                placeholder="City"
-                className="border border-neutral-200 px-4 py-3 rounded-2xl focus:ring-1 focus:ring-amber-500"
-              />
-              <input
-                type="text"
-                placeholder="State"
-                className="border border-neutral-200 px-4 py-3 rounded-2xl focus:ring-1 focus:ring-amber-500"
-              />
-              <input
-                type="text"
-                placeholder="Postal Code"
-                className="border border-neutral-200 px-4 py-3 rounded-2xl focus:ring-1 focus:ring-amber-500"
-              />
-            </div>
+          <CheckoutForm/>
           </div>
 
           {/* Payment Section */}

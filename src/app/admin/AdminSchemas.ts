@@ -202,3 +202,167 @@ export type ProductFormValues = z.infer<typeof productSchema>;
 //   );
 
 // export type ProductFormValues = z.infer<typeof productSchema>;
+
+
+
+
+// ─── Reusable field validators ────────────────────────────────────────────────
+
+const nameField = (label: string) =>
+  z
+    .string({ error: `${label} is required` })
+    .trim()
+    .min(2, `${label} must be at least 2 characters`)
+    .max(50, `${label} must be at most 50 characters`)
+    .regex(/^[a-zA-Z\s'-]+$/, `${label} contains invalid characters`);
+
+const phoneField = z
+  .string({ error: "Phone number is required" })
+  .trim()
+  .regex(
+    /^\+?[1-9]\d{6,14}$/,
+    "Enter a valid phone number (e.g. +97412345678)"
+  );
+
+const zipField = z
+  .string({ error: "ZIP / Postal code is required" })
+  .trim()
+  .min(3, "ZIP code must be at least 3 characters")
+  .max(10, "ZIP code must be at most 10 characters")
+  .regex(/^[a-zA-Z0-9\s-]+$/, "ZIP code contains invalid characters");
+
+// ─── Sub-schemas ──────────────────────────────────────────────────────────────
+
+const contactInfoSchema = z.object({
+  firstName: nameField("First name"),
+  lastName: nameField("Last name"),
+  email: z
+    .string({ error: "Email is required" })
+    .trim()
+    .email("Enter a valid email address")
+    .toLowerCase(),
+  phone: phoneField,
+});
+
+const shippingAddressSchema = z.object({
+  addressLine1: z
+    .string({ error: "Address is required" })
+    .trim()
+    .min(5, "Address must be at least 5 characters")
+    .max(100, "Address must be at most 100 characters"),
+
+  addressLine2: z
+    .string()
+    .trim()
+    .max(100, "Address line 2 must be at most 100 characters")
+    .optional(),
+
+  city: z
+    .string({ error: "City is required" })
+    .trim()
+    .min(2, "City must be at least 2 characters")
+    .max(50, "City must be at most 50 characters"),
+
+  state: z
+    .string({ error: "State / Province is required" })
+    .trim()
+    .min(2, "State must be at least 2 characters")
+    .max(50, "State must be at most 50 characters"),
+
+  zip: zipField,
+
+  country: z
+    .string({ error: "Country is required" })
+    .trim()
+    .min(2, "Select a valid country"),
+});
+
+const paymentMethodSchema = z.discriminatedUnion("method", [
+  // ── Credit / Debit Card ──────────────────────────────────────────────────
+  z.object({
+    method: z.literal("card"),
+    cardHolder: nameField("Cardholder name"),
+    cardNumber: z
+      .string({ error: "Card number is required" })
+      .trim()
+      .regex(/^\d{4}(\s?\d{4}){3}$/, "Enter a valid 16-digit card number"),
+    expiryDate: z
+      .string({ error: "Expiry date is required" })
+      .regex(
+        /^(0[1-9]|1[0-2])\/(\d{2})$/,
+        "Enter a valid expiry date (MM/YY)"
+      )
+      .refine((val) => {
+        const [month, year] = val.split("/").map(Number);
+        const expiry = new Date(2000 + year, month - 1);
+        return expiry > new Date();
+      }, "Card has expired"),
+    cvv: z
+      .string({ error: "CVV is required" })
+      .regex(/^\d{3,4}$/, "CVV must be 3 or 4 digits"),
+  }),
+
+  // ── Cash on Delivery ─────────────────────────────────────────────────────
+  z.object({
+    method: z.literal("cod"),
+  }),
+
+  // ── Bank Transfer ────────────────────────────────────────────────────────
+  z.object({
+    method: z.literal("bank_transfer"),
+    bankName: z
+      .string({ error: "Bank name is required" })
+      .trim()
+      .min(2, "Enter a valid bank name"),
+    accountNumber: z
+      .string({ error: "Account number is required" })
+      .trim()
+      .regex(/^\d{8,20}$/, "Account number must be 8–20 digits"),
+  }),
+]);
+
+const orderSummarySchema = z.object({
+  notes: z
+    .string()
+    .trim()
+    .max(300, "Order notes must be at most 300 characters")
+    .optional(),
+
+  agreeToTerms: z.literal(true, {
+    error: () => ({ message: "You must agree to the terms and conditions" }),
+  }),
+});
+
+// ─── Root checkout schema ─────────────────────────────────────────────────────
+
+export const checkoutSchema = z.object({
+  contact: contactInfoSchema,
+  shipping: shippingAddressSchema,
+  payment: paymentMethodSchema,
+  order: orderSummarySchema,
+
+  // Optional: billing same as shipping toggle
+  billingSameAsShipping: z.boolean(),
+
+  // Optional: separate billing address (only required when toggle is false)
+  billing: shippingAddressSchema.optional(),
+});
+
+// Enforce billing address when billingSameAsShipping is false
+export const checkoutSchemaRefined = checkoutSchema.superRefine((data, ctx) => {
+  if (!data.billingSameAsShipping && !data.billing) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Billing address is required when different from shipping",
+      path: ["billing"],
+    });
+  }
+});
+
+// ─── TypeScript types (inferred from schema) ──────────────────────────────────
+
+export type CheckoutFormValues = z.infer<typeof checkoutSchemaRefined>;
+export type ContactInfo = z.infer<typeof contactInfoSchema>;
+export type ShippingAddress = z.infer<typeof shippingAddressSchema>;
+export type PaymentMethod = z.infer<typeof paymentMethodSchema>;
+export type OrderSummary = z.infer<typeof orderSummarySchema>;

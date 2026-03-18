@@ -1,3 +1,5 @@
+import { CheckoutFormValues } from "./AdminSchemas";
+
 export const ProductDefaultValues = {
   title: "",
   category: "prayer-mat",
@@ -27,4 +29,40 @@ export const UserRegisterDefaultvalues = {
   email: "",
   password: "",
   confirmPassword: "",
+};
+
+
+
+export const checkoutDefaultValues: CheckoutFormValues = {
+  contact: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+  },
+
+  shipping: {
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+  },
+
+  payment: {
+    method: "card",
+    cardHolder: "",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
+  },
+
+  order: {
+    notes: "",
+    agreeToTerms: true,
+  },
+
+  billingSameAsShipping: true,
+  billing: undefined,
 };
