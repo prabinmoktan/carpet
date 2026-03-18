@@ -1,22 +1,20 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useGuestCart from "./useGuestCart";
 import useServerCart from "./useServerCart";
 import {
   removeFromCart,
   updateQuantity,
 } from "@/app/redux/slice/cart/cart.slice";
-import { requireUser } from "@/app/admin/lib/requireUser";
+
 import { useMeQuery } from "../../(auth)/auth.api";
+import { selectUser } from "@/app/redux/slice/auth/auth.selector";
 
 const useCartController = () => {
   const { cart } = useGuestCart();
 
   const dispatch = useDispatch();
-  const { deletecartItemById, clearCart, updateCart } = useServerCart();
-
-  const { data, isLoading } = useMeQuery();
-
-  const isServercart = !!data?.user;
+  const { deletecartItemById, clearCartItems, updateCart, isServercart } = useServerCart();
+ 
   console.log("isServercart==>", isServercart)
 
   const increaseQuantity = async (
@@ -38,7 +36,7 @@ const useCartController = () => {
     console.log("productId =>", productId);
     console.log("quantity =>", quantity);
     console.log("isServercart =>", isServercart);
-    if(isLoading) return;
+    // if(isLoading) return;
     const newQuantity = quantity - 1;
     if (newQuantity <= 0) {
         console.log('newQuantity <= 0 this condition is running right now')

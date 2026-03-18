@@ -10,13 +10,13 @@ import Logout from "@/app/components/Logout/Logout";
 
 import dynamic from "next/dynamic";
 import { useSelector } from "react-redux";
-import { user } from "@/app/redux/slice/auth/auth.selector";
+import { selectUser } from "@/app/redux/slice/auth/auth.selector";
 
 const Cart = dynamic(() => import("@/app/(public)/components/Cart/Cart"));
 
 const Header = () => {
   const [scroll, setScroll] = useState(false);
-  const userData = useSelector(user);
+  const userData = useSelector(selectUser);
  
 
   useEffect(() => {

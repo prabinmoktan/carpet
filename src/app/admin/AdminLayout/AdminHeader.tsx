@@ -2,7 +2,7 @@
 // import { useMeQuery } from "@/app/(public)/(pages)/(auth)/auth.api";
 import CompanyLogo from "@/app/(public)/ui/CompanyLogo/CompanyLogo";
 import { UserAvatar } from "@/app/components/UserAvatar/UserAvatar";
-import { isAuthLoading, user } from "@/app/redux/slice/auth/auth.selector";
+import { isAuthLoading, selectUser } from "@/app/redux/slice/auth/auth.selector";
 
 import { Bell } from "lucide-react";
 import React from "react";
@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import AdminHeaderSkeleton from "./AdminHeaderSkeleton";
 
 const AdminHeader = () => {
-  const userData = useSelector(user);
+  const userData = useSelector(selectUser);
   const authLoading = useSelector(isAuthLoading);
   if (authLoading) {
     return <AdminHeaderSkeleton />;

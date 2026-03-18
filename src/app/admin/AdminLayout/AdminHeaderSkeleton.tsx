@@ -1,10 +1,5 @@
 "use client";
-import CompanyLogo from "@/app/(public)/ui/CompanyLogo/CompanyLogo";
-import { UserAvatar } from "@/app/components/UserAvatar/UserAvatar";
-import { user } from "@/app/redux/slice/auth/auth.selector";
-import { Bell } from "lucide-react";
-import React from "react";
-import { useSelector } from "react-redux";
+
 
 const SkeletonPulse = ({ className }: { className: string }) => (
   <div className={`animate-pulse bg-gray-200 rounded ${className}`} />

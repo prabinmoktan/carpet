@@ -7,7 +7,7 @@ interface CloudinaryOptions {
 }
 
 export const CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-console.log("CLOUD_NAME==>", CLOUD_NAME);
+
 
 export function cloudinaryUrl(publicId: string, options: CloudinaryOptions) {
   const { width, height, crop, quality = "auto", format = "avif" } = options;

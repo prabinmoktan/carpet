@@ -10,6 +10,7 @@ const CartItems = () => {
   const { cart } = useGuestCart();
   const { items, isLoading } = useServerCart();
   const normalizeCartItem = normalizeServerCart(items)
+  console.log('normalizeCartItem', normalizeCartItem)
   const cartItem = cart.length ? cart : normalizeCartItem;
 
   return (

@@ -47,18 +47,10 @@ const cartSlice = createSlice({
         existingItem.quantity += 1;
       } else {
         state.items.push({
-          _id: product._id,
-          title: product.title,
-          price: product.price,
+          ...product,
+
           finalPrice: priceToUse,
           quantity: 1, // ✅ must initialize
-          stock: product.stock,
-          images: product.images ?? ["/placeholder.png"], // ✅ keep array
-          category: product.category,
-          description: product.description,
-          isLatest: product.isLatest,
-          onSale: product.onSale,
-          sale: product.sale,
         });
       }
       state.totalQuantity += 1;

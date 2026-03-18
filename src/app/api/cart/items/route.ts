@@ -6,78 +6,104 @@ import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
-    await dbConnect();
-    try {
-      //finding user
-      const user = await getAuthenticatedUser();
-      if (!user) {
-        return NextResponse.json(
-          { success: false, message: "User not available" },
-          { status: 401 }
-        );
-      }
-      //find cart by userId
-      const { items } = await req.json();
-  
-      const userId = new mongoose.Types.ObjectId(user.id); // ✅ consistent ObjectId
-      let cart = await Cart.findOne({ userId });
-      if (!cart) {
-        cart = await Cart.create({ userId, items: [] });
-      }
-  
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      const productIds = items.map((i) => i.productId);
-      const products = await Product.find({
-        _id: { $in: productIds },
-      });
-  
-      const productMap = new Map(products.map((p) => [p._id.toString(), p]));
-  
-      for (const guestItem of items) {
-        // ✅ use _id to match what you mapped with
-        const product = productMap.get(guestItem.productId);
-        if (!product) {
-          console.log("Product not found for", guestItem.productId);
-          continue;
-        }
-  
-        const existingItem = cart.items.find(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (item: any) => item.productId.toString() === guestItem.productId.toString() // ✅ same field
-        );
-  
-        const safeQuantity = Math.min(guestItem.quantity, product.stock);
-        const unitPrice = product.onSale
+  await dbConnect();
+  try {
+    //finding user
+    const user = await getAuthenticatedUser();
+    if (!user) {
+      return NextResponse.json(
+        { success: false, message: "User not available" },
+        { status: 401 }
+      );
+    }
+    //find cart by userId
+    const { productId, quantity } = await req.json();
+
+    const userId = new mongoose.Types.ObjectId(user.id); // ✅ consistent ObjectId
+
+    if (!productId || !mongoose.Types.ObjectId.isValid(productId)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid productId" },
+        { status: 400 }
+      );
+    }
+
+    if (!Number.isFinite(quantity) || quantity <= 0) {
+      return NextResponse.json(
+        { success: false, message: "Invalid quantity" },
+        { status: 400 }
+      );
+    }
+
+    // ✅ use _id to match what you mapped with
+    const product = await Product.findById(productId);
+    // productMap.get(guestItem.productId);
+    if (!product) {
+      return NextResponse.json(
+        { success: false, message: "Product not found" },
+        { status: 404 }
+      );
+    }
+
+   
+    
+
+   
+    let cart = await Cart.findOne({userId})
+    if(!cart){
+      cart = await Cart.create({userId, items: []})
+    }
+    const existingItem = cart.items.find(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (item: any) => item.productId.toString() === productId // ✅ same field
+    );
+    if (product.stock <= 0) {
+      return NextResponse.json(
+        { success: false, message: "Product out of stock" },
+        { status: 400 }
+      );
+    }
+    const safeQuantity = Math.min(quantity, product.stock);
+    const unitPrice = product.onSale
       ? product.finalPrice ?? product.price
       : product.price;
-  
-    const finalPriceSnapshot = unitPrice * safeQuantity;
-        
-  
-        if (existingItem) {
-          existingItem.quantity = safeQuantity;
-          existingItem.finalPriceSnapshot = finalPriceSnapshot;
-          
-        } else {
-          cart.items.push({
-            productId: product._id,
-            titleSnapshot: product.title,
-            imageSnapshot: product.images?.[0],
-            priceSnapshot: product.price,
-            finalPriceSnapshot,
-            quantity: safeQuantity,
-          });
-        }
+
+      if (!Number.isFinite(unitPrice)) {
+        return NextResponse.json(
+          { success: false, message: "Invalid product price" },
+          { status: 500 }
+        );
       }
-  
-      await cart.save();
-      return NextResponse.json({ success: true, cart });
-    } catch (error) {
-      return NextResponse.json({
+
+    const finalPriceSnapshot = unitPrice * safeQuantity;
+
+    if (existingItem) {
+
+      const newQuantity = Math.min(existingItem.quantity + safeQuantity, product.stock);
+      //merge quantity
+      existingItem.quantity = newQuantity;
+      existingItem.finalPriceSnapshot = unitPrice * newQuantity;
+    } else {
+      cart.items.push({
+        productId: product._id,
+        titleSnapshot: product.title,
+        imageSnapshot: product.images?.[0],
+        priceSnapshot: product.price,
+        finalPriceSnapshot,
+        quantity: safeQuantity,
+      });
+    }
+
+    await cart.save();
+    return NextResponse.json({ success: true, message: "Item added to cart", cart });
+  } catch (error) {
+    return NextResponse.json(
+      {
         success: false,
         message: "server error occured while adding cart items to user",
         error,
-      });
-    }
-  };
+      },
+      { status: 500 }
+    );
+  }
+};

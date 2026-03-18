@@ -8,6 +8,10 @@ import { useLoginUserMutation } from "../../auth.api";
 import { LoginPageTypes } from "@/app/admin/AdminType";
 import { useRouter, useSearchParams } from "next/navigation";
 import { showError, showSuccess } from "@/app/services/toastService";
+import { useMergeCartMutation } from "@/app/services/cart.api";
+import { selectCart } from "@/app/redux/slice/cart/cart.selector";
+import { useSelector } from "react-redux";
+import useGuestCart from "../../../cartpage/hooks/useGuestCart";
 
 export const UseLoginForm = () => {
   const router = useRouter();
@@ -26,6 +30,9 @@ export const UseLoginForm = () => {
     reValidateMode: "onChange"
   })
   const [loginUser, { isLoading }] = useLoginUserMutation();
+  const {cart, clearGuestCart} = useGuestCart();
+  console.log(cart)
+  const [mergeCart] = useMergeCartMutation();
  
 
     const onSubmit = async (data: LoginPageTypes) => {
@@ -34,6 +41,16 @@ export const UseLoginForm = () => {
       
       if (response.success === true) {
         showSuccess(`${response.message}`);
+        if(cart?.length > 0){
+          console.log("cart.length==>", cart.length)
+          await mergeCart({
+            items: cart.map((item)=> ({
+              productId: item._id,
+              quantity: item.quantity
+            }))
+          }).unwrap();
+          clearGuestCart();
+        }
 
         router.push(returnTo || response.redirectTo );
       }

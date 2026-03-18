@@ -42,12 +42,16 @@ export const POST = async (req: NextRequest) => {
         (item: { productId: { productId: string } }) =>
           item.productId.toString() === guestItem._id
       );
+      console.log('existingItem=>', existingItem)
+     
       if (existingItem) {
         const newQuantity = existingItem.quantity + guestItem.quantity;
-
+        console.log('exsiting item condition newQuantity==> ', newQuantity)
         if (newQuantity > product.stock) {
+            console.log("existingItem from merge api newQuantity > product.stock ==>", existingItem)
           existingItem.quantity = product.stock;
         } else {
+            console.log("existingItem from merge api existingItem.quantity = newQuantity ==>", existingItem)
           existingItem.quantity = newQuantity;
         }
       } else {

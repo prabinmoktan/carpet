@@ -1,31 +1,28 @@
 "use client";
 import React from "react";
-import { useDispatch } from "react-redux";
 import { MoveRight } from "lucide-react";
-
 import Button from "../../ui/Button/Button";
-
 import CartSkeleton from "./_components/cartSkeleton";
-
 import Link from "next/link";
-
 import CartItems from "./_components/CartItems/CartItems";
 import useGuestCart from "./hooks/useGuestCart";
-import useCartSync from "./hooks/useCartSync";
 import useServerCart from "./hooks/useServerCart";
+
+
+
 
 const Page = () => {
 
   const { cart, totalAmount, totalSaving, originalPrice, totalQuantity } =
     useGuestCart();
 
-  const { items, isLoading,  clearCart } =
+  const { items, isLoading,  clearCartItems } =
     useServerCart();
 
   console.log("items=>", items);
   console.log("cart from cartpage redux", cart)
 
-  useCartSync();
+  // useCartSync();
 
   const hasItems = cart?.length > 0 || items.length > 0;
 
@@ -51,7 +48,7 @@ const Page = () => {
                   <Button
                     title={"Clear Cart"}
                     variant={"destruction"}
-                    onClick={clearCart}
+                    onClick={clearCartItems }
                   />
                 )}
             </div>

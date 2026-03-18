@@ -1,9 +1,8 @@
 import { dbConnect } from "@/app/admin/lib/database/db";
 import { getAuthenticatedUser } from "@/app/admin/lib/getAuthenticatedUser";
 import { Cart } from "@/app/admin/lib/models/cart.model";
-import Product from "@/app/admin/lib/models/product.model";
-import mongoose from "mongoose";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
 
 
 

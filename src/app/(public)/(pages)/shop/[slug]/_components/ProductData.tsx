@@ -15,6 +15,7 @@ import OptimizedImage from "@/app/(public)/components/OptimizedImage/OptimizedIm
 import { selectCart } from "@/app/redux/slice/cart/cart.selector";
 import { useMeQuery } from "../../../(auth)/auth.api";
 import { usePostCartItemsMutation } from "@/app/services/cart.api";
+import { selectUser } from "@/app/redux/slice/auth/auth.selector";
 
 export interface productTypes {
   quantity: number;
@@ -41,20 +42,21 @@ export interface Props {
 }
 
 const ProductData = ({ product }: Props) => {
-  const images = product.images ?? [];
+  const images = product?.images ?? [];
   const [selectedImage, setSelectedImage] = useState<string | undefined>(
     images[0]
   );
 
-  const { data, isLoading } = useMeQuery();
+  const data = useSelector(selectUser);
   const [postToCart] = usePostCartItemsMutation();
-  const isUserLogged = !!data?.user;
-  console.log("isUserLogged==>", isUserLogged)
+  const isUserLogged = !!data;
+  console.log("isUserLogged==>", isUserLogged);
 
   const dispatch = useDispatch();
   const cart = useSelector(selectCart);
+  console.log("cart==>", cart);
   const formattedCart = {
-    items: cart.map((item) => ({
+    items: cart?.map((item) => ({
       productId: item._id,
       titleSnapshot: item.title,
       imageSnapshot: item.images?.[0],
@@ -62,10 +64,12 @@ const ProductData = ({ product }: Props) => {
       quantity: item.quantity,
     })),
   };
+  console.log("formattedCart==>", formattedCart);
   const handleAddToCart = async () => {
+   
     if (isUserLogged) {
-      await postToCart(formattedCart).unwrap();
-    } else {
+      await postToCart({ productId: product._id, quantity: 1 }).unwrap();
+    }else{
       dispatch(addToCart(product));
     }
   };
