@@ -6,8 +6,6 @@ import {
   updateQuantity,
 } from "@/app/redux/slice/cart/cart.slice";
 
-import { useMeQuery } from "../../(auth)/auth.api";
-import { selectUser } from "@/app/redux/slice/auth/auth.selector";
 
 const useCartController = () => {
   const { cart } = useGuestCart();
@@ -15,7 +13,7 @@ const useCartController = () => {
   const dispatch = useDispatch();
   const { deletecartItemById, clearCartItems, updateCart, isServercart } = useServerCart();
  
-  console.log("isServercart==>", isServercart)
+ 
 
   const increaseQuantity = async (
     productId: string,

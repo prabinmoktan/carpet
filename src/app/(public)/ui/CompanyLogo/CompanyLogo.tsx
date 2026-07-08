@@ -5,7 +5,7 @@ import React from "react";
 const CompanyLogo = () => {
   return (
     <>
-      <div className="flex items-center  gap-2">
+      <div className="flex items-center gap-2">
         <Image
           src={favico}
           height={50}

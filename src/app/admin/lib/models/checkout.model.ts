@@ -1,11 +1,11 @@
-import { model, models, Schema } from "mongoose";
+import mongoose, { model, models, Schema } from "mongoose";
 
 export interface IOrderItem {
-  product: Schema.Types.ObjectId;
-  name: string;
-  images: string;
-  price: number;
-  finalPrice: number;
+  productId: mongoose.Types.ObjectId;
+  titleSnapshot: string;
+  imageSnapshot: string;
+  priceSnapshot: number;
+  finalPriceSnapshot: number;
   discountPercent: number;
   discountAmount: number;
   quantity: number;
@@ -13,20 +13,24 @@ export interface IOrderItem {
 }
 
 export interface IShippingAddress {
-  fullName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  addressLine1: string;
+  addressLine2?: string; 
   phone: string;
   street: string;
   city: string;
   state: string;
-  postalCode: string;
+  zip: string;
   country: string;
 }
 
 export interface IPayment {
-  method: "cash_on_delivery" | "stripe" | "card";
+  method: "cash_on_delivery" | "stripe" | "card" | "paypal";
   status: "pending" | "paid" | "failed" | "refunded";
   transactionId: string;
-  paidAt: Date;
+  paidAt: Date | undefined;
 }
 
 export interface IStatusHistory {
@@ -36,7 +40,7 @@ export interface IStatusHistory {
 }
 
 export interface IOrder extends Document {
-  user: Schema.Types.ObjectId;
+  userId?: mongoose.Types.ObjectId; //optional for guest checkout
   orderNumber: string;
   items: IOrderItem[];
   shippingAddress: IShippingAddress;
@@ -64,19 +68,19 @@ export interface IOrder extends Document {
 }
 
 const OrderItemSchema = new Schema<IOrderItem>({
-  product: {
+  productId: {
     type: Schema.Types.ObjectId,
     ref: "Product",
     required: true,
   },
-  name: {
+  titleSnapshot: {
     type: String,
     required: true,
   },
   
-  images: { type: String, required: true },
-  price: { type: Number, required: true },
-  finalPrice: {type: Number, required: true},
+  imageSnapshot: { type: String, required: true },
+  priceSnapshot: { type: Number, required: true },
+  finalPriceSnapshot: {type: Number, required: true},
   discountAmount: {type: Number,  default: 0},
   discountPercent:{type:Number,default:0, min:0, max: 100},
   quantity: { type: Number, required: true, min: 1 },
@@ -84,12 +88,15 @@ const OrderItemSchema = new Schema<IOrderItem>({
 });
 
 const ShippingAddressSchema = new Schema<IShippingAddress>({
-  fullName: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: {type: String, required: true},
   phone: { type: String, required: true },
   street: { type: String, required: true },
   state: { type: String, required: true },
   city: { type: String, required: true },
-  postalCode: { type: String, required: true },
+  addressLine1: {type: String, required: true},
+  addressLine2: {type: String},
+  zip: { type: String, required: true },
   country: { type: String, required: true, default: "QATAR" },
 });
 
@@ -110,7 +117,7 @@ const PaymentSchema = new Schema<IPayment>({
 });
 
 const OrderSchema = new Schema<IOrder>({
-  user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   orderNumber: { type: String, unique: true },
   items: { type: [OrderItemSchema], required: true },
   shippingAddress: { type: ShippingAddressSchema, required: true },
@@ -166,4 +173,4 @@ if(this.isModified("status")){
 }
 })
 
-const Order = models.Order || model<IOrder>("Order", OrderSchema)
+export const Order = models.Order || model<IOrder>("Order", OrderSchema)

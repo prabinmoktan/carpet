@@ -9,7 +9,7 @@ const Page = () => {
 
   return (
     <>
-      <section className="flex flex-col px-5">
+      <section className="flex flex-col px-5 py-2 gap-y-4">
         <Button
           title={"Add Products"}
           variant={"primary"}

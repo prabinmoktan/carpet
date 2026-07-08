@@ -19,6 +19,12 @@ const useServerCart = () => {
   const dispatch = useDispatch();
 
   const isServercart = !!user;
+  const cartSummary = data?.summary ||  {
+    originalPrice: 0,
+    totalAmount: 0,
+    totalSaving: 0,
+    totalQuantity: 0,
+  };;
 
   const items = data?.cart?.items || [];
   const deletecartItemById = async (id: string) => {
@@ -41,6 +47,7 @@ const useServerCart = () => {
 
   return {
     items,
+    cartSummary,
     isLoading,
     deletecartItemById,
     clearCartItems,

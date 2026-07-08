@@ -8,7 +8,7 @@ export const normalizeServerCart = (
     title: item.titleSnapshot,
     images: item.imageSnapshot ? [item.imageSnapshot] : [],
     price: item.priceSnapshot,
-    finalPrice: item.priceSnapshot,
+    finalPrice: item?.finalPriceSnapshot,
     stock: 0,
     quantity: item.quantity,
   }))

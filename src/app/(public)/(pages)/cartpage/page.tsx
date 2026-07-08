@@ -7,6 +7,8 @@ import Link from "next/link";
 import CartItems from "./_components/CartItems/CartItems";
 import useGuestCart from "./hooks/useGuestCart";
 import useServerCart from "./hooks/useServerCart";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/app/redux/slice/auth/auth.selector";
 
 
 
@@ -21,10 +23,14 @@ const Page = () => {
 
   console.log("items=>", items);
   console.log("cart from cartpage redux", cart)
+  const user = useSelector(selectUser);
 
   // useCartSync();
 
   const hasItems = cart?.length > 0 || items.length > 0;
+
+  const cartData = user ? items : cart;
+  console.log("cartData==>", cartData)
 
   // if (!mounted) return <CartSkeleton />;
 
@@ -79,7 +85,7 @@ const Page = () => {
                           Original price
                         </dt>
                         <dd className="text-base font-medium text-gray-900 dark:text-white">
-                          QAR{originalPrice}
+                          {/* QAR{cartData ? originalPrice : } */}
                         </dd>
                       </dl>
 

@@ -4,6 +4,7 @@ export interface CartItem {
   imageSnapshot: string;
   priceSnapshot: number;
   quantity: number;
+  finalPriceSnapshot: number;
 }
 
 export interface Cart {
@@ -18,6 +19,12 @@ export interface CartApiresponse {
   status: number;
   maxReached?: boolean;
   stock?: number;
+  summary: {
+    totalAmount: number;
+    totalSaving: number;
+    originalPrice: number;
+    totalQuantity: number;
+  };
 }
 export interface UpdateQuantityArgs {
   id: string;
@@ -25,20 +32,21 @@ export interface UpdateQuantityArgs {
 }
 
 export interface ServerCartItem {
-    productId: string;
-    titleSnapshot: string;
-    imageSnapshot: string;
-    priceSnapshot: number;
-    quantity: number;
-  }
-  
-  export interface NormalizedCartItem {
-    _id: string;
-    title: string;
-    images: string[];
-    price: number;
-    finalPrice: number;
-    stock: number;
-    quantity: number;
-    category?: string;
-  }
+  productId: string;
+  titleSnapshot: string;
+  imageSnapshot: string;
+  priceSnapshot: number;
+  quantity: number;
+  finalPriceSnapshot: number;
+}
+
+export interface NormalizedCartItem {
+  _id: string;
+  title: string;
+  images: string[];
+  price: number;
+  finalPrice: number;
+  stock: number;
+  quantity: number;
+  category?: string;
+}

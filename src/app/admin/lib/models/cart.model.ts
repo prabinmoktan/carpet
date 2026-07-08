@@ -14,6 +14,9 @@ export interface ICartItem {
 export interface ICart {
   userId: string;
   items: ICartItem[];
+  originalPrice: number;
+  totalSaving: number;
+  totalAmount: number, 
 }
 
 const CartItemSchema = new Schema<ICartItem>(
@@ -59,6 +62,9 @@ const CartSchema = new Schema<ICart>(
       required: true,
     },
     items: [CartItemSchema],
+    totalAmount: {type: Number},
+    totalSaving: {type: Number}, 
+    originalPrice: {type: Number}
   },
   {
     timestamps: true,

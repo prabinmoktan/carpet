@@ -18,7 +18,7 @@ const AdminSelectInput = forwardRef<HTMLSelectElement, SelectTypes>(
   (
     {
       label,
-
+      options,
       id,
       value,
       name, // ✅ Missing from destructuring
@@ -31,9 +31,13 @@ const AdminSelectInput = forwardRef<HTMLSelectElement, SelectTypes>(
   ) => {
     const combinedOptions = [
       { name: "Select option", id: "none" },
-      ...category,
+      ...(options ?? category )
+      
+   
     ]; // ✅ Better label
-
+console.log('combinedOptions==>', combinedOptions)
+console.log('category==>', category)
+console.log('options==>', options)
     return (
       <div className={className}>
         <label className="text-sm font-medium dark:text-gray-200">
@@ -52,8 +56,9 @@ const AdminSelectInput = forwardRef<HTMLSelectElement, SelectTypes>(
           }`}
           {...rest}
         >
-          {combinedOptions.map((option) => (
+         {category.map((option) => (
             <option
+
               key={option.id}
               value={option.id}
              

@@ -8,7 +8,6 @@ import burgundyPrayer from "../../public/burgundyPrayer.png";
 import emeraldPrayer from "../../public/emeraldPrayer.png";
 import creamPrayer from "../../public/creamPrayer.png";
 import pm4 from "../../public/pm4.png";
-import fallback_image from "../../public/placeholder.png"
 
 import { LayoutDashboard } from "lucide-react";
 import { Settings } from "lucide-react";
@@ -17,10 +16,13 @@ import { Mail } from "lucide-react";
 import { ChartColumnDecreasing } from "lucide-react";
 // import {  } from "./admin/AdminType";
 import { Column } from "./admin/AdminUi/ProductTable/ProductTable";
-import Image from "next/image";
 import { ProductFormValues } from "./admin/AdminType";
-import { cloudinaryUrl } from "./admin/utils/cloudinaryUrl";
 import OptimizedImage from "./(public)/components/OptimizedImage/OptimizedImage";
+
+import {
+   ShoppingCart, Package, Users, BarChart3,
+  
+} from "lucide-react";
 
 export const navItems = [
   { label: "Shop", href: "/shop" },
@@ -379,13 +381,14 @@ export const inspirationPosts = [
 
 export const SidebarItem = [
   { name: "dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
-  { name: "products", icon: Boxes, href: "/admin/products" },
+  { name: "orders", icon: ShoppingCart, href: "/admin/orders" },
+  { name: "products", icon: Package, href: "/admin/products" },
   { name: "inquiries", icon: Mail, href: "/admin/inquiry" },
-  { name: "analytics", icon: ChartColumnDecreasing, href: "/admin/analytics" },
+  { name: "analytics", icon: BarChart3  , href: "/admin/analytics" },
   { name: "settings", icon: Settings, href: "/admin/settings" },
 ];
 
-export const category = [{ id: "prayer-mat", name: "prayer-mat" }];
+export const category = [{ name: "Select option", id: "none" },{ id: "prayer-mat", name: "prayer-mat" }];
 
 
 
@@ -458,3 +461,17 @@ export const sortOptions =[
   { label: "Price: High → Low", value: "price_desc" },
   { label: "Newest First", value: "newest" },
 ]
+
+export const COUNTRIES = [
+  { id: "QA", name: "Qatar" },
+  { id: "AE", name: "United Arab Emirates" },
+  { id: "SA", name: "Saudi Arabia" },
+  { id: "KW", name: "Kuwait" },
+  { id: "BH", name: "Bahrain" },
+  { id: "LB", name: "Lebanon" },
+];
+
+export const combinedOptions = [
+  {name: "Prayer-Mat", id: 1}
+]
+

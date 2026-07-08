@@ -17,7 +17,10 @@ const page = async ({ params }: PageProps) => {
   }
   return (
     <>
+    <section className="flex flex-col px-5 ">
       <ProductForm mode="edit" productId={_id} defaultValues={product} />
+
+    </section>
     </>
   );
 };
